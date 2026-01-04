@@ -1037,7 +1037,20 @@ h4.see-also {
 }
 
 
-
 .page-heading hr.small {
   display: none;
+}
+
+/* Center single-post titles for reading/watching/listening */
+.reading-heading,
+.watching-heading,
+.listening-heading {
+  text-align: center;
+}
+
+.reading-heading hr.small,
+.watching-heading hr.small,
+.listening-heading hr.small {
+  margin-left: auto;
+  margin-right: auto;
 }

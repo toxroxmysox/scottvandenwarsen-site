@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "content/gallery/Spain/index.md",
+                "file": "static/css/main.css",
                 "mode": "source",
-                "source": false
+                "source": true
               },
               "icon": "lucide-file",
-              "title": "index"
+              "title": "main"
             }
           }
         ]
@@ -94,7 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "content/gallery/Spain/index.md",
+                "file": "static/css/main.css",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +104,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for index"
+              "title": "Backlinks for main"
             }
           },
           {
@@ -113,12 +113,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "content/gallery/Spain/index.md",
+                "file": "static/css/main.css",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from index"
+              "title": "Outgoing links from main"
             }
           },
           {
@@ -156,13 +156,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "content/gallery/Spain/index.md",
+                "file": "static/css/main.css",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of index"
+              "title": "Outline of main"
             }
           }
         ]
@@ -183,19 +183,28 @@
       "bases:Create new base": false
     }
   },
-  "active": "85bcc4eef173f03f",
+  "active": "7543da3d1b951266",
   "lastOpenFiles": [
-    "content/gallery/Spain/IMG_20251129_182622_458.jpg",
-    "content/gallery/Spain/cover_2.jpg",
-    "content/gallery/Spain/IMG_20251129_180754_475.jpg",
-    "content/gallery/Spain/IMG_3289.JPG",
-    "content/gallery/Spain/IMG_3263.JPG",
-    "content/gallery/Spain/IMG_3219.JPG",
-    "content/gallery/Spain/IMG_0818.jpeg",
-    "content/gallery/Spain/IMG_3026.JPG",
-    "content/gallery/Spain/IMG_3001.JPG",
-    "content/gallery/Spain/IMG_0754.jpeg",
-    "content/gallery/Spain/IMG_2972.JPG",
+    "themes/beautifulhugo/layouts/_default/single.html",
+    "layouts/partials/home/card.html",
+    "layouts/index.html",
+    "static/css/main.css",
+    "content/gallery/Spain/index.md",
+    "public/gallery/spain/cover_2.jpg",
+    "public/gallery/spain/cover.jpg",
+    "public/gallery/spain/IMG_3289.JPG",
+    "public/gallery/spain/IMG_3263.JPG",
+    "public/gallery/spain/IMG_3219.JPG",
+    "public/gallery/spain/IMG_3026.JPG",
+    "public/gallery/spain/IMG_3001.JPG",
+    "public/gallery/spain/IMG_2972.JPG",
+    "public/gallery/spain/IMG_2928.JPG",
+    "public/gallery/spain/IMG_2918.JPG",
+    "content/gallery/_index.md",
+    "public/gallery/spain/index.html",
+    "public/gallery/spain",
+    "public/reading/2025-01-03---algorithm-bias/index.html",
+    "public/reading/2025-01-03---algorithm-bias",
     "content/watching/example-post-1/index.md",
     "content/reading/example-post-1/index.md",
     "content/reading/2025-01-03 - Algorithm Bias/index.md"
