@@ -1,5 +1,7 @@
-baseURL = "https://scottvandenwarsen-site.pages.dev/"
-languageCode = "en-us"
-title = "Scott Vanden Warsen"
+baseURL = 'https://example.org/'
+languageCode = 'en-us'
+title = 'Scott'
+theme = "beautifulhugo"
 
-disableKinds = ["taxonomy", "term"]
+[params]
+  homeBlurb = "An inside look at what I’m thinking about."

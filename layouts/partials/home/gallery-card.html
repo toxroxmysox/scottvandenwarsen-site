@@ -1,0 +1,17 @@
+<article style="margin-bottom: 1.25rem;">
+    <h3 style="margin: 0.25;">{{ .Title }}</h3>
+  <a href="{{ .RelPermalink }}" style="text-decoration: none;">
+    {{ with .Params.cover }}
+      {{ with $.Resources.GetMatch . }}
+        <img
+          src="{{ .RelPermalink }}"
+          alt="{{ $.Title }}"
+          style="width: 100%; height: 180px; object-fit: cover; border-radius: 6px; margin-bottom: .5rem;"
+        >
+      {{ end }}
+    {{ end }}
+  </a>
+</article>
+<p style="margin: .5rem 0 0 0;">
+  <a href="{{ .RelPermalink }}" class="btn btn-default btn-sm">View album</a>
+</p>

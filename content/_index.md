@@ -1,7 +1,4 @@
 ---
-title: "Home"
+title: "Scott Vanden Warsen"
+subtitle: "An inside look at what I'm thinking about."
 ---
-
-This site will collect things I’m thinking about.
-
-Links, notes, and references I want to share publicly.
