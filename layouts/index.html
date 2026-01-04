@@ -1,14 +1,54 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>{{ .Site.Title }}</title>
-  </head>
-  <body>
-    <main style="max-width: 720px; margin: 48px auto; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; line-height: 1.5;">
-      <h1>{{ .Site.Title }}</h1>
-      {{ .Content }}
-    </main>
-  </body>
-</html>
+{{ define "main" }}
+
+<div class="container homepage-sections" role="main">
+
+
+  <!-- Optional blurb under the hero (keeps homepage tight) -->
+  {{ with .Site.Params.homeBlurb }}
+    <p class="text-center" style="max-width: 720px; margin: 0 auto 2rem; opacity: .9;">
+      {{ . | markdownify }}
+    </p>
+  {{ end }}
+
+  <div class="row text-center">
+    <div class="col-md-4">
+      <h2 class="text-center">Reading</h2>
+      {{ range first 5 (where .Site.RegularPages.ByDate.Reverse "Section" "reading") }}
+        {{ partial "home/card.html" . }}
+      {{ end }}
+    </div>
+
+    <div class="col-md-4">
+      <h2 class="text-center">Watching</h2>
+      {{ range first 5 (where .Site.RegularPages.ByDate.Reverse "Section" "watching") }}
+        {{ partial "home/card.html" . }}
+      {{ end }}
+    </div>
+
+    <div class="col-md-4">
+      <h2 class="text-center">Listening</h2>
+      {{ range first 5 (where .Site.RegularPages.ByDate.Reverse "Section" "listening") }}
+        {{ partial "home/card.html" . }}
+      {{ end }}
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="row text-center">
+    <div class="col-md-12">
+      <h2 class="text-center">Gallery</h2>
+    </div>
+  </div>
+
+  <div class="row text-center">
+    {{ range first 6 (where .Site.RegularPages.ByDate.Reverse "Section" "gallery") }}
+      <div class="col-sm-4">
+        {{ partial "home/gallery-card.html" . }}
+      </div>
+    {{ end }}
+  </div>
+
+</div>
+
+{{ end }}
