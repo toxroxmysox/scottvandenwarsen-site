@@ -1054,3 +1054,61 @@ h4.see-also {
   margin-left: auto;
   margin-right: auto;
 }
+
+.feed-heading {
+  text-align: center;
+}
+
+.feed-heading hr.small {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.navbar-custom .nav > li.active > a {
+  font-weight: 600;
+  opacity: 1;
+}
+.navbar-custom .nav > li > a {
+  opacity: 0.85;
+}
+
+/* Center nav in Bootstrap 3 navbar */
+.navbar-custom .navbar-collapse {
+  position: relative;
+}
+
+.navbar-custom .navbar-nav {
+  float: none;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+}
+
+
+/* Navbar text color */
+.navbar-custom .navbar-brand,
+.navbar-custom .nav > li > a {
+  color: #ffffff;
+  opacity: 0.85;
+}
+
+/* Hover */
+.navbar-custom .nav > li > a:hover {
+  color: #ffffff;
+  opacity: 1;
+  background: transparent;
+}
+
+/* Active page */
+.navbar-custom .nav > li.active > a,
+.navbar-custom .nav > li.active > a:hover {
+  color: #ffffff;
+  opacity: 1;
+  background-color: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+}
+
+.navbar-custom .navbar-brand {
+  font-weight: 600;
+}

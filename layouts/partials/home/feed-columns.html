@@ -1,0 +1,22 @@
+<div class="row text-center">
+    <div class="col-md-4">
+      <h2 class="text-center">Reading</h2>
+      {{ range first 5 (where .Site.RegularPages.ByDate.Reverse "Section" "reading") }}
+        {{ partial "home/card.html" . }}
+      {{ end }}
+    </div>
+
+    <div class="col-md-4">
+      <h2 class="text-center">Watching</h2>
+      {{ range first 5 (where .Site.RegularPages.ByDate.Reverse "Section" "watching") }}
+        {{ partial "home/card.html" . }}
+      {{ end }}
+    </div>
+
+    <div class="col-md-4">
+      <h2 class="text-center">Listening</h2>
+      {{ range first 5 (where .Site.RegularPages.ByDate.Reverse "Section" "listening") }}
+        {{ partial "home/card.html" . }}
+      {{ end }}
+    </div>
+  </div>
