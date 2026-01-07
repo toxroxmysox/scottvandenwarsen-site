@@ -1,0 +1,15 @@
+{{ define "main" }}
+<div class="container homepage-sections" role="main">
+  <h1>{{ .Title }}</h1>
+
+  {{ if eq .Section "feed" }}
+    {{ partial "home/feed-columns.html" . }}
+  {{ else if eq .Section "gallery" }}
+    {{ partial "home/gallery-albums.html" . }}
+  {{ else }}
+    {{ range .Pages.ByDate.Reverse }}
+      <p><a href="{{ .RelPermalink }}">{{ .Title }}</a></p>
+    {{ end }}
+  {{ end }}
+</div>
+{{ end }}

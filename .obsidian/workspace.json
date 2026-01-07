@@ -4,11 +4,25 @@
     "type": "split",
     "children": [
       {
-        "id": "b0cd3f345fa23535",
+        "id": "1f9d4781e848174b",
         "type": "tabs",
         "children": [
           {
-            "id": "7543da3d1b951266",
+            "id": "883f3e04d5b489cc",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "layouts/partials/nav.html",
+                "mode": "source",
+                "source": true
+              },
+              "icon": "lucide-file",
+              "title": "nav"
+            }
+          },
+          {
+            "id": "27fc6187377be7d1",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -21,7 +35,8 @@
               "title": "main"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -183,29 +198,33 @@
       "bases:Create new base": false
     }
   },
-  "active": "7543da3d1b951266",
+  "active": "27fc6187377be7d1",
   "lastOpenFiles": [
-    "themes/beautifulhugo/layouts/_default/single.html",
-    "layouts/partials/home/card.html",
-    "layouts/index.html",
+    "layouts/partials/head.html",
+    "layouts/partials/nav.html",
+    "themes/beautifulhugo/layouts/partials/nav.html",
+    "themes/beautifulhugo/layouts/partials/layouts/partials",
+    "themes/beautifulhugo/layouts/partials/layouts",
+    "themes/beautifulhugo/layouts/partials/header.html",
+    "themes/beautifulhugo/layouts/partials/head.html",
+    "themes/beautifulhugo/layouts/partials/head_custom.html",
     "static/css/main.css",
+    "layouts/partials/header.html",
+    "layouts/partials/home/gallery-albums.html",
+    "public/favicon-32x32.png",
+    "public/favicon-16x16.png",
+    "static/favicon-32x32.png",
+    "static/favicon-16x16.png",
+    "public/favicon-96x96.png",
+    "static/favicon-96x96.png",
+    "public/apple-touch-icon.png",
+    "static/apple-touch-icon.png",
+    "content/feed/_index.md",
+    "content/gallery/_index.md",
+    "content/watching/example-post-1/index.md",
     "content/gallery/Spain/index.md",
     "public/gallery/spain/cover_2.jpg",
     "public/gallery/spain/cover.jpg",
-    "public/gallery/spain/IMG_3289.JPG",
-    "public/gallery/spain/IMG_3263.JPG",
-    "public/gallery/spain/IMG_3219.JPG",
-    "public/gallery/spain/IMG_3026.JPG",
-    "public/gallery/spain/IMG_3001.JPG",
-    "public/gallery/spain/IMG_2972.JPG",
-    "public/gallery/spain/IMG_2928.JPG",
-    "public/gallery/spain/IMG_2918.JPG",
-    "content/gallery/_index.md",
-    "public/gallery/spain/index.html",
-    "public/gallery/spain",
-    "public/reading/2025-01-03---algorithm-bias/index.html",
-    "public/reading/2025-01-03---algorithm-bias",
-    "content/watching/example-post-1/index.md",
     "content/reading/example-post-1/index.md",
     "content/reading/2025-01-03 - Algorithm Bias/index.md"
   ]

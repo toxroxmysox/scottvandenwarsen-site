@@ -1,0 +1,12 @@
+<div class="row text-center">
+  {{ $albums := where .Site.RegularPages.ByDate.Reverse "Section" "gallery" }}
+  {{ if .IsHome }}
+    {{ $albums = first 6 $albums }}
+  {{ end }}
+
+  {{ range $albums }}
+    <div class="col-sm-4">
+      {{ partial "home/gallery-card.html" . }}
+    </div>
+  {{ end }}
+</div>
