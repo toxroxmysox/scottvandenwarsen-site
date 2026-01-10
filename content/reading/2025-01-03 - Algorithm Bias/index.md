@@ -11,4 +11,4 @@ In the linked article, Lauren talks about how google maps influences the restaur
 
 It makes me think about what other hidden algorithms or bias' exist in other mediums. There's the easy example of social media where we're shown what the algorithm "thinks" we want to see, and that becomes our online reality. We're not often shown new topics, or posts from people with differing opinions. 
 
-I want to intentionally think about what other hidden bias' I might in the apps and online sources that I consume. Is there a difference in what businesses and restaurants are shown between google maps, apple maps, or a different map system? Is the benefit of a more neutral system worth the ease of use downside of a less mainstream app? 
+I want to intentionally think about what other hidden bias' I might in the apps and online sources that I consume. Is there a difference in what businesses and restaurants are shown between google maps, apple maps, or a different map system? Is the benefit of a more neutral system worth the ease of use downside of a less mainstream app? test
