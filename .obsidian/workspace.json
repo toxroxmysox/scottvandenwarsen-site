@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "static/css/main.css",
+                "file": "layouts/feed/single.html",
                 "mode": "source",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "main"
+              "title": "single"
             }
           }
         ]
@@ -94,7 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "static/css/main.css",
+                "file": "layouts/feed/single.html",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +104,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for main"
+              "title": "Backlinks for single"
             }
           },
           {
@@ -113,12 +113,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "static/css/main.css",
+                "file": "layouts/feed/single.html",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from main"
+              "title": "Outgoing links from single"
             }
           },
           {
@@ -156,13 +156,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "static/css/main.css",
+                "file": "layouts/feed/single.html",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of main"
+              "title": "Outline of single"
             }
           }
         ]
@@ -185,8 +185,8 @@
   },
   "active": "883f3e04d5b489cc",
   "lastOpenFiles": [
-    "layouts/partials/head.html",
     "static/css/main.css",
+    "layouts/partials/head.html",
     "layouts/feed/single.html",
     "content/watching/_index.md",
     "content/_index.md",

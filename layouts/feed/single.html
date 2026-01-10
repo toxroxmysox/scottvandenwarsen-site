@@ -10,6 +10,14 @@
 		    </div>
 		  {{ end }}
 
+		{{ with .Params.external_url }}
+		  <p class="post-meta" style="margin-top: 6px;">
+		    <a href="{{ . }}" target="_blank" rel="noopener noreferrer">
+		      External Link ↗
+		    </a>
+		  </p>
+		{{ end }}
+
         {{ .Content }}
 
         {{ if .Params.tags }}
