@@ -1,6 +1,14 @@
 {{ define "main" }}
 <div class="container" role="main" style="max-width: 1100px;">
 
+<div class="row" style="margin-bottom: 1.25rem;">
+  <div class="col-sm-12">
+    <div style="opacity:.9; font-size:1.8rem;">
+      {{ .Date.Format "Jan 2, 2006" }}
+    </div>
+  </div>
+</div>
+
 {{ if .Content }}
   <div class="row" style="margin-bottom: 2rem;">
     <div class="col-sm-12 col-md-12">

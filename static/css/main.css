@@ -1085,14 +1085,6 @@ h4.see-also {
   margin: 0;
 }
 
-
-/* Navbar text color */
-.navbar-custom .navbar-brand,
-.navbar-custom .nav > li > a {
-  color: #ffffff;
-  opacity: 0.85;
-}
-
 /* Hover */
 .navbar-custom .nav > li > a:hover {
   color: #ffffff;
@@ -1111,4 +1103,101 @@ h4.see-also {
 
 .navbar-custom .navbar-brand {
   font-weight: 600;
+}
+
+.feed-date {
+  font-size: 1.8rem;
+  opacity: 0.75;
+  margin: 0 0 0.75rem 0;
+}
+
+/* ===== FIX NAVBAR CONTRAST + MOBILE HAMBURGER =====
+   Paste this at the VERY bottom of main.css (below your current Scott overrides).
+   It intentionally overrides your current "Navbar text color" block that forces white text.
+*/
+
+/* 1) Color by theme (light = dark text, dark = light text) */
+@media (prefers-color-scheme: light) {
+  .navbar-custom .navbar-brand,
+  .navbar-custom .nav > li > a {
+    color: #111 !important;
+    opacity: 0.9;
+  }
+
+  .navbar-custom .nav > li > a:hover,
+  .navbar-custom .nav > li > a:focus {
+    color: #000 !important;
+    opacity: 1;
+    background: transparent;
+  }
+
+  .navbar-custom .nav > li.active > a,
+  .navbar-custom .nav > li.active > a:hover,
+  .navbar-custom .nav > li.active > a:focus {
+    color: #000 !important;
+    opacity: 1;
+    background-color: rgba(0, 0, 0, 0.08);
+    border-radius: 4px;
+  }
+
+  .navbar-custom .navbar-toggle .icon-bar {
+    background-color: #111 !important;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .navbar-custom .navbar-brand,
+  .navbar-custom .nav > li > a {
+    color: #fff !important;
+    opacity: 0.85;
+  }
+
+  .navbar-custom .nav > li > a:hover,
+  .navbar-custom .nav > li > a:focus {
+    color: #fff !important;
+    opacity: 1;
+    background: transparent;
+  }
+
+  .navbar-custom .nav > li.active > a,
+  .navbar-custom .nav > li.active > a:hover,
+  .navbar-custom .nav > li.active > a:focus {
+    color: #fff !important;
+    opacity: 1;
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+  }
+
+  .navbar-custom .navbar-toggle .icon-bar {
+    background-color: #fff !important;
+  }
+}
+
+/* 2) Keep centered nav ONLY on desktop; reset to Bootstrap default on mobile.
+      This fixes the “hamburger opens then immediately closes” behavior that your absolute-centering can trigger. */
+@media only screen and (min-width: 768px) {
+  .navbar-custom .navbar-collapse { position: relative; }
+
+  .navbar-custom .navbar-nav {
+    float: none;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 0;
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .navbar-custom .navbar-collapse { position: static; }
+
+  .navbar-custom .navbar-nav {
+    float: none;
+    position: static;
+    left: auto;
+    transform: none;
+    margin: 7.5px -15px;
+  }
+
+  /* Ensure the toggle stays clickable above anything */
+  .navbar-custom .navbar-toggle { position: relative; z-index: 3; }
 }

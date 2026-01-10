@@ -34,12 +34,12 @@
 
         {{ else }}
 
-          <li class="{{ if .IsHome }}active{{ end }}">
-            <a title="Home" href="{{ "/" | relLangURL }}">Home</a>
-          </li>
-
           <li class="{{ if eq .Section "feed" }}active{{ end }}">
             <a title="Feed" href="{{ "/feed/" | relLangURL }}">Feed</a>
+          </li>
+
+          <li class="{{ if .IsHome }}active{{ end }}">
+            <a title="Home" href="{{ "/" | relLangURL }}">Home</a>
           </li>
 
           <li class="{{ if eq .Section "gallery" }}active{{ end }}">
