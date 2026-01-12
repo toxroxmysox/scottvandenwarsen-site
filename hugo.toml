@@ -1,7 +1,11 @@
-baseURL = 'https://example.org/'
+baseURL = "https://scottvandenwarsen.com/"
 languageCode = 'en-us'
-title = 'Scott'
+title = "Scott Vanden Warsen"
 theme = "beautifulhugo"
+enableRobotsTXT = true
+canonifyURLs = true
+
 
 [params]
-  homeBlurb = "An inside look at what I’m thinking about."
+  homeBlurb = "Welcome to an inside look at what I’m thinking about and want to share with others."
+

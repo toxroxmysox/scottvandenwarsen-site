@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "layouts/feed/single.html",
+                "file": "layouts/partials/head_custom.html",
                 "mode": "source",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "single"
+              "title": "head_custom"
             }
           }
         ]
@@ -94,7 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "layouts/feed/single.html",
+                "file": "layouts/partials/head_custom.html",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +104,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for single"
+              "title": "Backlinks for head_custom"
             }
           },
           {
@@ -113,12 +113,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "layouts/feed/single.html",
+                "file": "layouts/partials/head_custom.html",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from single"
+              "title": "Outgoing links from head_custom"
             }
           },
           {
@@ -156,13 +156,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "layouts/feed/single.html",
+                "file": "layouts/partials/head_custom.html",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of single"
+              "title": "Outline of head_custom"
             }
           }
         ]
@@ -185,9 +185,11 @@
   },
   "active": "883f3e04d5b489cc",
   "lastOpenFiles": [
-    "static/css/main.css",
+    "public/robots.txt",
     "layouts/partials/head.html",
+    "layouts/partials/head_custom.html",
     "layouts/feed/single.html",
+    "static/css/main.css",
     "content/watching/_index.md",
     "content/_index.md",
     "content/reading/_index.md",
@@ -199,8 +201,6 @@
     "themes/beautifulhugo/layouts/_default/single.html",
     "themes/beautifulhugo/layouts/_default/list.html",
     "themes/beautifulhugo/layouts/_default/baseof.html",
-    "themes/beautifulhugo/layouts/partials/post_meta.html",
-    "themes/beautifulhugo/layouts/partials/page_meta.html",
     "content/reading/2025-01-03 - Algorithm Bias/index.md",
     "content/gallery/Paris/index.md",
     "public/gallery/paris/cover_2.jpeg",
