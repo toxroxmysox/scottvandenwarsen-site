@@ -3,7 +3,7 @@ title: AI Slop Inevitability
 date: 2026-01-08
 draft: false
 summary: If the trend of AI creators and AI content continues to increase, what happens to authenticity?
-tags: []
+tags: [Podcast]
 external_url: https://www.theverge.com/podcast/856248/ces-2026-gadgets-vergecast
 ---
 
