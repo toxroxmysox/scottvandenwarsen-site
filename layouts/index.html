@@ -11,14 +11,17 @@
 
   {{ partial "home/feed-columns.html" . }}
 
-  <hr>
-<div class="row text-center">
-  <div class="col-md-12">
+  <!-- Gallery -->
+  <section class="gallery-section">
     <h2 class="text-center">Gallery</h2>
-  </div>
-</div>
 
-  {{ partial "home/gallery-albums.html" . }}
+    <div class="gallery-grid">
+      {{ $albums := where .Site.RegularPages.ByDate.Reverse "Section" "gallery" }}
+      {{ range first 6 $albums }}
+        {{ partial "home/gallery-card.html" . }}
+      {{ end }}
+    </div>
+  </section>
 
 </div>
 
