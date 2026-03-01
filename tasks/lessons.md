@@ -48,6 +48,17 @@ Rules to prevent repeated mistakes. Review at session start.
 - **Problem:** `git push` over HTTPS fails with "Device not configured" if no credential helper is set up.
 - **Rule:** After `gh auth login`, `gh` configures the git credential helper automatically. Always check `gh auth status` before attempting to push.
 
+## CSS Variables & Refactoring
+
+### `replace_all` corrupts `:root` CSS variable definitions
+- **Problem:** Using Edit with `replace_all: true` to replace a hex value like `#64b5f6` → `var(--link)` also replaces the *value* inside the `:root` definition, creating a circular reference: `--link: var(--link);`. This silently breaks all usages of that token.
+- **Rule:** After any `replace_all` pass that involves a value also defined in `:root`, immediately restore the `:root` definition to its correct literal value.
+- **Best approach:** Do all `replace_all` passes first (accepting that `:root` will be corrupted), then restore the entire `:root` block in one comprehensive Edit at the end. Track which entries will be corrupted before starting.
+
+### Design token strategy for Moody Slate
+- **Pattern used:** Insert a `:root {}` block at the very top of `main.css` with all tokens. Dark-mode overrides go in an immediately-following `@media (prefers-color-scheme: dark) :root {}` block. The Moody Slate section below uses `var(--token)` everywhere — no hardcoded hex values.
+- **File structure order:** tokens → legacy theme CSS → Scott overrides → Moody Slate → cards.
+
 ## Workflow
 
 ### Don't fight caching — fix it at the source
