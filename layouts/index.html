@@ -4,7 +4,7 @@
 
   <!-- Optional blurb under the hero (keeps homepage tight) -->
   {{ with .Site.Params.homeBlurb }}
-    <p class="text-center" style="max-width: 720px; margin: 0 auto 2rem; opacity: .9;">
+    <p class="homepage-blurb">
       {{ . | markdownify }}
     </p>
   {{ end }}
@@ -17,7 +17,8 @@
 
     <div class="gallery-grid">
       {{ $albums := where .Site.RegularPages.ByDate.Reverse "Section" "gallery" }}
-      {{ range first 6 $albums }}
+      {{ $galleryLimit := .Site.Params.galleryAlbumLimit | default 6 }}
+      {{ range first $galleryLimit $albums }}
         {{ partial "home/gallery-card.html" . }}
       {{ end }}
     </div>
