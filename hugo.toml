@@ -5,7 +5,12 @@ theme = "beautifulhugo"
 enableRobotsTXT = true
 canonifyURLs = true
 
-
 [params]
-  homeBlurb = "Welcome to an inside look at what I’m thinking about and want to share with others."
+  homeBlurb = "Welcome to an inside look at what I'm thinking about and want to share with others."
 
+  # How many items appear per feed column (Reading / Watching / Listening) on the homepage.
+  # Increase to show more recent items in each column.
+  feedItemLimit = 5
+
+  # How many albums appear in the gallery grid on the homepage.
+  galleryAlbumLimit = 6

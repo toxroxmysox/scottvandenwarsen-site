@@ -1,22 +1,27 @@
+{{/* feedItemLimit controls how many cards appear per column.
+     Change it in hugo.toml → [params] → feedItemLimit.
+     Defaults to 5 if the param is not set. */}}
+{{ $limit := .Site.Params.feedItemLimit | default 5 }}
+
 <div class="row text-center">
-    <div class="col-md-4">
-      <h2 class="text-center">Reading</h2>
-      {{ range first 5 (where .Site.RegularPages.ByDate.Reverse "Section" "reading") }}
-        {{ partial "home/card.html" . }}
-      {{ end }}
-    </div>
-
-    <div class="col-md-4">
-      <h2 class="text-center">Watching</h2>
-      {{ range first 5 (where .Site.RegularPages.ByDate.Reverse "Section" "watching") }}
-        {{ partial "home/card.html" . }}
-      {{ end }}
-    </div>
-
-    <div class="col-md-4">
-      <h2 class="text-center">Listening</h2>
-      {{ range first 5 (where .Site.RegularPages.ByDate.Reverse "Section" "listening") }}
-        {{ partial "home/card.html" . }}
-      {{ end }}
-    </div>
+  <div class="col-md-4">
+    <h2 class="text-center">Reading</h2>
+    {{ range first $limit (where .Site.RegularPages.ByDate.Reverse "Section" "reading") }}
+      {{ partial "home/card.html" . }}
+    {{ end }}
   </div>
+
+  <div class="col-md-4">
+    <h2 class="text-center">Watching</h2>
+    {{ range first $limit (where .Site.RegularPages.ByDate.Reverse "Section" "watching") }}
+      {{ partial "home/card.html" . }}
+    {{ end }}
+  </div>
+
+  <div class="col-md-4">
+    <h2 class="text-center">Listening</h2>
+    {{ range first $limit (where .Site.RegularPages.ByDate.Reverse "Section" "listening") }}
+      {{ partial "home/card.html" . }}
+    {{ end }}
+  </div>
+</div>
