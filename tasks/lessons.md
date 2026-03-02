@@ -59,6 +59,56 @@ Rules to prevent repeated mistakes. Review at session start.
 - **Pattern used:** Insert a `:root {}` block at the very top of `main.css` with all tokens. Dark-mode overrides go in an immediately-following `@media (prefers-color-scheme: dark) :root {}` block. The Moody Slate section below uses `var(--token)` everywhere — no hardcoded hex values.
 - **File structure order:** tokens → legacy theme CSS → Scott overrides → Moody Slate → cards.
 
+## JavaScript
+
+### JS files are cached more aggressively than CSS
+- **Problem:** `footer_custom.html` uses `?v={{ now.Unix }}` cache-busting on JS script tags, but the *browser* still caches aggressively. After editing `static/js/map.js` or `mini-map.js`, the preview browser often serves the old file with `transferSize: 0` (from disk cache).
+- **Diagnosis command:**
+  ```js
+  performance.getEntriesByType('resource').find(r => r.name.includes('map.js'))
+  // If transferSize === 0, the file is cached
+  ```
+- **Fix — force fresh JS in the preview:** Use `preview_eval` to navigate away then back with a unique bust param:
+  ```js
+  window.location.href = 'about:blank'
+  // then:
+  window.location.href = 'http://localhost:1313/?_bust=' + Date.now()
+  ```
+- **Root cause:** Hugo's dev server returns the same `?v=TIMESTAMP` URL on repeated renders because `now.Unix` is computed once per build, not per request. The browser sees the same URL and serves its cached copy.
+- **Rule:** After editing a JS file, always check `transferSize` in performance entries before trusting what's rendered. If cached, force a fresh load before debugging the JS logic.
+
+## Hugo
+
+### Use `relURL` not `absURL` for local static assets
+- **Problem:** `absURL` in Hugo templates generates full production URLs (`https://scottvandenwarsen.com/js/map.js`). During local dev, these 404 because the file isn't on production yet — so the script silently fails to load.
+- **Rule:** Always use `relURL` for `<script>` and `<link>` tags that reference files in `static/`. Only use `absURL` for canonical URLs, Open Graph `og:url`, and sitemap entries that genuinely need an absolute URL.
+- **Example fix:** `{{ "js/map.js" | absURL }}` → `{{ "js/map.js" | relURL }}`
+
+## Git
+
+### Git rebase workflow when you have unstaged changes
+If `git pull --rebase` fails with "unstaged changes":
+1. `git stash` — shelve unstaged changes
+2. `git pull --rebase origin main` — pull + replay local commits
+3. Resolve any conflicts; `git add` each resolved file
+4. `git rebase --continue` — complete the rebase
+5. `git stash pop` — restore your unstaged changes
+6. `git push origin main`
+
+### Merge conflict strategy: CSS variables win over hardcoded values
+- **Rule:** When a merge conflict is between a CSS `var(--token)` (remote design-token refactor) and a hardcoded hex value (our older code), **always keep the CSS variable**. It's more maintainable and consistent with the design system.
+- **Pattern to watch for:** `.some-class { color: <<<< HEAD: var(--text-muted) ==== #99a8b8 >>>>` → keep `var(--text-muted)`.
+
+### After git add, unmerged files still show as conflicted
+- **Problem:** After resolving all conflict markers and running `git add file`, git rebase still reports the file as "needs merge" if you haven't also staged the other conflicted files.
+- **Rule:** After resolving all files, check `git status` to see all "Unmerged paths". Stage every resolved file before running `git rebase --continue`.
+
+## Testing & Verification
+
+### Remove test data immediately after verification
+- **Problem:** Temporarily injected a fake US-CA gallery entry into `buildLocationIndex` to verify the US state rendering code path. Later verified it as a "phantom highlight" bug — it was just the test data left in from the previous session.
+- **Rule:** Inject test data → verify → remove in the same session, before marking the phase complete. Never leave test data in production code paths.
+
 ## Workflow
 
 ### Don't fight caching — fix it at the source
