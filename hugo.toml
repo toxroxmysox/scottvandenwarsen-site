@@ -14,3 +14,11 @@ canonifyURLs = true
 
   # How many albums appear in the gallery grid on the homepage.
   galleryAlbumLimit = 6
+
+[outputFormats.GalleryJSON]
+  mediaType = "application/json"
+  baseName = "galleries"
+  isPlainText = true
+
+[outputs]
+  home = ["HTML", "RSS", "GalleryJSON"]

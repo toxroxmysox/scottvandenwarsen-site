@@ -11,22 +11,19 @@
 
   {{ partial "home/feed-columns.html" . }}
 
-  <!-- Gallery -->
-  <section class="gallery-section">
-    <h2 class="text-center">Gallery</h2>
-
-    <div class="gallery-grid">
-      {{ $albums := where .Site.RegularPages.ByDate.Reverse "Section" "gallery" }}
-      {{ $galleryLimit := .Site.Params.galleryAlbumLimit | default 6 }}
-      {{ range first $galleryLimit $albums }}
-        {{ partial "home/gallery-card.html" . }}
-      {{ end }}
+  <!-- Mini Map -->
+  <section class="mini-map-section">
+    <h2 class="text-center">Where I've Been</h2>
+    <a href="{{ "/map/" | relLangURL }}" class="mini-map-link">
+      <div class="mini-map-container" id="mini-map-container">
+        <!-- D3 renders the static SVG here -->
+      </div>
+    </a>
+    <div class="text-center" style="margin-top: 1.2rem;">
+      <a href="{{ "/map/" | relLangURL }}" class="mini-map-cta">Explore the Map &rarr;</a>
     </div>
   </section>
 
 </div>
 
 {{ end }}
-
-
-

@@ -1,0 +1,18 @@
+{{ define "header" }}
+  <!-- Suppress default header for full-bleed map -->
+{{ end }}
+
+{{ define "main" }}
+<div class="map-page" id="map-page">
+  <div class="map-container" id="map-container">
+    <!-- D3 renders the SVG here -->
+  </div>
+  <div class="map-sidebar" id="map-sidebar">
+    <button class="sidebar-close" id="sidebar-close">&times;</button>
+    <h2 class="sidebar-title" id="sidebar-title"></h2>
+    <div class="sidebar-albums" id="sidebar-albums">
+      <!-- Gallery cards injected by JS -->
+    </div>
+  </div>
+</div>
+{{ end }}

@@ -1,0 +1,10 @@
+[{{ $galleries := where .Site.RegularPages "Section" "gallery" }}{{ range $i, $page := $galleries }}{{ if $i }},{{ end }}
+  {
+    "title": {{ $page.Title | jsonify }},
+    "date": "{{ $page.Date.Format "2006-01-02" }}",
+    "summary": {{ $page.Params.summary | default "" | jsonify }},
+    "location": {{ $page.Params.location | default "" | jsonify }},
+    "cover": "{{ with $page.Params.cover }}{{ with $page.Resources.GetMatch . }}{{ .RelPermalink }}{{ end }}{{ end }}",
+    "url": "{{ $page.RelPermalink }}"
+  }{{ end }}
+]
