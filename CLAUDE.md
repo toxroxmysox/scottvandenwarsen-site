@@ -203,6 +203,43 @@ Confirm:
 
 If the build fails, fix the issue before marking the task complete.
 
+## Hugo Template Rules
+
+### URL generation
+- **Always use `relURL`** for `<script>` and `<link>` tags referencing files in `static/`. Example: `{{ "js/map.js" | relURL }}`.
+- **Never use `absURL`** for local static assets — it generates production URLs (`https://scottvandenwarsen.com/...`) that 404 during local dev.
+- `absURL` is only appropriate for canonical meta tags, `og:url`, and sitemap entries.
+
+### Cache-busting
+- CSS link in `head.html`: `?v={{ now.Unix }}` — already applied.
+- JS scripts in `footer_custom.html`: `?v={{ now.Unix }}` — already applied.
+- Despite cache-busting, the browser may still serve cached JS. If behavior looks stale, check with: `performance.getEntriesByType('resource').find(r => r.name.includes('filename.js'))` and look for `transferSize === 0`.
+
+## Verification Workflow
+
+When a preview server is running and code has been edited:
+
+1. **Use `preview_snapshot` first** — returns accessibility tree (text, cheap). Use this to verify text content, element presence, and page structure.
+2. **Use `preview_inspect`** — for CSS/style verification (color, font, spacing). More accurate than a screenshot.
+3. **Use `preview_screenshot` sparingly** — only when you genuinely need to see visual layout. Screenshots are image data and cost significantly more tokens than text-based tools.
+4. **Reload with cache-bust if JS looks stale:**
+   ```js
+   // In preview_eval:
+   window.location.href = window.location.href.split('?')[0] + '?_bust=' + Date.now()
+   ```
+
+## Git Push Workflow
+
+When local branch has diverged from origin:
+```sh
+git stash                      # shelve unstaged changes (e.g. .obsidian/)
+git pull --rebase origin main  # replay local commits on top of remote
+# resolve any conflicts, git add each file
+git rebase --continue
+git stash pop                  # restore unstaged changes
+git push origin main
+```
+
 ## Mistakes to Avoid
 
 See `tasks/lessons.md` for the full accumulated list.
