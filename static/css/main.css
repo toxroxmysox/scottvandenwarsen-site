@@ -1831,3 +1831,312 @@ ul.share li a {
   opacity: 0.9;
   text-align: center;
 }
+
+/* ==========================================================
+   HOMEPAGE MINI-MAP
+   ========================================================== */
+
+.mini-map-section {
+  padding: 2rem 0 1rem;
+  text-align: center;
+}
+
+.mini-map-section h2 {
+  margin-bottom: 1.2rem;
+}
+
+.mini-map-link {
+  display: block;
+  text-decoration: none !important;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: box-shadow 0.2s ease;
+}
+
+.mini-map-link:hover {
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+}
+
+.mini-map-container {
+  width: 100%;
+  background: rgba(30, 40, 55, 0.6);
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(100, 120, 140, 0.15);
+}
+
+.mini-map-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.mini-map-country {
+  fill: none;
+  stroke: rgba(100, 120, 140, 0.2);
+  stroke-width: 0.5;
+}
+
+.mini-map-country.visited {
+  fill: rgba(100, 181, 246, 0.2);
+  stroke: rgba(100, 181, 246, 0.35);
+}
+
+.mini-map-border {
+  fill: none;
+  stroke: rgba(100, 120, 140, 0.15);
+  stroke-width: 0.5;
+  pointer-events: none;
+}
+
+.mini-map-cta {
+  display: inline-block;
+  padding: 0.6rem 1.8rem;
+  color: #64b5f6;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  border: 1px solid rgba(100, 181, 246, 0.3);
+  border-radius: 6px;
+  text-decoration: none !important;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.mini-map-cta:hover {
+  background: rgba(100, 181, 246, 0.1);
+  color: #90caf9;
+}
+
+/* ==========================================================
+   WORLD MAP PAGE
+   ========================================================== */
+
+/* Hide footer and default header padding on map page */
+.map-page ~ footer,
+.map-page ~ .pswp {
+  display: none;
+}
+
+.map-page {
+  display: flex;
+  width: 100%;
+  height: calc(100vh - 51px);
+  margin-top: 51px;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Map area */
+.map-container {
+  flex: 1;
+  min-width: 0;
+  transition: flex 0.4s ease;
+  overflow: hidden;
+  background: transparent;
+}
+
+.map-container svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Country name label (HTML overlay) */
+.country-label {
+  position: absolute;
+  transform: translateX(-50%);
+  color: #ffffff;
+  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+  white-space: nowrap;
+  z-index: 5;
+}
+
+/* Country paths — outline only, no fill */
+.map-country {
+  fill: none;
+  stroke: rgba(100, 120, 140, 0.4);
+  stroke-width: 0.5px;
+  transition: fill 0.2s ease, stroke 0.2s ease;
+}
+
+/* Countries that have galleries */
+.map-country.has-gallery {
+  fill: rgba(100, 181, 246, 0.15);
+  stroke: rgba(100, 181, 246, 0.5);
+  stroke-width: 0.8px;
+  cursor: pointer;
+}
+
+.map-country.has-gallery:hover {
+  fill: rgba(100, 181, 246, 0.3);
+  stroke: rgba(100, 181, 246, 0.7);
+  stroke-width: 1px;
+}
+
+.map-country.active {
+  fill: rgba(100, 181, 246, 0.35);
+  stroke: #64b5f6;
+  stroke-width: 1.5px;
+}
+
+/* US state paths */
+.map-state {
+  fill: none;
+  stroke: rgba(100, 120, 140, 0.3);
+  stroke-width: 0.3px;
+  transition: fill 0.2s ease, stroke 0.2s ease;
+}
+
+.map-state.has-gallery {
+  fill: rgba(100, 181, 246, 0.15);
+  stroke: rgba(100, 181, 246, 0.5);
+  stroke-width: 0.6px;
+  cursor: pointer;
+}
+
+.map-state.has-gallery:hover {
+  fill: rgba(100, 181, 246, 0.3);
+  stroke: rgba(100, 181, 246, 0.7);
+}
+
+.map-state.active {
+  fill: rgba(100, 181, 246, 0.35);
+  stroke: #64b5f6;
+  stroke-width: 1px;
+}
+
+/* Sidebar */
+.map-sidebar {
+  width: 0;
+  overflow: hidden;
+  transition: width 0.4s ease, padding 0.4s ease;
+  background: rgba(38, 53, 69, 0.95);
+  border-left: 1px solid rgba(58, 82, 106, 0.5);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
+}
+
+.map-sidebar.open {
+  width: 33.333%;
+  min-width: 320px;
+  padding: 1.5rem;
+  overflow-y: auto;
+}
+
+.sidebar-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  color: #99a8b8;
+  font-size: 1.8rem;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0.25rem;
+  transition: color 0.2s ease;
+  z-index: 10;
+}
+
+.sidebar-close:hover {
+  color: #e8edf2;
+}
+
+.sidebar-title {
+  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #e8edf2;
+  margin: 0 0 1.25rem 0;
+  padding-right: 2rem;
+}
+
+.sidebar-albums {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Album card in sidebar */
+.sidebar-album-card {
+  display: block;
+  text-decoration: none !important;
+  border-radius: 10px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+.sidebar-album-card:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(100, 181, 246, 0.25);
+}
+
+.sidebar-album-cover {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  display: block;
+}
+
+.sidebar-album-info {
+  padding: 0.75rem 1rem;
+}
+
+.sidebar-album-title {
+  display: block;
+  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #e8edf2;
+  line-height: 1.3;
+}
+
+.sidebar-album-date {
+  display: block;
+  font-size: 0.8rem;
+  color: #6b7f8e;
+  margin-top: 0.2rem;
+}
+
+.sidebar-album-summary {
+  display: block;
+  font-size: 0.85rem;
+  color: #99a8b8;
+  margin-top: 0.3rem;
+  line-height: 1.4;
+}
+
+/* --- Dark mode adjustments for map --- */
+@media (prefers-color-scheme: dark) {
+  .map-country {
+    stroke: rgba(80, 100, 120, 0.35);
+  }
+  .map-sidebar {
+    background: rgba(26, 37, 48, 0.95);
+    border-left-color: rgba(50, 70, 90, 0.5);
+  }
+  .sidebar-album-card {
+    background: rgba(255, 255, 255, 0.03);
+    border-color: rgba(255, 255, 255, 0.04);
+  }
+  .sidebar-album-card:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(124, 196, 250, 0.2);
+  }
+  .sidebar-album-title { color: #dce3ea; }
+  .sidebar-album-summary { color: #8a9aaa; }
+  .sidebar-album-date { color: #5a6e7e; }
+}

@@ -1,0 +1,13 @@
+{{ if eq .Type "map" }}
+<!-- D3.js for interactive map -->
+<script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
+<script src="{{ "js/map.js" | relURL }}?v={{ now.Unix }}"></script>
+{{ end }}
+
+{{ if .IsHome }}
+<!-- D3.js for homepage mini-map -->
+<script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
+<script src="{{ "js/mini-map.js" | relURL }}?v={{ now.Unix }}"></script>
+{{ end }}

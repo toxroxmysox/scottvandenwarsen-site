@@ -46,6 +46,10 @@
             <a title="Gallery" href="{{ "/gallery/" | relLangURL }}">Gallery</a>
           </li>
 
+          <li class="{{ if eq .Type "map" }}active{{ end }}">
+            <a title="Map" href="{{ "/map/" | relLangURL }}">Map</a>
+          </li>
+
         {{ end }}
 
         {{ if hugo.IsMultilingual }}
