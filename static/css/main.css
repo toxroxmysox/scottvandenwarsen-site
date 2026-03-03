@@ -2140,3 +2140,105 @@ ul.share li a {
   .sidebar-album-summary { color: #8a9aaa; }
   .sidebar-album-date { color: #5a6e7e; }
 }
+
+/* --- Mobile map: bottom sheet sidebar (≤767px) --- */
+@media only screen and (max-width: 767px) {
+  .map-page {
+    flex-direction: column;
+  }
+
+  .map-container {
+    flex: 1;
+    width: 100%;
+  }
+
+  .map-sidebar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-height: 55vh;
+    height: auto;
+    border-left: none;
+    border-top: 1px solid rgba(58, 82, 106, 0.5);
+    border-radius: 16px 16px 0 0;
+    transform: translateY(100%);
+    transition: transform 0.35s ease, padding 0.35s ease;
+    z-index: 20;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .map-sidebar.open {
+    width: 100% !important;
+    min-width: 0 !important;
+    padding: 1.25rem;
+    transform: translateY(0);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Drag handle hint at top of sheet */
+  .map-sidebar.open::before {
+    content: '';
+    display: block;
+    width: 36px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+    margin: 0 auto 0.75rem;
+  }
+
+  .sidebar-title {
+    font-size: 18px;
+    margin: 0 0 1rem 0;
+  }
+
+  .sidebar-close {
+    top: 0.5rem;
+    right: 0.75rem;
+    font-size: 1.5rem;
+  }
+
+  .sidebar-album-cover {
+    height: 140px;
+  }
+
+  /* Country label: hide on mobile — sidebar title is sufficient */
+  .country-label {
+    display: none;
+  }
+}
+
+/* --- Mobile dark mode for bottom sheet --- */
+@media only screen and (max-width: 767px) and (prefers-color-scheme: dark) {
+  .map-sidebar {
+    border-top-color: rgba(50, 70, 90, 0.5);
+  }
+}
+
+/* --- Tablet map: tighter side panel (768px–1023px) --- */
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
+  .map-sidebar.open {
+    width: 40%;
+    min-width: 280px;
+  }
+
+  .sidebar-album-cover {
+    height: 160px;
+  }
+}
+
+/* --- Touch devices: brighter tap targets --- */
+@media (hover: none) {
+  .map-country.has-gallery {
+    fill: rgba(100, 181, 246, 0.22);
+    stroke: rgba(100, 181, 246, 0.6);
+  }
+
+  .map-state.has-gallery {
+    fill: rgba(100, 181, 246, 0.22);
+    stroke: rgba(100, 181, 246, 0.6);
+  }
+}
