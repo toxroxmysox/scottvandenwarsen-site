@@ -69,6 +69,18 @@
     '78': 'US-VI'
   };
 
+  // Viewport breakpoints (must match CSS)
+  var MOBILE_MAX = 767;
+  var TABLET_MAX = 1023;
+
+  function isMobileViewport() {
+    return window.innerWidth <= MOBILE_MAX;
+  }
+
+  function isTabletViewport() {
+    return window.innerWidth > MOBILE_MAX && window.innerWidth <= TABLET_MAX;
+  }
+
   // State data
   var galleryData = [];
   var galleriesByLocation = {};
@@ -224,15 +236,27 @@
     var x = (bounds[0][0] + bounds[1][0]) / 2;
     var y = (bounds[0][1] + bounds[1][1]) / 2;
 
-    // Account for sidebar taking 1/3 of viewport.
-    // Center the country in the left 2/3 of the screen.
-    var sidebarWidth = width * 0.333;
-    var availableWidth = width - sidebarWidth;
+    var availableWidth, availableHeight, tx, ty, scale;
 
-    // Zoom so the country fills ~60% of the available area
-    var scale = Math.min(12, 0.6 / Math.max(dx / availableWidth, dy / height));
-    var tx = availableWidth / 2 - scale * x;
-    var ty = height / 2 - scale * y;
+    if (isMobileViewport()) {
+      // Mobile: bottom sheet takes ~55% of viewport height.
+      // Center the country in the full width, top ~45% of the screen.
+      availableWidth = width;
+      availableHeight = height * 0.45;
+      scale = Math.min(12, 0.6 / Math.max(dx / availableWidth, dy / availableHeight));
+      tx = availableWidth / 2 - scale * x;
+      ty = availableHeight / 2 - scale * y;
+    } else {
+      // Tablet & desktop: sidebar panel on the right.
+      // Tablet: 40%, Desktop: 33.333%
+      var sidebarFraction = isTabletViewport() ? 0.4 : 0.333;
+      var sidebarWidth = width * sidebarFraction;
+      availableWidth = width - sidebarWidth;
+      availableHeight = height;
+      scale = Math.min(12, 0.6 / Math.max(dx / availableWidth, dy / availableHeight));
+      tx = availableWidth / 2 - scale * x;
+      ty = availableHeight / 2 - scale * y;
+    }
 
     svg.transition()
       .duration(750)
@@ -240,7 +264,7 @@
         d3.zoomIdentity.translate(tx, ty).scale(scale)
       );
 
-    // Show country name label on the map
+    // Show country name label on the map (hidden via CSS on mobile)
     if (showLabel !== false && d.properties && d.properties.name) {
       addCountryLabel(d);
     }
@@ -459,6 +483,12 @@
 
     svg.attr('width', width).attr('height', height);
     g.selectAll('path').attr('d', path);
+
+    // If sidebar is open, close it on major resize (e.g. orientation change)
+    // to prevent stale zoom positioning
+    if (activeLocation && sidebar.classList.contains('open')) {
+      closeSidebar();
+    }
   }
 
   // --- Start ---
