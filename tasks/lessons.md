@@ -121,3 +121,25 @@ If `git pull --rebase` fails with "unstaged changes":
 ### Multiple worktrees need different ports
 - **Problem:** Running two Hugo servers on the same port causes conflicts and stale content from the wrong worktree.
 - **Rule:** When comparing worktrees, assign different ports in `.claude/launch.json` (e.g., 1313 and 1314).
+
+## Responsive / Mobile
+
+### CSS sidebar transitions: use `transform` not `width` on mobile
+- **Pattern:** Desktop sidebar animates via `width: 0 → 33%`. On mobile, animating width is janky and fights `position: fixed`. Use `transform: translateY(100%) → translateY(0)` for a smooth bottom sheet instead.
+- **Rule:** For overlaid panels (bottom sheets, drawers), always animate `transform` — it's GPU-composited and doesn't trigger layout recalculation.
+
+### Keep JS breakpoints in sync with CSS
+- **Pattern:** Defined `MOBILE_MAX = 767` and `TABLET_MAX = 1023` as JS constants at the top of `map.js`, with a comment "must match CSS". The CSS uses `@media (max-width: 767px)` and `@media (min-width: 768px) and (max-width: 1023px)`.
+- **Rule:** When JS behavior depends on responsive breakpoints, define them once as named constants and add a comment tying them to the CSS. Don't hardcode pixel values inline in JS functions.
+
+### Zoom centering must account for where the sidebar appears
+- **Problem:** `zoomToFeature()` hardcoded `width * 0.333` as sidebar offset, which is wrong when the sidebar is a bottom sheet (mobile) or 40% wide (tablet).
+- **Rule:** When zooming/centering content that shares space with a sidebar, compute the available area dynamically based on viewport size and sidebar position (horizontal on desktop, vertical on mobile).
+
+### `!important` is acceptable for responsive overrides of base layout
+- **Pattern:** Used `width: 100% !important; min-width: 0 !important;` in the mobile media query to override the base `.map-sidebar.open { width: 33.333%; min-width: 320px; }`.
+- **Rule:** `!important` is fine when a responsive media query needs to definitively override a base rule that would otherwise break the layout at that breakpoint. This is one of the legitimate use cases for `!important`.
+
+### Use `@media (hover: none)` for touch-specific styles
+- **Pattern:** Touch devices don't have hover. Used `@media (hover: none)` to give `.has-gallery` countries a brighter default fill so they're visually distinct as tappable without relying on `:hover`.
+- **Rule:** Don't rely on `:hover` as the only visual affordance for interactive elements. Add `@media (hover: none)` fallbacks for touch devices.
