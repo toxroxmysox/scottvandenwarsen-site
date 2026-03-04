@@ -384,10 +384,20 @@
     });
 
     sidebar.classList.add('open');
+
+    // On mobile, disable D3 zoom while bottom sheet is open.
+    // Prevents touch events on the map behind the sheet from
+    // being captured as pan/zoom gestures.
+    if (isMobileViewport()) {
+      svg.on('.zoom', null);
+    }
   }
 
   function closeSidebar() {
     sidebar.classList.remove('open');
+
+    // Re-enable D3 zoom (disabled when mobile sidebar opened)
+    svg.call(zoom);
     d3.selectAll('.map-country.active, .map-state.active').classed('active', false);
     activeLocation = null;
 
