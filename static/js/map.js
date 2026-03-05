@@ -92,9 +92,15 @@
   // DOM refs
   var mapContainer = document.getElementById('map-container');
   var sidebar = document.getElementById('map-sidebar');
+  var sidebarBody = document.getElementById('sidebar-body');
   var sidebarTitle = document.getElementById('sidebar-title');
   var sidebarAlbums = document.getElementById('sidebar-albums');
   var closeBtn = document.getElementById('sidebar-close');
+
+  // Sheet drag state (mobile only)
+  var sheetDragStartY = 0;
+  var sheetDragDelta = 0;
+  var sheetIsDragging = false;
 
   // D3 setup
   var width, height;
@@ -385,19 +391,84 @@
 
     sidebar.classList.add('open');
 
-    // On mobile, disable D3 zoom while bottom sheet is open.
-    // Prevents touch events on the map behind the sheet from
-    // being captured as pan/zoom gestures.
+    // On mobile, inject a drag handle so the user can raise/lower the sheet.
+    // The handle uses touch-action:none so its touchstart/move/end handlers
+    // receive all events, and position:absolute on the sidebar ensures iOS
+    // WebKit routes touches to the sidebar (not the SVG below).
     if (isMobileViewport()) {
-      svg.on('.zoom', null);
+      setupSheetHandle();
     }
+  }
+
+  // --- Mobile sheet drag handle ---
+
+  function setupSheetHandle() {
+    // Remove stale handle from any previous open
+    var existing = sidebar.querySelector('.sheet-handle');
+    if (existing) existing.parentNode.removeChild(existing);
+
+    var handle = document.createElement('div');
+    handle.className = 'sheet-handle';
+    var bar = document.createElement('div');
+    bar.className = 'sheet-handle-bar';
+    handle.appendChild(bar);
+
+    // Prepend before .sidebar-body
+    sidebar.insertBefore(handle, sidebarBody);
+
+    handle.addEventListener('touchstart', function (e) {
+      sheetDragStartY = e.touches[0].clientY;
+      sheetDragDelta = 0;
+      sheetIsDragging = true;
+      sidebar.classList.add('dragging');
+      e.preventDefault();
+      e.stopPropagation();
+    }, { passive: false });
+
+    handle.addEventListener('touchmove', function (e) {
+      if (!sheetIsDragging) return;
+      var deltaY = e.touches[0].clientY - sheetDragStartY;
+      sheetDragDelta = deltaY;
+
+      if (deltaY > 0) {
+        // Dragging DOWN — translate the sheet toward closed; max-height stays put
+        sidebar.style.transform = 'translateY(' + deltaY + 'px)';
+        sidebar.style.maxHeight = '';
+      } else {
+        // Dragging UP — grow max-height so content is revealed (bottom-anchored)
+        sidebar.style.transform = '';
+        var baseH = window.innerHeight * 0.55;
+        var maxH  = window.innerHeight * 0.82;
+        sidebar.style.maxHeight = Math.min(baseH + Math.abs(deltaY), maxH) + 'px';
+      }
+      e.preventDefault();
+      e.stopPropagation();
+    }, { passive: false });
+
+    handle.addEventListener('touchend', function (e) {
+      if (!sheetIsDragging) return;
+      sheetIsDragging = false;
+      sidebar.classList.remove('dragging'); // re-enable CSS transitions
+      sidebar.style.transform = '';
+      sidebar.style.maxHeight = ''; // hand back to CSS class
+
+      if (sheetDragDelta > 80) {
+        // Dragged down far enough — close
+        closeSidebar();
+      } else if (sheetDragDelta < -40) {
+        // Dragged up enough — snap to expanded (max-height: 82vh via CSS class)
+        sidebar.classList.add('expanded');
+      } else {
+        // Small drag — snap back; if currently expanded keep it expanded
+      }
+      e.stopPropagation();
+    }, { passive: true });
   }
 
   function closeSidebar() {
     sidebar.classList.remove('open');
-
-    // Re-enable D3 zoom (disabled when mobile sidebar opened)
-    svg.call(zoom);
+    sidebar.classList.remove('expanded');
+    sidebar.style.transform = ''; // clear any inline drag transform
     d3.selectAll('.map-country.active, .map-state.active').classed('active', false);
     activeLocation = null;
 
