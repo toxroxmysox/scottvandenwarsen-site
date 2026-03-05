@@ -143,3 +143,26 @@ If `git pull --rebase` fails with "unstaged changes":
 ### Use `@media (hover: none)` for touch-specific styles
 - **Pattern:** Touch devices don't have hover. Used `@media (hover: none)` to give `.has-gallery` countries a brighter default fill so they're visually distinct as tappable without relying on `:hover`.
 - **Rule:** Don't rely on `:hover` as the only visual affordance for interactive elements. Add `@media (hover: none)` fallbacks for touch devices.
+
+### `position: fixed` overlays pass touches through to `touch-action: none` elements on iOS WebKit
+- **Problem:** A `position: fixed` bottom sheet with `z-index: 20` was visually on top of a D3 SVG, but taps on the sheet hit the SVG instead. D3's `zoom()` sets `touch-action: none` inline on the SVG. iOS WebKit (Safari, Arc, Chrome for iOS — all use the same engine) incorrectly routes touch events to the `touch-action: none` element rather than the fixed overlay above it.
+- **Root cause:** This is a longstanding iOS WebKit bug, not a z-index/pointer-events issue.
+- **Fix:** Change the overlay from `position: fixed` to `position: absolute`. Ensure the parent container has `position: relative`. Visually identical (bottom-anchored), but iOS touch routing works correctly.
+- **Wrong approach tried first:** `svg.on('.zoom', null)` — removes D3's zoom listener, but D3 already set `touch-action: none` as an inline style; touch routing was still broken AND it blocked map interaction while the sheet was open.
+
+### Pseudo-elements cannot receive touch or pointer events
+- **Problem:** Used `::before` to render a drag handle bar. When implementing drag-to-resize, attached `touchstart`/`touchmove`/`touchend` to the pseudo-element area — but events never fired.
+- **Rule:** Pseudo-elements (`::before`, `::after`) are not DOM nodes and cannot receive events. Always create a real DOM element for anything interactive. Inject it via JS or add it to the HTML template.
+
+### Bottom sheet expand: use `max-height`, not `translateY`
+- **Problem:** To simulate "drag up to expand" on a bottom sheet, used `translateY(-Npx)` — this just shifted the whole box upward without revealing more content, since the sheet height didn't change.
+- **Rule:** For a bottom-anchored sheet (`position: absolute; bottom: 0`), expanding means growing the sheet's `max-height` (or `height`) so content is revealed. `translateY` should only be used for the close/dismiss direction (dragging down).
+- **Pattern:** `touchmove UP → sidebar.style.maxHeight = (baseH + |deltaY|) + 'px'` (capped at max). `touchend → sidebar.classList.add('expanded')` (CSS class takes over). Include `max-height` in the CSS `transition` property for smooth snap animation.
+
+### Disable CSS transitions during active drag, re-enable on release
+- **Pattern:** Add a `.dragging` class with `transition: none !important` when `touchstart` fires. Remove it on `touchend` before snapping to final position — this lets the CSS transition animate the snap.
+- **Rule:** Direct manipulation (drag) must be instantaneous. The snap-to-final-position on release should animate. `.dragging` class is the clean way to toggle this.
+
+### iOS browser ≠ Safari only — all iOS browsers share WebKit
+- **Lesson:** Tested on Arc browser on iOS; assumed the bug might be Arc-specific. Arc on iOS still uses WKWebView (iOS-mandated WebKit). All iOS browsers — Safari, Chrome, Arc, Firefox, Edge — run on WebKit.
+- **Rule:** Any iOS touch bug is a WebKit bug and affects every browser on iOS. Don't narrow scope to "Safari only" when diagnosing iOS touch issues.
