@@ -11,3 +11,56 @@
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
 <script src="{{ "js/mini-map.js" | relURL }}?v={{ now.Unix }}"></script>
 {{ end }}
+
+{{ if and (eq .Kind "page") (eq .Section "gallery") }}
+<!-- PhotoSwipe v4 init — JS + overlay HTML already injected by the theme on every page -->
+<script>
+(function () {
+  var gallery = document.querySelector('.pswp-gallery');
+  if (!gallery) return;
+
+  var pswpEl = document.querySelector('.pswp');
+  var links   = gallery.querySelectorAll('a[data-size]');
+
+  // Build the items array from each link's href + data-size attribute.
+  var items = [];
+  Array.prototype.forEach.call(links, function (el) {
+    var parts = el.getAttribute('data-size').split('x');
+    var img   = el.querySelector('img');
+    items.push({
+      src:   el.href,
+      w:     parseInt(parts[0], 10),
+      h:     parseInt(parts[1], 10),
+      msrc:  img ? img.src  : undefined,
+      title: img ? img.alt  : undefined
+    });
+  });
+
+  // Event delegation: walk up from the click target to find the <a data-size> link.
+  gallery.addEventListener('click', function (e) {
+    var target = e.target;
+    while (target && target !== gallery) {
+      if (target.tagName === 'A' && target.getAttribute('data-size')) {
+        e.preventDefault();
+        var index = -1;
+        for (var i = 0; i < links.length; i++) {
+          if (links[i] === target) { index = i; break; }
+        }
+        if (index >= 0) {
+          var pswp = new PhotoSwipe(pswpEl, PhotoSwipeUI_Default, items, {
+            index:           index,
+            bgOpacity:       0.92,
+            showHideOpacity: true,
+            history:         false,
+            shareEl:         false
+          });
+          pswp.init();
+        }
+        return;
+      }
+      target = target.parentNode;
+    }
+  });
+}());
+</script>
+{{ end }}
