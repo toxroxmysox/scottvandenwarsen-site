@@ -4,8 +4,14 @@
      .feed-date:       reuses the existing date label style
      .album-content:   sets body text opacity for the album description
      .album-thumb:     thumbnail sizing — change height in main.css (.album-thumb)
+     .pswp-gallery:    PhotoSwipe v4 hook — clicking a photo opens the lightbox
 */}}
 <div class="container album-container" role="main">
+
+  {{/* Back to gallery breadcrumb — top */}}
+  <div class="album-breadcrumb">
+    <a href="{{ "/gallery/" | relURL }}">← Gallery</a>
+  </div>
 
   {{/* Header row: date label */}}
   <div class="row album-row-header">
@@ -27,18 +33,31 @@
     </div>
   {{ end }}
 
-  {{/* Photo grid: col-sm-4 = 3-up on tablet and above, stacked on mobile */}}
-  <div class="row">
+  {{/* Photo grid: col-sm-4 = 3-up on tablet and above, stacked on mobile.
+       data-size="WxH" is required by PhotoSwipe v4 to size the overlay correctly.
+       Hugo provides .Width and .Height on image resources automatically. */}}
+  <div class="row pswp-gallery" itemscope itemtype="http://schema.org/ImageGallery">
     {{ $imgs := .Resources.Match "*.{jpg,jpeg,png,webp}" }}
-    {{ range $imgs }}
+    {{ range $i, $img := $imgs }}
       <div class="col-sm-4 album-photo-col">
-        {{/* Link opens full-size image in a new tab */}}
-        <a href="{{ .RelPermalink }}" target="_blank" rel="noopener" style="text-decoration:none;">
-          <img src="{{ .RelPermalink }}" alt="" class="album-thumb">
+        <a href="{{ $img.RelPermalink }}"
+           data-size="{{ $img.Width }}x{{ $img.Height }}"
+           itemprop="contentUrl">
+          <img src="{{ $img.RelPermalink }}"
+               alt="{{ $.Title }} — photo {{ add $i 1 }}"
+               class="album-thumb"
+               loading="lazy"
+               itemprop="thumbnail">
         </a>
       </div>
     {{ end }}
   </div>
 
+  {{/* Back to gallery breadcrumb — bottom so users don't have to scroll back up */}}
+  <div class="album-breadcrumb album-breadcrumb-bottom">
+    <a href="{{ "/gallery/" | relURL }}">← Back to Gallery</a>
+  </div>
+
 </div>
+
 {{ end }}
