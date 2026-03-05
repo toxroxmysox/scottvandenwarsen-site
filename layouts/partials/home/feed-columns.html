@@ -1,7 +1,11 @@
-{{/* feedItemLimit controls how many cards appear per column.
+{{/* feedItemLimit controls how many cards appear per column on the homepage.
      Change it in hugo.toml → [params] → feedItemLimit.
-     Defaults to 5 if the param is not set. */}}
+     Defaults to 5 if the param is not set.
+     On the /feed/ archive page the limit is removed so all items are shown. */}}
 {{ $limit := .Site.Params.feedItemLimit | default 5 }}
+{{ if eq .Section "feed" }}
+  {{ $limit = 9999 }}
+{{ end }}
 
 <div class="row text-center">
   <div class="col-md-4">
