@@ -431,12 +431,15 @@
       sheetDragDelta = deltaY;
 
       if (deltaY > 0) {
-        // Dragging DOWN — translate the sheet off screen
+        // Dragging DOWN — translate the sheet toward closed; max-height stays put
         sidebar.style.transform = 'translateY(' + deltaY + 'px)';
+        sidebar.style.maxHeight = '';
       } else {
-        // Dragging UP — expand by reducing translateY below 0 (clamped at -100px)
-        var clampedDelta = Math.max(deltaY, -100);
-        sidebar.style.transform = 'translateY(' + clampedDelta + 'px)';
+        // Dragging UP — grow max-height so content is revealed (bottom-anchored)
+        sidebar.style.transform = '';
+        var baseH = window.innerHeight * 0.55;
+        var maxH  = window.innerHeight * 0.82;
+        sidebar.style.maxHeight = Math.min(baseH + Math.abs(deltaY), maxH) + 'px';
       }
       e.preventDefault();
       e.stopPropagation();
@@ -445,18 +448,19 @@
     handle.addEventListener('touchend', function (e) {
       if (!sheetIsDragging) return;
       sheetIsDragging = false;
-      sidebar.classList.remove('dragging');
-      sidebar.style.transform = ''; // let CSS transition snap
+      sidebar.classList.remove('dragging'); // re-enable CSS transitions
+      sidebar.style.transform = '';
+      sidebar.style.maxHeight = ''; // hand back to CSS class
 
-      var sidebarH = sidebar.getBoundingClientRect().height;
-      if (sheetDragDelta > sidebarH * 0.3) {
-        // Dragged down past 30% of sheet height — close
+      if (sheetDragDelta > 80) {
+        // Dragged down far enough — close
         closeSidebar();
       } else if (sheetDragDelta < -40) {
-        // Dragged up enough — expand to show more
+        // Dragged up enough — snap to expanded (max-height: 82vh via CSS class)
         sidebar.classList.add('expanded');
+      } else {
+        // Small drag — snap back; if currently expanded keep it expanded
       }
-      // Otherwise snap back to current state (CSS handles it)
       e.stopPropagation();
     }, { passive: true });
   }
