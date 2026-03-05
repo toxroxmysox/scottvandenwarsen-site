@@ -4,6 +4,15 @@ _No active tasks._
 
 ## Completed
 
+- [x] Fix mobile bottom sheet touch passthrough (PR #5, merged)
+  - Root cause: iOS WebKit routes touches to `touch-action:none` SVG through `position:fixed` overlays
+  - Fix: `position:absolute` (not `fixed`) on the sidebar; parent `.map-page` is `position:relative`
+  - Added real `.sheet-handle` DOM element (pseudo-elements can't receive touch events)
+  - Handle drag-down → close, drag-up → expand via `max-height` growth (not `translateY`)
+  - `touch-action:none` on handle, `touch-action:pan-y` on scrollable `.sidebar-body`
+  - `.dragging` class disables CSS transitions during drag; removed on release for snap animation
+  - Removed broken `svg.on('.zoom',null)` approach from PR #4
+
 - [x] Mobile/tablet responsive map page (PR #4, merged)
   - Mobile (≤767px): sidebar → bottom sheet with `translateY` animation, drag handle, momentum scroll
   - Tablet (768px–1023px): side panel tightened to 40% width
