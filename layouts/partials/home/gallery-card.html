@@ -9,6 +9,15 @@
       >
     {{ end }}
   {{ end }}
+  {{/* Badges pinned to card corners */}}
+  {{ $flag := index .Site.Data.country_flags .Params.location }}
+  {{ with $flag }}
+    <span class="gallery-badge gallery-badge-flag">{{ . }}</span>
+  {{ end }}
+  {{ $count := len (.Resources.Match "*.{jpg,jpeg,png,webp}") }}
+  {{ if gt $count 0 }}
+    <span class="gallery-badge gallery-badge-count">{{ $count }} photos</span>
+  {{ end }}
   <div class="gallery-card-overlay">
     <span class="gallery-card-title">{{ .Title }}</span>
     {{ with .Params.summary }}
