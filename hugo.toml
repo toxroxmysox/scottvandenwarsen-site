@@ -15,6 +15,10 @@ canonifyURLs = true
   # How many albums appear in the gallery grid on the homepage.
   galleryAlbumLimit = 6
 
+  # Show related posts on feed single pages (matched by shared tags).
+  showRelatedPosts = true
+  related_content_limit = 4
+
 [outputFormats.GalleryJSON]
   mediaType = "application/json"
   baseName = "galleries"
