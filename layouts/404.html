@@ -1,0 +1,16 @@
+{{ define "header" }}<!-- No hero header on 404 -->{{ end }}
+{{ define "main" }}
+<div class="container error-page" role="main">
+  <div class="error-page-inner">
+    <h1 class="error-code">404</h1>
+    <p class="error-message">This page doesn't exist.</p>
+    <p class="error-hint">It may have been moved or removed. Try one of the links below.</p>
+    <nav class="error-nav">
+      <a href="{{ "/" | relLangURL }}" class="error-nav-link">Home</a>
+      <a href="{{ "/feed/" | relLangURL }}" class="error-nav-link">Feed</a>
+      <a href="{{ "/gallery/" | relLangURL }}" class="error-nav-link">Gallery</a>
+      <a href="{{ "/map/" | relLangURL }}" class="error-nav-link">Map</a>
+    </nav>
+  </div>
+</div>
+{{ end }}

@@ -4,6 +4,11 @@ _No active tasks._
 
 ## Completed
 
+- [x] Author config + custom 404 page (PR #10)
+  - `hugo.toml`: added `description`, `rss = true`
+  - `layouts/404.html`: branded 404 with Moody Slate styling + nav pill links
+  - Mobile responsive: nav links stack vertically at ≤480px
+
 - [x] Fix mobile bottom sheet touch passthrough (PR #5, merged)
   - Root cause: iOS WebKit routes touches to `touch-action:none` SVG through `position:fixed` overlays
   - Fix: `position:absolute` (not `fixed`) on the sidebar; parent `.map-page` is `position:relative`
