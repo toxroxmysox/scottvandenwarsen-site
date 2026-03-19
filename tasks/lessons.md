@@ -86,6 +86,11 @@ Rules to prevent repeated mistakes. Review at session start.
 
 ## Git
 
+### Always fetch `origin/main` before starting a worktree session
+- **Problem:** Local `main` was 4 commits behind `origin/main`. PRs merged on GitHub don't update local branches — they only update the remote. A worktree branched from stale local `main` was missing the lightbox, feed redesign, and other merged changes.
+- **Rule:** At session start, run `git fetch origin main` and rebase the worktree branch on `origin/main` (not local `main`). This ensures all merged PR changes are included.
+- **Pattern:** `git fetch origin main && git rebase origin/main`
+
 ### Git rebase workflow when you have unstaged changes
 If `git pull --rebase` fails with "unstaged changes":
 1. `git stash` — shelve unstaged changes
