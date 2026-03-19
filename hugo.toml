@@ -19,6 +19,17 @@ canonifyURLs = true
   showRelatedPosts = true
   related_content_limit = 4
 
+  # Show RSS icon in the site footer.
+  rss = true
+
+[params.author]
+  name = "Scott Vanden Warsen"
+  website = "https://scottvandenwarsen.com"
+  linkedin = "scott-vanden-warsen"
+
+[taxonomies]
+  tag = "tags"
+
 [outputFormats.GalleryJSON]
   mediaType = "application/json"
   baseName = "galleries"
