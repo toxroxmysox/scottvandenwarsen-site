@@ -50,6 +50,8 @@
   --link-hover-dark:   #a6d8fc;
   --accent-bg:         rgba(100, 181, 246, 0.10);   /* badge backgrounds, tag pills */
   --accent-bg-hover:   rgba(100, 181, 246, 0.15);   /* tag hover state */
+  --now-bg:            rgba(100, 181, 246, 0.07);   /* now-playing card background */
+  --now-border:        rgba(100, 181, 246, 0.15);   /* now-playing card border */
   --selection:         #4a7fa5;   /* text selection highlight */
 
   /* ---- Card shape & motion ---- */
@@ -82,6 +84,8 @@
     --link-hover:      #a6d8fc;
     --accent-bg:       rgba(124, 196, 250, 0.10);
     --accent-bg-hover: rgba(124, 196, 250, 0.15);
+    --now-bg:          rgba(124, 196, 250, 0.065);
+    --now-border:      rgba(124, 196, 250, 0.12);
   }
 }
 
@@ -1791,6 +1795,63 @@ ul.share li a {
 }
 
 /* ==========================================================
+   NOW PLAYING WIDGET (layouts/partials/now-playing.html)
+   Subtle blue-tinted card between column headings and feed cards.
+   Background is halfway between feed-card bg and external-link pill.
+   ========================================================== */
+
+.now-playing {
+  display: block;
+  padding: 0.6rem 1rem;
+  background: var(--now-bg);
+  border: 1px solid var(--now-border);
+  border-radius: var(--radius-card);
+  text-align: center;
+  margin-bottom: 0;
+}
+
+.now-playing-label {
+  display: block;
+  font-family: var(--font-ui);
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--link);
+  margin-bottom: 0.3rem;
+}
+
+.now-playing-value {
+  display: block;
+  font-family: var(--font-ui);
+  font-size: 1.3rem;
+  color: var(--text-muted);
+}
+
+.now-playing-date {
+  display: block;
+  font-size: 1rem;
+  color: var(--text-faint);
+  margin-top: 0.2rem;
+}
+
+.now-playing-sep {
+  border: none;
+  width: 200px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--link), #a78bfa);
+  opacity: 0.8;
+  margin: 1rem auto 0.6rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  .now-playing-sep {
+    background: linear-gradient(90deg, var(--link-dark), #b89dfc);
+    opacity: 0.7;
+  }
+}
+
+/* ==========================================================
    GALLERY ALBUM PAGE (gallery/single.html)
    Controls the individual album view — not the homepage grid.
    ========================================================== */
@@ -2294,7 +2355,7 @@ ul.share li a {
   .sheet-handle-bar {
     width: 36px;
     height: 4px;
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.25);
     border-radius: 2px;
   }
 

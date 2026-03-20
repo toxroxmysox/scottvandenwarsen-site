@@ -4,13 +4,11 @@
 <div class="feed-single-container" role="main">
 
       {{/* ---- Breadcrumb ---- */}}
-      {{ with .Parent }}
-        <nav class="feed-breadcrumb" aria-label="Breadcrumb">
-          <a href="{{ .RelPermalink }}">
-            &larr; Back to {{ .Title }}
-          </a>
-        </nav>
-      {{ end }}
+      <nav class="feed-breadcrumb" aria-label="Breadcrumb">
+        <a href="{{ "feed/" | relURL }}" onclick="if(history.length>1){history.back();return false;}">
+          &larr; Back
+        </a>
+      </nav>
 
       {{/* ---- Hero Card ---- */}}
       <div class="feed-hero-card">
