@@ -9,3 +9,6 @@
 # Editor junk
 .vscode/
 .idea/
+
+# Claude Code worktrees (ephemeral, per-session)
+.claude/worktrees/
