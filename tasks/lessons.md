@@ -108,6 +108,40 @@ If `git pull --rebase` fails with "unstaged changes":
 - **Problem:** After resolving all conflict markers and running `git add file`, git rebase still reports the file as "needs merge" if you haven't also staged the other conflicted files.
 - **Rule:** After resolving all files, check `git status` to see all "Unmerged paths". Stage every resolved file before running `git rebase --continue`.
 
+## Hugo Themes & Third-Party Libraries
+
+### Check what the theme already provides before adding it yourself
+- **Problem:** Added PhotoSwipe CDN `<script>` tags and a `.pswp` overlay `<div>` in custom templates — only to discover the theme's `footer.html` and `header.html` already inject all of this globally on every page. This created duplicate script loads and a broken double overlay.
+- **Rule:** Before adding a JS library or DOM boilerplate, grep the theme for it: `grep -r "PhotoSwipe\|pswp" themes/`. If the theme already loads it, only add your custom init logic.
+- **Specific pattern:** Theme's `load-photoswipe.js` only processes `<figure>` elements — so custom `<a data-size>` elements are safe to wire up separately without conflict.
+
+### PhotoSwipe v4 on Hugo: use `data-size="WxH"` with Hugo's `.Width`/`.Height`
+- **Pattern:** Hugo image resources expose `.Width` and `.Height` on image resources. Use these in the template: `data-size="{{ $img.Width }}x{{ $img.Height }}"`. PhotoSwipe v4 requires these dimensions to size the overlay correctly.
+- **Rule:** Never hardcode dimensions or use temp defaults (800x600). Hugo provides actual dimensions at build time — always use them.
+
+## CSS Layout
+
+### Fixed height on thumbnails distorts aspect ratio — use `aspect-ratio` instead
+- **Problem:** `.album-thumb { height: 220px; object-fit: cover }` forced all thumbnails to 220px tall, making portrait photos appear heavily cropped and landscape photos look squished.
+- **Rule:** Use `aspect-ratio: 4/3` (or your preferred ratio) instead of fixed `height`. Combine with `object-fit: cover` and `width: 100%` for thumbnails that maintain natural proportions at any container width.
+
+### Theme root font-size may not be 16px — verify before setting `rem` values
+- **Problem:** Set breadcrumb font-size to `0.875rem` expecting ~14px, but the theme sets `html { font-size: 62.5% }` making `1rem = 10px`. The breadcrumb rendered as 8.75px — invisible.
+- **Rule:** Before using `rem` values for font sizes, check what `html { font-size }` is in the theme. On this site: `1rem = 10px`, body text = `1.8rem = 18px`. Match body text by using `1.8rem`, not `1rem`.
+
+## Git
+
+### `git stash pop` can conflict with append-only files (like main.css)
+- **Problem:** Remote added CSS to the end of `main.css`; our stash also appended CSS to the end. `git stash pop` created a conflict because both edits targeted the same tail region.
+- **Rule:** When two branches both append to the same file, `git stash pop` will conflict at the append location. Resolution: keep both blocks — upstream's block first (complete it if truncated), then our additions after.
+- **Conflict marker pattern:** The `=======` marker may split the upstream block mid-rule (e.g., a closing `}` is on the wrong side). Always check the upstream block is syntactically complete before appending ours.
+
+## Preview Server
+
+### Preview server must run from the worktree, not the main repo
+- **Problem:** `preview_list` showed the server CWD was `/Users/Scott/Website/scottvandenwarsen-site` (main repo), not the worktree. Template changes in the worktree were invisible.
+- **Rule:** After starting a worktree session, always check `preview_list` and confirm the server `cwd` matches the worktree path. If not, stop and restart the server from the correct context.
+
 ## Testing & Verification
 
 ### Remove test data immediately after verification

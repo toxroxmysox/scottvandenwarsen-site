@@ -18,6 +18,16 @@ _No active tasks._
   - `.dragging` class disables CSS transitions during drag; removed on release for snap animation
   - Removed broken `svg.on('.zoom',null)` approach from PR #4
 
+- [x] Gallery lightbox, card badges, feed archive, album breadcrumbs (PR #7, merged)
+  - PhotoSwipe v4 lightbox on album pages — no more raw JPEG in new tab
+  - Gallery cards: country flag (top-left) + photo count (top-right) corner badges
+  - Card overlay text +25% larger (title, summary, badge, flag)
+  - Album thumbnails: `aspect-ratio: 4/3` instead of fixed height — no distortion
+  - Album pages: `← Gallery` breadcrumb at top and bottom
+  - Feed page (`/feed`): bypasses 5-item cap to show full archive
+  - Unique per-photo `alt` text (`Egypt 2023 — photo 3`) for accessibility
+  - `data/country_flags.json`: ISO 3166-1 → flag emoji for 190+ countries
+
 - [x] Mobile/tablet responsive map page (PR #4, merged)
   - Mobile (≤767px): sidebar → bottom sheet with `translateY` animation, drag handle, momentum scroll
   - Tablet (768px–1023px): side panel tightened to 40% width
