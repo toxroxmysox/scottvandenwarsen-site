@@ -4,6 +4,15 @@ _No active tasks._
 
 ## Completed
 
+- [x] Now-playing widget + feed breadcrumb fix (commit 85b97d7, pushed to main)
+  - `data/now.yaml`: per-field data source (value + updated date)
+  - `layouts/partials/now-playing.html`: reusable partial with triple-nested `with` guards
+  - Widget injected in `feed-columns.html` (homepage + /feed/) and `_default/list.html` (section pages)
+  - Centered text, label on own line, blue/purple gradient separator matching section headings
+  - Feed breadcrumb: `history.back()` with `/feed/` fallback
+  - Edge cases: missing field, empty values, deleted file all handled gracefully
+  - Tracked `.claude/commands/` and `.claude/settings.json` in git; gitignored `.claude/worktrees/`
+
 - [x] Author config + custom 404 page (PR #10)
   - `hugo.toml`: added `description`, `rss = true`
   - `layouts/404.html`: branded 404 with Moody Slate styling + nav pill links
