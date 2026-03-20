@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "content/about/_index.md",
+                "file": "content/listening/2026-03-06 - Bruno Mars/index.md",
                 "mode": "source",
-                "source": false
+                "source": true
               },
               "icon": "lucide-file",
-              "title": "_index"
+              "title": "index"
             }
           }
         ]
@@ -185,9 +185,23 @@
   },
   "active": "883f3e04d5b489cc",
   "lastOpenFiles": [
+    "content/listening/2026-01-31 - No Easy Fix/index.md",
+    "content/listening/2026-03-06 - Bruno Mars/index.md",
+    "content/watching/2026-02-26 - The Pitt/index.md",
+    "content/listening/2026-03-06 - Bruno Mars",
+    "content/watching/2026-02-01 - Newsroom/index.md",
+    "content/reading/2026-03-05 - Claude Code and HA/index.md",
+    "content/watching/2026-02-26 - The Pitt",
+    "content/reading/2026-03-12 - Red Rising/index.md",
+    "content/reading/2026-03-05 - Claude Code and HA/Untitled",
+    "content/reading/2026-03-05 - Claude Code and HA",
+    "content/reading/Untitled.canvas",
+    "content/reading/2025-01-03 - Algorithm Bias/index.md",
+    "content/reading/_index.md",
+    "content/reading/2026-03-12 - Red Rising",
+    "content/about/_index.md",
     "data/now.yaml",
     "data/country_flags.json",
-    "content/about/_index.md",
     "public/about/index.xml",
     "public/about/index.html",
     "public/about",
@@ -203,20 +217,10 @@
     "public/gallery/switzerland-2026/IMG_3707.JPG",
     "content/gallery/Switzerland 2026/IMG_3707.JPG",
     "public/gallery/switzerland-2026/IMG_3806.JPG",
-    "public/tags/ski/index.html",
-    "public/tags/ski",
-    "public/tags/skiing/index.html",
-    "public/tags/skiing",
-    "public/gallery/switzerland-2026/index.html",
-    "public/gallery/switzerland-2026",
     "content/gallery/Paris 2025/index.md",
     "content/gallery/Egypt 2023/index.md",
     "content/gallery/Egypt 2024/index.md",
     "content/gallery/Egypt 2024/Untitled.md",
-    "content/listening/2026-01-31 - No Easy Fix/index.md",
-    "content/watching/2026-02-01 - Newsroom/index.md",
-    "content/reading/2025-01-03 - Algorithm Bias/index.md",
-    "content/reading/_index.md",
     "content/listening/2025-01-08 - AI Slop Inevitability/index.md",
     "content/feed/_index.md",
     "content/listening/2026-01-31/Index.md",
@@ -227,8 +231,6 @@
     "content/gallery/Paris/index.md",
     "content/listening/example-post-1/index.md",
     "content/gallery/_index.md",
-    "content/watching/example-post-1/index.md",
-    "content/gallery/Spain/index.md",
-    "content/reading/example-post-1/index.md"
+    "content/watching/example-post-1/index.md"
   ]
 }
