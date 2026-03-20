@@ -205,3 +205,25 @@ If `git pull --rebase` fails with "unstaged changes":
 ### iOS browser ≠ Safari only — all iOS browsers share WebKit
 - **Lesson:** Tested on Arc browser on iOS; assumed the bug might be Arc-specific. Arc on iOS still uses WKWebView (iOS-mandated WebKit). All iOS browsers — Safari, Chrome, Arc, Firefox, Edge — run on WebKit.
 - **Rule:** Any iOS touch bug is a WebKit bug and affects every browser on iOS. Don't narrow scope to "Safari only" when diagnosing iOS touch issues.
+
+## Hugo Data Files
+
+### YAML dates must be unquoted for Hugo's `dateFormat`
+- **Problem:** Hugo's `dateFormat` requires a `time.Time` value. YAML parses unquoted `2026-03-19` as a date/time, but quoted `"2026-03-19"` becomes a string. Using `dateFormat` on a string causes a build error.
+- **Rule:** In `data/*.yaml`, always leave date values unquoted: `updated: 2026-03-19` (not `updated: "2026-03-19"`).
+
+### Hugo `$` in partials invoked via `dict` refers to the dict itself
+- **Problem:** Inside a partial called with `{{ partial "foo.html" (dict "field" "x" "Site" .Site) }}`, the `$` variable points to the dict, not the page. So `$.field` works at all nesting depths, and `.Site` must be passed explicitly.
+- **Rule:** When calling a partial via `dict`, always pass `.Site` explicitly if the partial needs site data. Use `$.field` (not `.field`) inside nested `with`/`range` blocks.
+
+### Hugo template lookup order: type cascades override section
+- **Problem:** Expected `/reading/` to route through `layouts/_default/list.html`, but it actually routes through `layouts/feed/list.html` because `content/feed/_index.md` sets `type: feed` via frontmatter cascade.
+- **Rule:** Hugo's template lookup: `layouts/[type]/list.html` → `layouts/[section]/list.html` → `layouts/_default/list.html`. Check `_index.md` for `type` or `cascade` settings before assuming which template handles a section page.
+
+## Git
+
+### Worktree PRs cause local main to fall behind
+- **Problem:** When using worktree branches (e.g., `claude/keen-satoshi`) and merging PRs on GitHub, the local `main` branch doesn't update automatically. Next session starts with main N commits behind origin.
+- **Why it happens:** `git merge` on GitHub only updates the remote ref. Local `main` stays at its last fetched state. This is normal git behavior — not a bug.
+- **Rule:** At the start of every session, run `git pull --rebase origin main` (or `git fetch origin && git rebase origin/main`). This is not optional — stale main causes merge conflicts on every stash pop.
+- **Prevention:** The `/warmup` slash command already checks for this. Always run `/warmup` at session start.
