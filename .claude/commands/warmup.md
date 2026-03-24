@@ -15,25 +15,37 @@ Load all accumulated knowledge, then help the user sharpen their request into a 
 3. **Read task history**
    Read `tasks/todo.md` to understand what was recently worked on and what's pending.
 
-4. **Check git state**
-   Run:
+4. **Check git state** (run all in parallel):
    ```sh
+   git branch --show-current
+   git status --short
    git log --oneline -10
-   git status
-   git branch -a
+   git stash list
+   git fetch origin --dry-run 2>&1
+   git log --oneline HEAD..origin/main 2>/dev/null   # remote commits not local
+   git log --oneline origin/main..HEAD 2>/dev/null   # local commits not pushed
    ```
-   Report: current branch, recent commits, any uncommitted changes.
+   Report: current branch, recent commits, uncommitted changes, stashes, ahead/behind origin.
 
-5. **Check for open PRs**
+5. **Check for open PRs and running servers** (run in parallel):
    ```sh
    gh pr list --state open
    ```
+   Use `preview_list` to check if a dev server is already running.
 
 6. **Summarize findings**
-   Present a concise briefing:
+   Present a concise briefing in this format:
+   ```
+   Branch:      main
+   Uncommitted: clean
+   Sync:        2 ahead, 0 behind origin/main
+   Stashes:     none
+   Server:      hugo-dev running on :1313  (or: none)
+   Open PRs:    none  (or: #5 "Add dark mode toggle")
+   ```
+   Then summarize:
    - **Top rules to remember** (from lessons.md) — the ones most likely to trip you up
    - **Recent context** — what was last worked on, any pending tasks
-   - **Git state** — branch, uncommitted work, open PRs
    - **Key patterns** — design tokens, URL rules, content access rules
 
 ## Phase 2: Clarify Task
