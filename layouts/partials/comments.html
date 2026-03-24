@@ -1,0 +1,51 @@
+{{/* Comments — Cusdis embed (no-login, lightweight).
+     Toggle button shows/hides; script lazy-loads on first open.
+     Renders nothing if .Site.Params.cusdisAppId is not set. */}}
+{{ with .Site.Params.cusdisAppId }}
+<section class="comments-section">
+  <button class="comments-toggle-btn" onclick="toggleComments(this)" aria-expanded="false">Show Comments</button>
+  <div class="comments-body" style="display:none;">
+    <div id="cusdis_thread"
+      data-host="https://cusdis.com"
+      data-app-id="{{ . }}"
+      data-page-id="{{ $.RelPermalink }}"
+      data-page-url="{{ $.Permalink }}"
+      data-page-title="{{ $.Title }}"
+      data-theme="dark"
+    ></div>
+  </div>
+</section>
+<script>
+var cusdisResizeInterval = null;
+function toggleComments(btn) {
+  var body = btn.nextElementSibling;
+  var isHidden = body.style.display === 'none';
+  body.style.display = isHidden ? 'block' : 'none';
+  btn.textContent = isHidden ? 'Hide Comments' : 'Show Comments';
+  btn.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
+  // Lazy-load Cusdis script on first open
+  if (isHidden && !document.querySelector('script[src*="cusdis"]')) {
+    var s = document.createElement('script');
+    s.src = 'https://cusdis.com/js/cusdis.es.js';
+    s.async = true;
+    s.defer = true;
+    document.body.appendChild(s);
+  }
+  // Start/stop iframe auto-resize (srcdoc iframes are same-origin)
+  if (isHidden && !cusdisResizeInterval) {
+    cusdisResizeInterval = setInterval(function() {
+      var iframe = document.querySelector('#cusdis_thread iframe');
+      if (iframe && iframe.contentDocument) {
+        var h = iframe.contentDocument.body.scrollHeight;
+        if (h && iframe.offsetHeight !== h) {
+          iframe.style.height = h + 'px';
+        }
+      }
+    }, 500);
+  } else if (!isHidden && cusdisResizeInterval) {
+    clearInterval(cusdisResizeInterval);
+    cusdisResizeInterval = null;
+  }
+}
+</script>
+{{ end }}
