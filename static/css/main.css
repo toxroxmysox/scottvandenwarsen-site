@@ -2821,3 +2821,116 @@ ul.share li a {
   .comments-toggle-btn { color: var(--link-dark); }
   .comments-toggle-btn:hover { color: var(--link-hover-dark); }
 }
+
+/* ==========================================================
+   SUBSCRIBE FORM — footer email signup (Buttondown)
+   ========================================================== */
+
+.subscribe-form {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.subscribe-label {
+  font-family: var(--font-ui);
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+}
+
+.subscribe-inline {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.subscribe-input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.55rem 0.9rem;
+  font-family: var(--font-ui);
+  font-size: 0.9rem;
+  color: var(--text-body);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  outline: none;
+  transition: border-color var(--transition), background var(--transition);
+}
+
+.subscribe-input::placeholder {
+  color: var(--text-faint);
+}
+
+.subscribe-input:focus {
+  border-color: var(--link);
+  background: rgba(255, 255, 255, 0.09);
+}
+
+.subscribe-btn {
+  flex-shrink: 0;
+  padding: 0.55rem 1.25rem;
+  font-family: var(--font-ui);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #fff;
+  background: var(--link);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background var(--transition), opacity 0.15s ease;
+}
+
+.subscribe-btn:hover {
+  background: var(--link-hover);
+}
+
+.subscribe-btn:active {
+  opacity: 0.85;
+}
+
+/* Mobile: stack input + button */
+@media only screen and (max-width: 767px) {
+  .subscribe-inline {
+    flex-direction: column;
+    max-width: 100%;
+  }
+
+  .subscribe-input {
+    width: 100%;
+  }
+
+  .subscribe-btn {
+    width: 100%;
+  }
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  .subscribe-input {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.08);
+    color: var(--text-body);
+  }
+
+  .subscribe-input:focus {
+    border-color: var(--link-dark);
+    background: rgba(255, 255, 255, 0.07);
+  }
+
+  .subscribe-btn {
+    background: var(--link-dark);
+  }
+
+  .subscribe-btn:hover {
+    background: var(--link-hover-dark);
+  }
+
+  .subscribe-label {
+    color: var(--text-subtle);
+  }
+}

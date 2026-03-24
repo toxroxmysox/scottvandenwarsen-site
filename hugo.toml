@@ -27,6 +27,11 @@ canonifyURLs = true
   # Cusdis comment widget — App ID from https://cusdis.com dashboard.
   cusdisAppId = "0785bc96-57da-40d3-8271-6f5fbcbd0cb7"
 
+  # Buttondown email subscription — form action URL.
+  # Set this after creating your Buttondown account:
+  # buttondown.com → Settings → Forms → copy the embed subscribe URL.
+  buttondownFormAction = "https://buttondown.com/api/emails/embed-subscribe/scottvandenwarsen"
+
 [params.author]
   name = "Scott Vanden Warsen"
   website = "https://scottvandenwarsen.com"
