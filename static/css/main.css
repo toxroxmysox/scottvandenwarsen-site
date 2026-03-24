@@ -2730,6 +2730,54 @@ ul.share li a {
   line-height: 1.4;
 }
 
+/* ---- Comments Section (Cusdis) ---- */
+.comments-section {
+  margin: 2.5rem 0;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-light);
+  text-align: center;
+}
+
+.comments-toggle-btn {
+  display: inline-block;
+  font-family: var(--font-ui);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--link);
+  background: var(--accent-bg);
+  padding: 0.5rem 1.5rem;
+  border-radius: 6px;
+  border: 1px solid rgba(100,181,246,0.25);
+  cursor: pointer;
+  transition: background var(--transition), border-color var(--transition), color var(--transition);
+}
+
+.comments-toggle-btn:hover {
+  background: var(--accent-bg-hover);
+  border-color: rgba(100,181,246,0.4);
+  color: var(--link-hover);
+}
+
+.comments-toggle-btn:focus-visible {
+  outline: 2px solid var(--link);
+  outline-offset: 2px;
+}
+
+.comments-toggle-btn:active {
+  opacity: 0.85;
+}
+
+.comments-body {
+  text-align: left;
+  margin-top: 1.25rem;
+}
+
+/* Cusdis iframe — min-height prevents flash; JS resize handler grows it */
+#cusdis_thread iframe {
+  color-scheme: dark;
+  min-height: 350px;
+}
+
 /* ---- Dark mode adjustments for feed single page ---- */
 @media (prefers-color-scheme: dark) {
   .feed-breadcrumb a { color: var(--text-subtle); }
@@ -2768,4 +2816,8 @@ ul.share li a {
   }
   .related-post-card:hover .related-post-title { color: var(--link-dark); }
   .related-post-summary { color: var(--text-subtle); }
+
+  .comments-section { border-top-color: rgba(255,255,255,0.06); }
+  .comments-toggle-btn { color: var(--link-dark); }
+  .comments-toggle-btn:hover { color: var(--link-hover-dark); }
 }

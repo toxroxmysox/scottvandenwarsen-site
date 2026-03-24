@@ -53,6 +53,9 @@
     {{ end }}
   </div>
 
+  {{/* ---- Comments ---- */}}
+  {{ partial "comments.html" . }}
+
   {{/* Back to gallery breadcrumb — bottom so users don't have to scroll back up */}}
   <div class="album-breadcrumb album-breadcrumb-bottom">
     <a href="{{ "/gallery/" | relURL }}">← Back to Gallery</a>
