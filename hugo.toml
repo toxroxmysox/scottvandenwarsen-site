@@ -24,6 +24,9 @@ canonifyURLs = true
   # Show RSS icon in the site footer.
   rss = true
 
+  # Cusdis comment widget — App ID from https://cusdis.com dashboard.
+  cusdisAppId = "0785bc96-57da-40d3-8271-6f5fbcbd0cb7"
+
 [params.author]
   name = "Scott Vanden Warsen"
   website = "https://scottvandenwarsen.com"
