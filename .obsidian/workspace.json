@@ -183,8 +183,9 @@
       "bases:Create new base": false
     }
   },
-  "active": "883f3e04d5b489cc",
+  "active": "85bcc4eef173f03f",
   "lastOpenFiles": [
+    "layouts/partials/comments.html",
     "content/listening/2026-01-31 - No Easy Fix/index.md",
     "content/listening/2026-03-06 - Bruno Mars/index.md",
     "content/watching/2026-02-26 - The Pitt/index.md",
@@ -230,7 +231,6 @@
     "content/listening/_index.md",
     "content/gallery/Paris/index.md",
     "content/listening/example-post-1/index.md",
-    "content/gallery/_index.md",
-    "content/watching/example-post-1/index.md"
+    "content/gallery/_index.md"
   ]
 }
