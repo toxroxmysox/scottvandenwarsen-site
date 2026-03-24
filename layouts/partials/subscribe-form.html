@@ -1,8 +1,8 @@
 {{ with .Site.Params.buttondownFormAction }}
 <div class="subscribe-form">
-  <p class="subscribe-label">Get new posts delivered to your inbox</p>
+  <label for="bd-email" class="subscribe-label">Get new posts delivered to your inbox</label>
   <form method="POST" action="{{ . }}" class="subscribe-inline">
-    <input type="email" name="email" placeholder="Your email" required class="subscribe-input" />
+    <input type="email" name="email" id="bd-email" placeholder="Your email" required class="subscribe-input" />
     <button type="submit" class="subscribe-btn">Subscribe</button>
     <!-- Honeypot — hidden from humans, traps bots -->
     <div style="position: absolute; left: -5000px;" aria-hidden="true">

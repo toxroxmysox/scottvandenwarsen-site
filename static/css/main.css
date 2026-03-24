@@ -52,6 +52,7 @@
   --accent-bg-hover:   rgba(100, 181, 246, 0.15);   /* tag hover state */
   --now-bg:            rgba(100, 181, 246, 0.07);   /* now-playing card background */
   --now-border:        rgba(100, 181, 246, 0.15);   /* now-playing card border */
+  --text-on-accent:    #ffffff;                     /* text on accent-colored buttons */
   --selection:         #4a7fa5;   /* text selection highlight */
 
   /* ---- Card shape & motion ---- */
@@ -2877,7 +2878,7 @@ ul.share li a {
   font-family: var(--font-ui);
   font-size: 0.9rem;
   font-weight: 600;
-  color: #fff;
+  color: var(--text-on-accent);
   background: var(--link);
   border: none;
   border-radius: 6px;
