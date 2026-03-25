@@ -55,6 +55,12 @@
   --text-on-accent:    #ffffff;                     /* text on accent-colored buttons */
   --selection:         #4a7fa5;   /* text selection highlight */
 
+  /* ---- Frosted-glass card surfaces ---- */
+  --card-bg:       rgba(255, 255, 255, 0.04);   /* translucent card background */
+  --card-border:   rgba(255, 255, 255, 0.06);   /* subtle card edge */
+  --card-bg-hover: rgba(255, 255, 255, 0.08);   /* card hover background */
+  --accent-ring:   rgba(100, 181, 246, 0.2);    /* accent-colored ring/border */
+
   /* ---- Card shape & motion ---- */
   --radius-card:    10px;       /* feed card border-radius */
   --radius-gallery: 12px;      /* gallery card border-radius */
@@ -87,6 +93,10 @@
     --accent-bg-hover: rgba(124, 196, 250, 0.15);
     --now-bg:          rgba(124, 196, 250, 0.065);
     --now-border:      rgba(124, 196, 250, 0.12);
+    --card-bg:         rgba(255, 255, 255, 0.03);
+    --card-border:     rgba(255, 255, 255, 0.04);
+    --card-bg-hover:   rgba(255, 255, 255, 0.06);
+    --accent-ring:     rgba(124, 196, 250, 0.2);
   }
 }
 
@@ -2933,5 +2943,149 @@ ul.share li a {
 
   .subscribe-label {
     color: var(--text-subtle);
+  }
+}
+
+/* ==========================================================
+   ABOUT PAGE
+   Hero with photo + intro, then prose content below.
+   ========================================================== */
+
+.about-page {
+  padding-top: 8rem;
+}
+
+/* ---- Hero section ---- */
+.about-hero {
+  padding: 3rem 0 2rem;
+}
+
+.about-hero-inner {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-card);
+  padding: 2.5rem;
+}
+
+.about-photo-wrap {
+  flex-shrink: 0;
+}
+
+.about-photo {
+  width: 18rem;
+  height: 18rem;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--accent-ring);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* ---- Intro text ---- */
+.about-intro {
+  flex: 1;
+  min-width: 0;
+}
+
+.about-name {
+  font-family: var(--font-ui);
+  font-size: 3.2rem;
+  font-weight: 800;
+  color: var(--text-heading);
+  margin: 0 0 0.6rem;
+  line-height: 1.2;
+}
+
+.about-subtitle {
+  font-family: var(--font-ui);
+  font-size: 1.6rem;
+  color: var(--link);
+  margin: 0 0 0.8rem;
+  font-weight: 600;
+}
+
+.about-tagline {
+  font-family: var(--font-body);
+  font-size: 1.4rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ---- Prose content below the hero ---- */
+.about-content {
+  padding: 2rem 0 4rem;
+}
+
+.about-prose {
+  max-width: 70rem;
+  margin: 0 auto;
+  font-family: var(--font-body);
+  font-size: 1.8rem;
+  line-height: 1.75;
+  color: var(--text-body);
+}
+
+.about-prose h2,
+.about-prose h3 {
+  font-family: var(--font-ui);
+  color: var(--text-heading);
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.about-prose a {
+  color: var(--link);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.about-prose a:hover {
+  color: var(--link-hover);
+}
+
+/* ---- Tablet and below ---- */
+@media (max-width: 768px) {
+  .about-hero-inner {
+    flex-direction: column;
+    text-align: center;
+    gap: 2rem;
+    padding: 2rem 1.5rem;
+  }
+
+  .about-photo {
+    width: 15rem;
+    height: 15rem;
+  }
+
+  .about-name {
+    font-size: 2.6rem;
+  }
+}
+
+/* ---- Mobile ---- */
+@media (max-width: 480px) {
+  .about-hero-inner {
+    padding: 1.5rem 1rem;
+    gap: 1.5rem;
+  }
+
+  .about-photo {
+    width: 12rem;
+    height: 12rem;
+  }
+
+  .about-name {
+    font-size: 2.2rem;
+  }
+
+  .about-subtitle {
+    font-size: 1.4rem;
+  }
+
+  .about-prose {
+    font-size: 1.6rem;
   }
 }

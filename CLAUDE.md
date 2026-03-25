@@ -66,9 +66,33 @@ Images sit alongside `index.md` inside each album folder.
 
 ## Design System
 
-- **Color scheme:** Moody Slate — dark blue-grey gradients (`#2c3e50` base), muted accents (`#64b5f6` links), full dark mode support via `prefers-color-scheme`
-- **Feed cards:** Frosted-glass style (`.feed-card-link`) — translucent backgrounds, subtle borders, hover lift
+### Color Scheme — Moody Slate
+
+Dark blue-grey gradients with muted blue accents. Full dark mode via `prefers-color-scheme`.
+
+All colors are defined as CSS custom properties (design tokens) in `:root` at the top of `static/css/main.css`. Dark-mode overrides follow immediately after. **Never hardcode hex/rgba values in component CSS — always use `var(--token)`.**
+
+Key token groups:
+- **Backgrounds:** `--bg-start` / `--bg-mid` / `--bg-light` (page gradient), `--surface` / `--surface-raised` (panels)
+- **Text hierarchy:** `--text-body` (main copy) → `--text-muted` → `--text-subtle` → `--text-faint` (least prominent), `--text-heading` (h1–h6)
+- **Links/accents:** `--link` / `--link-hover`, `--accent-bg` / `--accent-ring`
+- **Card surfaces:** `--card-bg` / `--card-border` / `--card-bg-hover` (frosted-glass translucent cards)
+- **Borders:** `--border` / `--border-light`
+- **Shape:** `--radius-card` (10px), `--radius-gallery` (12px), `--transition` (0.2s ease)
+
+### Typography
+
+- **Theme root:** `html { font-size: 62.5% }` → **1rem = 10px** (not 16px!)
+- **Body text:** `1.8rem` (18px) using `--font-body` (Lora serif)
+- **UI text:** `--font-ui` (Open Sans) for nav, headings, labels, card titles
+- **Mobile minimum:** `1.6rem` (16px) for body prose
+- When adding new text containers, always match body text at `1.8rem` — don't guess.
+
+### Component Patterns
+
+- **Feed cards:** Frosted-glass style (`.feed-card-link`) — `var(--card-bg)` background, `var(--card-border)` edge, hover lift
 - **Gallery cards:** Overlay style (`.gallery-card`) — full-bleed images with gradient text overlay, CSS grid (1/2/3 columns responsive)
+- **About hero:** Frosted-glass card with circular photo + intro text, uses same card tokens
 - **Feed layout:** Bootstrap 3-column grid (`col-md-4`) for Reading/Watching/Listening
 - **CSS cache-busting:** `?v={{ now.Unix }}` appended to main.css link in `layouts/partials/head.html`
 
