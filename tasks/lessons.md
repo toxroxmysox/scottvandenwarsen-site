@@ -227,3 +227,19 @@ If `git pull --rebase` fails with "unstaged changes":
 - **Why it happens:** `git merge` on GitHub only updates the remote ref. Local `main` stays at its last fetched state. This is normal git behavior — not a bug.
 - **Rule:** At the start of every session, run `git pull --rebase origin main` (or `git fetch origin && git rebase origin/main`). This is not optional — stale main causes merge conflicts on every stash pop.
 - **Prevention:** The `/warmup` slash command already checks for this. Always run `/warmup` at session start.
+
+## CSS & Design Tokens
+
+### Never hardcode rgba/hex values in component CSS — always use design tokens
+- **Problem:** The about page hero card used `rgba(255, 255, 255, 0.04)` and `rgba(100, 181, 246, 0.2)` directly instead of design tokens. This breaks the centralized token system — dark mode overrides and future palette changes won't apply.
+- **Rule:** Every color value in component CSS must reference a `var(--token)`. If no suitable token exists, add one to the `:root` block (and its dark-mode override) before using it.
+- **Tokens added:** `--card-bg`, `--card-border`, `--card-bg-hover`, `--accent-ring` for frosted-glass card surfaces.
+
+### Body text is 1.8rem (18px) — match it everywhere
+- **Problem:** The about page prose used `font-size: 1.5rem` (15px) while the rest of the site uses `1.8rem` (18px). The theme sets `html { font-size: 62.5% }`, so `1rem = 10px`.
+- **Rule:** Body/prose text should always be `1.8rem` to match the site's base font size. On mobile, `1.6rem` is the minimum. Check the existing body font-size before setting any new prose container's size.
+
+### Hugo `define "header"` won't override baseof's `block "header"` for section templates
+- **Problem:** Created `layouts/about/single.html` with `{{ define "header" }}{{ end }}` to suppress the theme's header banner. It didn't work — the default header.html partial still rendered, even though `{{ define "main" }}` worked fine.
+- **Fix:** Created a section-specific `layouts/about/baseof.html` that omits the `{{ block "header" }}` entirely.
+- **Rule:** If you need to suppress a baseof block for a specific section, create a section-specific baseof rather than relying on `{{ define "blockname" }}{{ end }}` in the inner template.
