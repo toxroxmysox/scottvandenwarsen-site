@@ -1,3 +1,23 @@
+/* ---- Skip-to-content link (accessibility) ---- */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--surface-raised);
+  color: var(--text-heading);
+  padding: 0.8rem 1.6rem;
+  border-radius: var(--radius-card);
+  z-index: 10000;
+  font-family: var(--font-ui);
+  font-size: 1.4rem;
+  text-decoration: none;
+  transition: top 0.15s ease;
+}
+.skip-link:focus {
+  top: 10px;
+}
+
 /* ==========================================================
    DESIGN TOKENS
    Change values here to restyle the whole site at once.
