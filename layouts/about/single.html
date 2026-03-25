@@ -1,0 +1,53 @@
+{{ define "main" }}
+<div class="about-page" role="main">
+
+  {{/* ---- Hero section: photo + intro ---- */}}
+  <section class="about-hero">
+    <div class="container">
+      <div class="about-hero-inner">
+
+        {{/* Photo (page resource next to index.md) */}}
+        {{ $photo := .Resources.GetMatch (.Params.photo | default "*.jpg") }}
+        {{ if $photo }}
+          {{ $crop := .Params.photo_crop | default "Center" }}
+          {{ $rotate := .Params.photo_rotate | default "" }}
+          {{ $opts := printf "400x400 %s webp q90" $crop }}
+          {{ if $rotate }}{{ $opts = printf "%s %s" $opts $rotate }}{{ end }}
+          {{ $sized := $photo.Fill $opts }}
+          <div class="about-photo-wrap">
+            <img src="{{ $sized.RelPermalink }}"
+                 alt="{{ .Title }}"
+                 class="about-photo"
+                 width="{{ $sized.Width }}"
+                 height="{{ $sized.Height }}" />
+          </div>
+        {{ end }}
+
+        {{/* Intro text */}}
+        <div class="about-intro">
+          <h1 class="about-name">{{ .Title }}</h1>
+          {{ with .Params.subtitle }}
+            <p class="about-subtitle">{{ . }}</p>
+          {{ end }}
+          {{ with .Params.tagline }}
+            <p class="about-tagline">{{ . | markdownify }}</p>
+          {{ end }}
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  {{/* ---- Body prose from index.md ---- */}}
+  {{ with .Content }}
+    <section class="about-content">
+      <div class="container">
+        <div class="about-prose">
+          {{ . }}
+        </div>
+      </div>
+    </section>
+  {{ end }}
+
+</div>
+{{ end }}
