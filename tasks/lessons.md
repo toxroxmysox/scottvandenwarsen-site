@@ -239,6 +239,11 @@ If `git pull --rebase` fails with "unstaged changes":
 - **Problem:** The about page prose used `font-size: 1.5rem` (15px) while the rest of the site uses `1.8rem` (18px). The theme sets `html { font-size: 62.5% }`, so `1rem = 10px`.
 - **Rule:** Body/prose text should always be `1.8rem` to match the site's base font size. On mobile, `1.6rem` is the minimum. Check the existing body font-size before setting any new prose container's size.
 
+### Hugo `Resize` strips EXIF orientation — don't use it for user-facing thumbnails
+- **Problem:** Used `$img.Resize "768x q85"` to generate responsive `srcset` variants for gallery album photos. Hugo's `Resize` strips EXIF orientation metadata without rotating the underlying pixels. Portrait photos (stored as landscape with EXIF rotation flag) rendered sideways.
+- **Rule:** Don't use Hugo's `Resize` on photos that may have EXIF orientation metadata (i.e., any camera/phone photo). Serve the original image and let the browser handle EXIF rotation natively. The CSS `aspect-ratio` + `object-fit: cover` approach already handles consistent thumbnail sizing without needing processed images.
+- **Alternative:** If responsive images are needed, pre-process photos with a tool that bakes EXIF rotation into pixels (e.g., `mogrify -auto-orient`) before adding them to the repo.
+
 ### Hugo `define "header"` won't override baseof's `block "header"` for section templates
 - **Problem:** Created `layouts/about/single.html` with `{{ define "header" }}{{ end }}` to suppress the theme's header banner. It didn't work — the default header.html partial still rendered, even though `{{ define "main" }}` worked fine.
 - **Fix:** Created a section-specific `layouts/about/baseof.html` that omits the `{{ block "header" }}` entirely.
