@@ -183,8 +183,12 @@
       "bases:Create new base": false
     }
   },
-  "active": "883f3e04d5b489cc",
+  "active": "85bcc4eef173f03f",
   "lastOpenFiles": [
+    "public/og-image.png",
+    "hugo.toml.sb-4f547d88-5PgHUl",
+    "static/og-image.png",
+    "layouts/robots.txt",
     "public/about/about-me_hu_8454d71316ce471a.webp",
     "resources/_gen/images/about/about-me_hu_8454d71316ce471a.webp",
     "public/about/about-me_hu_480cdc050b3bff45.webp",
@@ -204,10 +208,6 @@
     "layouts/about",
     "content/about/index.md",
     "content/about/about-me.jpeg",
-    "public/about/about-me.jpeg",
-    "public/about/IMG_1226.jpeg",
-    "public/about/index.html",
-    "public/about",
     "content/listening/2026-01-31 - No Easy Fix/index.md",
     "content/listening/2026-03-06 - Bruno Mars/index.md",
     "content/reading/2026-03-05 - Claude Code and HA/index.md",
