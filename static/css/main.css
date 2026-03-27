@@ -2158,20 +2158,21 @@ ul.share li a {
   display: block;
 }
 
-/* Country name label (HTML overlay) */
+/* Country name label (HTML overlay, centered near top of visible map area) */
 .country-label {
   position: absolute;
+  top: 6rem;
   transform: translateX(-50%);
-  color: #ffffff;
-  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  letter-spacing: 2.5px;
+  color: var(--text-heading);
+  font-family: var(--font-ui);
+  font-size: var(--text-xl);
+  font-weight: var(--weight-bold);
+  letter-spacing: 3px;
   text-transform: uppercase;
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.4s ease;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
   white-space: nowrap;
   z-index: 5;
 }
@@ -2490,6 +2491,350 @@ ul.share li a {
   .map-state.has-gallery {
     fill: rgba(100, 181, 246, 0.22);
     stroke: rgba(100, 181, 246, 0.6);
+  }
+}
+
+/* ===================================================================
+   TRAVEL TIMELINE — horizontal strip at bottom of map page
+   =================================================================== */
+
+.travel-timeline {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+  background: rgba(38, 53, 69, 0.92);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  z-index: 15;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+}
+
+.travel-timeline::-webkit-scrollbar {
+  display: none;
+}
+
+.timeline-track {
+  display: flex;
+  align-items: center;
+  padding: 0 2rem;
+  min-width: max-content;
+}
+
+.timeline-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  padding: 0.4rem 1.2rem;
+  position: relative;
+  transition: opacity var(--transition);
+}
+
+.timeline-node:hover .timeline-dot {
+  transform: scale(1.2);
+}
+
+.timeline-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--link);
+  border: 2px solid transparent;
+  transition: all var(--transition);
+  flex-shrink: 0;
+}
+
+.timeline-node.active .timeline-dot {
+  width: 16px;
+  height: 16px;
+  border-color: var(--link);
+  background: var(--surface);
+  box-shadow: 0 0 0 3px var(--accent-bg);
+}
+
+.timeline-node.future .timeline-dot {
+  background: transparent;
+  border: 2px dashed var(--text-faint);
+}
+
+.timeline-label {
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  margin-top: 0.3rem;
+  white-space: nowrap;
+}
+
+.timeline-node.active .timeline-label {
+  color: var(--text-heading);
+  font-weight: var(--weight-bold);
+}
+
+.timeline-node.future .timeline-label {
+  color: var(--text-faint);
+}
+
+.timeline-connector {
+  width: 40px;
+  height: 2px;
+  background: var(--border-light);
+  flex-shrink: 0;
+}
+
+.timeline-connector.future {
+  background: transparent;
+  border-top: 2px dashed var(--text-faint);
+}
+
+/* Sidebar trip info styles */
+.sidebar-trip-dates {
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  color: var(--text-faint);
+  margin-bottom: 0.75rem;
+}
+
+.sidebar-trip-description {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  color: var(--text-muted);
+  line-height: var(--leading-relaxed);
+  margin: 0 0 1.25rem;
+}
+
+.sidebar-trip-nav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+
+.sidebar-trip-nav-btn {
+  background: none;
+  border: none;
+  color: var(--link);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  cursor: pointer;
+  padding: 0.4rem 0;
+  transition: color var(--transition);
+  max-width: 45%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sidebar-trip-nav-btn:hover {
+  color: var(--link-hover);
+}
+
+.sidebar-trip-nav-btn:disabled {
+  color: var(--text-faint);
+  cursor: default;
+}
+
+/* Flight lines between consecutive trips */
+.flight-line {
+  fill: none;
+  stroke: var(--link);
+  stroke-width: 1.5px;
+  stroke-opacity: 0.35;
+  stroke-linecap: round;
+  cursor: pointer;
+  transition: stroke-opacity 0.2s ease, stroke-width 0.2s ease;
+}
+
+.flight-line:hover {
+  stroke-opacity: 0.6;
+}
+
+.flight-line.active {
+  stroke-opacity: 0.7;
+  stroke-width: 2px;
+}
+
+.flight-line.future {
+  stroke-dasharray: 6, 4;
+  stroke-opacity: 0.2;
+}
+
+.flight-line.future.active {
+  stroke-opacity: 0.45;
+}
+
+/* Dark mode timeline */
+@media (prefers-color-scheme: dark) {
+  .travel-timeline {
+    background: rgba(26, 37, 48, 0.92);
+  }
+}
+
+/* Mobile tabs — hidden on desktop */
+.travel-tabs {
+  display: none;
+}
+
+/* Tab content panels: map tab is a flex row (map + sidebar), timeline is block */
+.travel-tab-content {
+  display: none;
+}
+
+.travel-tab-content.active {
+  display: flex;
+}
+
+#tab-map {
+  flex: 1;
+  min-height: 0;
+}
+
+/* Desktop: always show map tab as flex row, hide tab UI and timeline tab */
+@media only screen and (min-width: 768px) {
+  #tab-map {
+    display: flex !important;
+  }
+
+  #tab-timeline {
+    display: none !important;
+  }
+}
+
+/* Timeline cards — vertical mobile list */
+.timeline-cards {
+  padding: 1.5rem 1.25rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  overflow-y: auto;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.timeline-card {
+  position: relative;
+  border-radius: var(--radius-gallery);
+  overflow: hidden;
+  cursor: pointer;
+  aspect-ratio: 16 / 10;
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.timeline-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.timeline-card-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.timeline-card:hover .timeline-card-cover {
+  transform: scale(1.04);
+  transition: transform 0.3s ease;
+}
+
+.timeline-card-body {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 2.5rem 1.2rem 1rem;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0) 100%);
+}
+
+.timeline-card-title {
+  font-family: var(--font-ui);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-bold);
+  color: #fff;
+  margin: 0 0 0.2rem;
+  line-height: var(--leading-normal);
+}
+
+.timeline-card-dates {
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.timeline-card-description {
+  font-size: var(--text-base);
+  color: rgba(255, 255, 255, 0.65);
+  line-height: var(--leading-normal);
+  margin: 0.2rem 0 0;
+}
+
+/* Mobile layout */
+@media only screen and (max-width: 767px) {
+  .travel-timeline {
+    display: none;
+  }
+
+  .travel-tabs {
+    display: flex;
+    position: fixed;
+    top: 50px;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .travel-tab {
+    flex: 1;
+    padding: 0.8rem 0;
+    font-family: var(--font-ui);
+    font-size: var(--text-base);
+    font-weight: var(--weight-medium);
+    color: var(--text-muted);
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    transition: color var(--transition), border-color var(--transition);
+  }
+
+  .travel-tab.active {
+    color: var(--link);
+    border-bottom-color: var(--link);
+  }
+
+  .travel-tab:hover {
+    color: var(--text-body);
+  }
+
+  .map-page {
+    padding-top: 40px;
+  }
+
+  #tab-map .map-container {
+    height: calc(100vh - 90px);
+  }
+
+  #tab-timeline {
+    height: calc(100vh - 90px);
+    overflow-y: auto;
+  }
+
+  .flight-line {
+    stroke-width: 1px;
+  }
+
+  .flight-line.active {
+    stroke-width: 1.5px;
   }
 }
 

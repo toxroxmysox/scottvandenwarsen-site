@@ -1,8 +1,8 @@
-{{ if eq .Type "map" }}
+{{ if eq .Type "travel" }}
 <!-- D3.js for interactive map -->
 <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
-<script src="{{ "js/map.js" | relURL }}?v={{ now.Unix }}"></script>
+<script src="{{ "js/travel.js" | relURL }}?v={{ now.Unix }}"></script>
 {{ end }}
 
 {{ if .IsHome }}

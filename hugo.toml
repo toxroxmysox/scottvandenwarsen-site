@@ -18,7 +18,6 @@ canonifyURLs = true
   galleryAlbumLimit = 6
 
   description = "An inside look at what Scott Vanden Warsen is thinking about and wants to share with others."
-  logo = "/og-image.png"
 
   # Show related posts on feed single pages (matched by shared tags).
   showRelatedPosts = true
@@ -48,5 +47,10 @@ canonifyURLs = true
   baseName = "galleries"
   isPlainText = true
 
+[outputFormats.TripsJSON]
+  mediaType = "application/json"
+  baseName = "trips"
+  isPlainText = true
+
 [outputs]
-  home = ["HTML", "RSS", "GalleryJSON"]
+  home = ["HTML", "RSS", "GalleryJSON", "TripsJSON"]
