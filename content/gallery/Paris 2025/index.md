@@ -1,6 +1,6 @@
 ---
 title: Anniversary in Paris
-date: 2025-01-09
+date: 2025-09-19
 draft: false
 summary: Weekend Trip to Paris for our 1st Wedding Anniversary
 tags:

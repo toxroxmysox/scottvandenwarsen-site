@@ -1,0 +1,31 @@
+- id: egypt-2023
+  title: "Egypt 2023"
+  description: "Family trip to Cairo and the Nile"
+  country_codes: ["EG"]
+  trip_start: 2023-11-16
+  trip_end: 2023-11-26
+  gallery: "/gallery/egypt-2023/"
+
+- id: paris-2025
+  title: "Paris 2025"
+  description: "Weekend trip for our 1st wedding anniversary"
+  country_codes: ["FR"]
+  trip_start: 2025-09-19
+  trip_end: 2025-09-21
+  gallery: "/gallery/paris-2025/"
+
+- id: spain-2025
+  title: "Spain 2025"
+  description: "Family trip to Barcelona and Andalucia"
+  country_codes: ["ES"]
+  trip_start: 2025-11-21
+  trip_end: 2025-11-29
+  gallery: "/gallery/spain-2025/"
+
+- id: switzerland-2026
+  title: "Switzerland 2026"
+  description: "Skiing in the Alps with family and friends"
+  country_codes: ["CH"]
+  trip_start: 2026-03-07
+  trip_end: 2026-03-15
+  gallery: "/gallery/switzerland-2026/"

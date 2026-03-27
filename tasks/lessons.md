@@ -239,7 +239,6 @@ If `git pull --rebase` fails with "unstaged changes":
 - **Problem:** The about page prose used `font-size: 1.5rem` (15px) while the rest of the site uses `1.8rem` (18px). The theme sets `html { font-size: 62.5% }`, so `1rem = 10px`.
 - **Rule:** Body/prose text should always be `1.8rem` to match the site's base font size. On mobile, `1.6rem` is the minimum. Check the existing body font-size before setting any new prose container's size.
 
-<<<<<<< HEAD
 ### Hugo dev server must be restarted to pick up CSS changes in preview
 - **Problem:** After editing `static/css/main.css`, the `?v={{ now.Unix }}` cache-bust param doesn't change between requests because Hugo computes `now.Unix` once per build. The preview browser keeps serving stale CSS even with `?_bust=` URL params.
 - **Rule:** When CSS changes aren't reflected in the preview after editing `main.css`, stop and restart the hugo-dev server (`preview_stop` + `preview_start`). This forces Hugo to rebuild with a new `now.Unix` value.
@@ -247,12 +246,11 @@ If `git pull --rebase` fails with "unstaged changes":
 ### Dark mode `@media` overrides can silently revert component-level changes
 - **Problem:** Changed `.feed-card-meta` color to `--text-subtle` in the main rule, but the `@media (prefers-color-scheme: dark)` block further down still had `color: var(--text-faint)`, overriding the change in dark mode.
 - **Rule:** When modifying a CSS property on a component, always search for that same selector in the dark mode `@media` block and update it there too.
-=======
+
 ### Hugo `Resize` strips EXIF orientation — don't use it for user-facing thumbnails
 - **Problem:** Used `$img.Resize "768x q85"` to generate responsive `srcset` variants for gallery album photos. Hugo's `Resize` strips EXIF orientation metadata without rotating the underlying pixels. Portrait photos (stored as landscape with EXIF rotation flag) rendered sideways.
 - **Rule:** Don't use Hugo's `Resize` on photos that may have EXIF orientation metadata (i.e., any camera/phone photo). Serve the original image and let the browser handle EXIF rotation natively. The CSS `aspect-ratio` + `object-fit: cover` approach already handles consistent thumbnail sizing without needing processed images.
 - **Alternative:** If responsive images are needed, pre-process photos with a tool that bakes EXIF rotation into pixels (e.g., `mogrify -auto-orient`) before adding them to the repo.
->>>>>>> bb0e0857a54e86208c5d07882a3c7ed05c7a064f
 
 ### Hugo `define "header"` won't override baseof's `block "header"` for section templates
 - **Problem:** Created `layouts/about/single.html` with `{{ define "header" }}{{ end }}` to suppress the theme's header banner. It didn't work — the default header.html partial still rendered, even though `{{ define "main" }}` worked fine.
