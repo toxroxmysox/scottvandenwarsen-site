@@ -239,6 +239,14 @@ If `git pull --rebase` fails with "unstaged changes":
 - **Problem:** The about page prose used `font-size: 1.5rem` (15px) while the rest of the site uses `1.8rem` (18px). The theme sets `html { font-size: 62.5% }`, so `1rem = 10px`.
 - **Rule:** Body/prose text should always be `1.8rem` to match the site's base font size. On mobile, `1.6rem` is the minimum. Check the existing body font-size before setting any new prose container's size.
 
+### Hugo dev server must be restarted to pick up CSS changes in preview
+- **Problem:** After editing `static/css/main.css`, the `?v={{ now.Unix }}` cache-bust param doesn't change between requests because Hugo computes `now.Unix` once per build. The preview browser keeps serving stale CSS even with `?_bust=` URL params.
+- **Rule:** When CSS changes aren't reflected in the preview after editing `main.css`, stop and restart the hugo-dev server (`preview_stop` + `preview_start`). This forces Hugo to rebuild with a new `now.Unix` value.
+
+### Dark mode `@media` overrides can silently revert component-level changes
+- **Problem:** Changed `.feed-card-meta` color to `--text-subtle` in the main rule, but the `@media (prefers-color-scheme: dark)` block further down still had `color: var(--text-faint)`, overriding the change in dark mode.
+- **Rule:** When modifying a CSS property on a component, always search for that same selector in the dark mode `@media` block and update it there too.
+
 ### Hugo `define "header"` won't override baseof's `block "header"` for section templates
 - **Problem:** Created `layouts/about/single.html` with `{{ define "header" }}{{ end }}` to suppress the theme's header banner. It didn't work — the default header.html partial still rendered, even though `{{ define "main" }}` worked fine.
 - **Fix:** Created a section-specific `layouts/about/baseof.html` that omits the `{{ block "header" }}` entirely.

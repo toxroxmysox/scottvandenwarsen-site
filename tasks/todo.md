@@ -4,6 +4,22 @@ _No active tasks._
 
 ## Completed
 
+- [x] Typography scale & design consistency (commit bb0e085, pushed to main)
+  - Added 5-step typography scale tokens to `:root`: `--text-sm` (12px), `--text-base` (15px), `--text-lg` (18px), `--text-xl` (24px), `--text-2xl` (30px)
+  - Added line-height tokens: `--leading-tight/normal/relaxed/loose`
+  - Added font-weight tokens: `--weight-normal/medium/bold/heavy`
+  - Applied tokens across all custom CSS components (feed cards, gallery cards, now-playing, subscribe form, about page, 404 page, map sidebar, breadcrumbs, related posts, comments, tag pills)
+  - Fixed subscribe form: 9px → 15px
+  - Fixed feed card summaries: 10px → 15px
+  - Fixed feed card titles: 15px → 18px (matches gallery cards)
+  - Fixed now-playing value: 13px → 18px
+  - Nav links: 12px → 15px (with tablet scaling back to 12px to prevent wrapping)
+  - Section headings: 30px → 24px
+  - About hero name: 32px → 30px, subtitle: 16px → 24px
+  - Feed card meta date contrast improved (`--text-faint` → `--text-subtle`)
+  - Breadcrumbs unified across feed and gallery (both 15px)
+  - Verified at desktop (1400px), tablet (768px), mobile (375px)
+
 - [x] Now-playing widget + feed breadcrumb fix (commit 85b97d7, pushed to main)
   - `data/now.yaml`: per-field data source (value + updated date)
   - `layouts/partials/now-playing.html`: reusable partial with triple-nested `with` guards
@@ -54,3 +70,31 @@ _No active tasks._
   - `feed/single.html`, `index.html` inline styles removed
   - Duplicate `<title>` in `head_custom.html` deleted
   - `feedItemLimit` and `galleryAlbumLimit` params added to `hugo.toml`
+
+---
+
+## Future Session Backlog
+
+### Content Additions
+- [ ] **Now page** (`/now/`) — what you're currently focused on, updated regularly. Creates return visits.
+- [ ] **Uses/Tools page** — gear, apps, services you use. Surprisingly popular content type.
+
+### Design Polish
+- [ ] Micro-interactions on feed/gallery cards (subtle hover animations, glow effects)
+- [ ] Homepage hero section — add a tagline/subheading communicating what the site is about in <10 words
+- [ ] Visual section dividers between feed columns (gradient lines or subtle separators)
+- [ ] Sticky back-to-top button for long pages
+- [ ] Textural elements — noise/grain overlay on dark backgrounds for depth
+- [ ] Scroll-triggered fade-in animations as sections enter viewport
+
+### Content Enhancements
+- [ ] Newsletter archive — display past Buttondown editions on-site (SEO + discoverability)
+- [ ] Enhanced gallery narratives — travel dates, favorite shots, stories alongside photos
+- [ ] Link log / "Recently bookmarked" section for short-form curation
+
+### Design Inspiration Sites to Study
+- Tobias van Schneider (minimalist, lets work shine)
+- Johnny Harris (clean typeface, scrapbook aesthetic)
+- Devon Stank (video hero)
+- Mindy Nguyen (excellent fonts, spacing, hierarchy)
+- Peter McKinnon (image collage + parallax)
