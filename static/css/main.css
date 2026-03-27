@@ -1,3 +1,23 @@
+/* ---- Skip-to-content link (accessibility) ---- */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--surface-raised);
+  color: var(--text-heading);
+  padding: 0.8rem 1.6rem;
+  border-radius: var(--radius-card);
+  z-index: 10000;
+  font-family: var(--font-ui);
+  font-size: var(--text-base);
+  text-decoration: none;
+  transition: top 0.15s ease;
+}
+.skip-link:focus {
+  top: 10px;
+}
+
 /* ==========================================================
    DESIGN TOKENS
    Change values here to restyle the whole site at once.
@@ -65,6 +85,27 @@
   --radius-card:    10px;       /* feed card border-radius */
   --radius-gallery: 12px;      /* gallery card border-radius */
   --transition:     0.2s ease; /* hover animation speed for cards */
+
+  /* ---- Typography scale ----
+     5-step scale: 12 / 15 / 18 / 24 / 30
+     Remember: html { font-size: 62.5% } → 1rem = 10px */
+  --text-sm:   1.2rem;   /* 12px — meta dates, timestamps, badges, labels */
+  --text-base: 1.5rem;   /* 15px — nav links, subscribe form, taglines */
+  --text-lg:   1.8rem;   /* 18px — body prose, card titles (bold) & summaries (regular) */
+  --text-xl:   2.4rem;   /* 24px — section headings, subtitles */
+  --text-2xl:  3.0rem;   /* 30px — page titles, hero name */
+
+  /* ---- Line heights ---- */
+  --leading-tight:   1.2;
+  --leading-normal:  1.4;
+  --leading-relaxed: 1.6;
+  --leading-loose:   1.75;
+
+  /* ---- Font weights ---- */
+  --weight-normal:   400;
+  --weight-medium:   600;
+  --weight-bold:     700;
+  --weight-heavy:    800;
 }
 
 /* Dark-mode token overrides.
@@ -1158,11 +1199,20 @@ h4.see-also {
   margin-right: auto;
 }
 
+/* Section headings (Reading/Watching/Listening/Gallery) — use type scale */
+.col-md-4 h2,
+.gallery-section h2,
+.feed-heading h2 {
+  font-size: var(--text-xl);
+  font-weight: var(--weight-heavy);
+}
+
 .navbar-custom .nav > li.active > a {
-  font-weight: 600;
+  font-weight: var(--weight-medium);
   opacity: 1;
 }
 .navbar-custom .nav > li > a {
+  font-size: var(--text-base);
   opacity: 0.85;
 }
 
@@ -1170,11 +1220,12 @@ h4.see-also {
    Hover and active colors handled by the Moody Slate section. */
 
 .navbar-custom .navbar-brand {
-  font-weight: 600;
+  font-weight: var(--weight-medium);
+  font-size: var(--text-lg);
 }
 
 .feed-date {
-  font-size: 1.8rem;
+  font-size: var(--text-lg);
   opacity: 0.75;
   margin: 0 0 0.75rem 0;
 }
@@ -1205,6 +1256,15 @@ h4.see-also {
   }
 
   .navbar-custom .navbar-toggle { position: relative; z-index: 3; }
+}
+
+/* Tablet: scale nav links down to prevent wrapping */
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
+  .navbar-custom .nav > li > a {
+    font-size: var(--text-sm);
+    padding-left: 10px;
+    padding-right: 10px;
+  }
 }
 
 
@@ -1708,18 +1768,18 @@ ul.share li a {
 .gallery-card-title {
   display: block;
   font-family: var(--font-ui);
-  font-size: 1.875rem;
-  font-weight: 700;
+  font-size: var(--text-lg);
+  font-weight: var(--weight-bold);
   color: #fff;
-  line-height: 1.3;
+  line-height: var(--leading-normal);
 }
 
 .gallery-card-summary {
   display: block;
-  font-size: 1.25rem;
+  font-size: var(--text-base);
   color: rgba(255,255,255,0.75);
   margin-top: 0.2rem;
-  line-height: 1.3;
+  line-height: var(--leading-normal);
 }
 
 
@@ -1750,11 +1810,11 @@ ul.share li a {
 .feed-card-title {
   display: block;
   font-family: var(--font-ui);
-  font-size: 1.5rem;
-  font-weight: 700;
+  font-size: var(--text-lg);
+  font-weight: var(--weight-bold);
   color: var(--text-heading);
   margin-bottom: 0.3rem;
-  line-height: 1.3;
+  line-height: var(--leading-normal);
 }
 
 .feed-card-link:hover .feed-card-title {
@@ -1763,7 +1823,7 @@ ul.share li a {
 
 .feed-card-summary {
   display: block;
-  font-size: 1rem;
+  font-size: var(--text-base);
   color: var(--text-muted);
   line-height: 1.45;
   margin-bottom: 0.4rem;
@@ -1771,15 +1831,15 @@ ul.share li a {
 
 .feed-card-meta {
   display: block;
-  font-size: 1rem;
-  color: var(--text-faint);
+  font-size: var(--text-sm);
+  color: var(--text-subtle);
   font-family: var(--font-ui);
 }
 
 .feed-external-badge {
   display: inline-block;
-  font-size: 1rem;
-  font-weight: 600;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
   color: var(--link);
   background: rgba(100,181,246,0.1);
   padding: 0.1rem 0.45rem;
@@ -1801,7 +1861,7 @@ ul.share li a {
   .feed-card-title { color: var(--text-heading); }
   .feed-card-link:hover .feed-card-title { color: var(--link-dark); }
   .feed-card-summary { color: var(--text-subtle); }
-  .feed-card-meta { color: var(--text-faint); }
+  .feed-card-meta { color: var(--text-subtle); }
   .feed-external-badge { color: var(--link-dark); background: rgba(124,196,250,0.1); }
 }
 
@@ -1824,8 +1884,8 @@ ul.share li a {
 .now-playing-label {
   display: block;
   font-family: var(--font-ui);
-  font-size: 1.2rem;
-  font-weight: 700;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-bold);
   text-transform: uppercase;
   letter-spacing: 0.04em;
   color: var(--link);
@@ -1835,13 +1895,13 @@ ul.share li a {
 .now-playing-value {
   display: block;
   font-family: var(--font-ui);
-  font-size: 1.3rem;
+  font-size: var(--text-lg);
   color: var(--text-muted);
 }
 
 .now-playing-date {
   display: block;
-  font-size: 1rem;
+  font-size: var(--text-sm);
   color: var(--text-faint);
   margin-top: 0.2rem;
 }
@@ -1970,7 +2030,7 @@ ul.share li a {
   display: inline-block;
   padding: 0.6rem 1.8rem;
   color: #64b5f6;
-  font-size: 1rem;
+  font-size: var(--text-base);
   font-weight: 600;
   letter-spacing: 0.03em;
   border: 1px solid rgba(100, 181, 246, 0.3);
@@ -2009,7 +2069,7 @@ ul.share li a {
 }
 
 .error-message {
-  font-size: 1.5rem;
+  font-size: var(--text-lg);
   color: var(--text-heading);
   margin-bottom: 0.5rem;
 }
@@ -2034,8 +2094,8 @@ ul.share li a {
   border-radius: var(--radius-card);
   color: var(--link) !important;
   font-family: var(--font-ui);
-  font-weight: 600;
-  font-size: 0.95rem;
+  font-weight: var(--weight-medium);
+  font-size: var(--text-base);
   text-decoration: none !important;
   transition: background var(--transition), border-color var(--transition), transform var(--transition);
 }
@@ -2051,7 +2111,7 @@ ul.share li a {
     font-size: 5rem;
   }
   .error-message {
-    font-size: 1.25rem;
+    font-size: var(--text-base);
   }
   .error-nav {
     flex-direction: column;
@@ -2210,9 +2270,9 @@ ul.share li a {
 }
 
 .sidebar-title {
-  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  font-size: 22px;
-  font-weight: 700;
+  font-family: var(--font-ui);
+  font-size: var(--text-xl);
+  font-weight: var(--weight-bold);
   color: #e8edf2;
   margin: 50px 0 1.25rem 0;
   padding-right: 2rem;
@@ -2254,23 +2314,23 @@ ul.share li a {
 
 .sidebar-album-title {
   display: block;
-  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  font-size: 1rem;
-  font-weight: 700;
+  font-family: var(--font-ui);
+  font-size: var(--text-base);
+  font-weight: var(--weight-bold);
   color: #e8edf2;
   line-height: 1.3;
 }
 
 .sidebar-album-date {
   display: block;
-  font-size: 0.8rem;
+  font-size: var(--text-sm);
   color: #6b7f8e;
   margin-top: 0.2rem;
 }
 
 .sidebar-album-summary {
   display: block;
-  font-size: 0.85rem;
+  font-size: var(--text-sm);
   color: #99a8b8;
   margin-top: 0.3rem;
   line-height: 1.4;
@@ -2381,14 +2441,14 @@ ul.share li a {
   }
 
   .sidebar-title {
-    font-size: 18px;
+    font-size: var(--text-lg);
     margin: 0 0 1rem 0;
   }
 
   .sidebar-close {
     top: 0.5rem;
     right: 0.75rem;
-    font-size: 1.5rem;
+    font-size: var(--text-base);
   }
 
   .sidebar-album-cover {
@@ -2446,8 +2506,8 @@ ul.share li a {
   background: rgba(0, 0, 0, 0.45);
   border-radius: 4px;
   font-family: var(--font-ui);
-  font-size: 0.9rem;
-  font-weight: 600;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
   color: rgba(255, 255, 255, 0.9);
   letter-spacing: 0.01em;
   backdrop-filter: blur(4px);
@@ -2476,7 +2536,7 @@ ul.share li a {
 
 .album-breadcrumb a {
   font-family: var(--font-ui);
-  font-size: 1.8rem;
+  font-size: var(--text-base);
   color: var(--text-muted);
   text-decoration: none;
   transition: color var(--transition);
@@ -2527,7 +2587,7 @@ ul.share li a {
 
 .feed-breadcrumb a {
   font-family: var(--font-ui);
-  font-size: 0.9rem;
+  font-size: var(--text-base);
   color: var(--text-muted);
   text-decoration: none;
   transition: color var(--transition);
@@ -2549,7 +2609,7 @@ ul.share li a {
 
 .feed-hero-date {
   font-family: var(--font-ui);
-  font-size: 0.85rem;
+  font-size: var(--text-sm);
   color: var(--text-subtle);
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -2558,16 +2618,16 @@ ul.share li a {
 
 .feed-hero-title {
   font-family: var(--font-ui);
-  font-size: 2rem;
-  font-weight: 800;
+  font-size: var(--text-xl);
+  font-weight: var(--weight-heavy);
   color: var(--text-heading);
-  line-height: 1.2;
+  line-height: var(--leading-tight);
   margin: 0 0 1rem;
 }
 
 @media only screen and (min-width: 768px) {
   .feed-hero-title {
-    font-size: 2.5rem;
+    font-size: var(--text-2xl);
   }
 }
 
@@ -2583,8 +2643,8 @@ ul.share li a {
 .tag-pill {
   display: inline-block;
   font-family: var(--font-ui);
-  font-size: 0.8rem;
-  font-weight: 600;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
   color: var(--link);
   background: var(--accent-bg);
   padding: 0.25rem 0.75rem;
@@ -2604,8 +2664,8 @@ ul.share li a {
 .feed-hero-external-btn {
   display: inline-block;
   font-family: var(--font-ui);
-  font-size: 0.95rem;
-  font-weight: 600;
+  font-size: var(--text-base);
+  font-weight: var(--weight-medium);
   color: var(--link);
   background: var(--accent-bg);
   padding: 0.5rem 1.5rem;
@@ -2636,7 +2696,7 @@ ul.share li a {
   border-left: 3px solid var(--link);
   padding: 1rem 1.5rem;
   margin: 2rem 0;
-  font-size: 1.15rem;
+  font-size: var(--text-lg);
   font-style: italic;
   color: var(--text-muted);
   background: rgba(255,255,255,0.02);
@@ -2656,7 +2716,7 @@ ul.share li a {
 
 .feed-pager-link {
   font-family: var(--font-ui);
-  font-size: 0.85rem;
+  font-size: var(--text-base);
   color: var(--text-subtle);
   text-decoration: none !important;
   transition: color var(--transition);
@@ -2684,8 +2744,8 @@ ul.share li a {
 
 .related-posts-heading {
   font-family: var(--font-ui);
-  font-size: 1.1rem;
-  font-weight: 700;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-bold);
   color: var(--text-subtle);
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -2723,11 +2783,11 @@ ul.share li a {
 .related-post-title {
   display: block;
   font-family: var(--font-ui);
-  font-size: 1rem;
-  font-weight: 700;
+  font-size: var(--text-lg);
+  font-weight: var(--weight-bold);
   color: var(--text-heading);
   margin-bottom: 0.25rem;
-  line-height: 1.3;
+  line-height: var(--leading-normal);
 }
 
 .related-post-card:hover .related-post-title {
@@ -2736,9 +2796,9 @@ ul.share li a {
 
 .related-post-summary {
   display: block;
-  font-size: 0.85rem;
+  font-size: var(--text-base);
   color: var(--text-muted);
-  line-height: 1.4;
+  line-height: var(--leading-normal);
 }
 
 /* ---- Comments Section (Cusdis) ---- */
@@ -2752,8 +2812,8 @@ ul.share li a {
 .comments-toggle-btn {
   display: inline-block;
   font-family: var(--font-ui);
-  font-size: 1.5rem;
-  font-weight: 600;
+  font-size: var(--text-base);
+  font-weight: var(--weight-medium);
   color: var(--link);
   background: var(--accent-bg);
   padding: 0.5rem 1.5rem;
@@ -2844,7 +2904,7 @@ ul.share li a {
 
 .subscribe-label {
   font-family: var(--font-ui);
-  font-size: 0.9rem;
+  font-size: var(--text-base);
   color: var(--text-muted);
   margin-bottom: 0.75rem;
 }
@@ -2864,7 +2924,7 @@ ul.share li a {
   min-width: 0;
   padding: 0.55rem 0.9rem;
   font-family: var(--font-ui);
-  font-size: 0.9rem;
+  font-size: var(--text-base);
   color: var(--text-body);
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid var(--border);
@@ -2886,8 +2946,8 @@ ul.share li a {
   flex-shrink: 0;
   padding: 0.55rem 1.25rem;
   font-family: var(--font-ui);
-  font-size: 0.9rem;
-  font-weight: 600;
+  font-size: var(--text-base);
+  font-weight: var(--weight-medium);
   color: var(--text-on-accent);
   background: var(--link);
   border: none;
@@ -2991,26 +3051,26 @@ ul.share li a {
 
 .about-name {
   font-family: var(--font-ui);
-  font-size: 3.2rem;
-  font-weight: 800;
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-heavy);
   color: var(--text-heading);
   margin: 0 0 0.6rem;
-  line-height: 1.2;
+  line-height: var(--leading-tight);
 }
 
 .about-subtitle {
   font-family: var(--font-ui);
-  font-size: 1.6rem;
+  font-size: var(--text-xl);
   color: var(--link);
   margin: 0 0 0.8rem;
-  font-weight: 600;
+  font-weight: var(--weight-medium);
 }
 
 .about-tagline {
   font-family: var(--font-body);
-  font-size: 1.4rem;
+  font-size: var(--text-base);
   color: var(--text-muted);
-  line-height: 1.6;
+  line-height: var(--leading-relaxed);
   margin: 0;
 }
 
@@ -3023,8 +3083,8 @@ ul.share li a {
   max-width: 70rem;
   margin: 0 auto;
   font-family: var(--font-body);
-  font-size: 1.8rem;
-  line-height: 1.75;
+  font-size: var(--text-lg);
+  line-height: var(--leading-loose);
   color: var(--text-body);
 }
 
@@ -3061,7 +3121,7 @@ ul.share li a {
   }
 
   .about-name {
-    font-size: 2.6rem;
+    font-size: var(--text-xl);
   }
 }
 
@@ -3078,14 +3138,14 @@ ul.share li a {
   }
 
   .about-name {
-    font-size: 2.2rem;
+    font-size: var(--text-xl);
   }
 
   .about-subtitle {
-    font-size: 1.4rem;
+    font-size: var(--text-lg);
   }
 
   .about-prose {
-    font-size: 1.6rem;
+    font-size: var(--text-base);
   }
 }
