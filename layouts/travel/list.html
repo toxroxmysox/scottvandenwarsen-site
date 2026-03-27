@@ -1,0 +1,35 @@
+{{ define "header" }}
+  <!-- Suppress default header for full-bleed map -->
+{{ end }}
+
+{{ define "main" }}
+<div class="map-page" id="map-page">
+  <div class="travel-tabs" id="travel-tabs">
+    <button class="travel-tab active" data-tab="map">Map</button>
+    <button class="travel-tab" data-tab="timeline">Timeline</button>
+  </div>
+  <div class="travel-tab-content active" id="tab-map">
+    <div class="map-container" id="map-container">
+      <!-- D3 renders the SVG here -->
+    </div>
+    <div class="map-sidebar" id="map-sidebar">
+      <!-- .sheet-handle injected here by JS on mobile -->
+      <div class="sidebar-body" id="sidebar-body">
+        <button class="sidebar-close" id="sidebar-close">&times;</button>
+        <h2 class="sidebar-title" id="sidebar-title"></h2>
+        <div class="sidebar-albums" id="sidebar-albums">
+          <!-- Gallery cards injected by JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="travel-tab-content" id="tab-timeline">
+    <div class="timeline-cards" id="timeline-cards">
+      <!-- Timeline cards injected by JS -->
+    </div>
+  </div>
+  <div class="travel-timeline" id="travel-timeline">
+    <!-- Desktop timeline strip injected by JS -->
+  </div>
+</div>
+{{ end }}

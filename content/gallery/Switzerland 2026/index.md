@@ -1,6 +1,6 @@
 ---
 title: Switzerland 2026
-date: 2026-03-08
+date: 2026-03-07
 draft: false
 summary: European Ski Trip to the Alps
 tags:

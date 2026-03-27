@@ -1,6 +1,6 @@
 ---
 title: Egypt 2023
-date: 2026-02-07
+date: 2023-11-16
 draft: false
 summary: Family trip to Cairo and the Nile in November 2023
 tags:
