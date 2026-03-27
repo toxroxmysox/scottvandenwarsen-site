@@ -1,0 +1,11 @@
+[{{ range $i, $trip := .Site.Data.trips }}{{ if $i }},{{ end }}
+  {
+    "id": {{ $trip.id | jsonify }},
+    "title": {{ $trip.title | jsonify }},
+    "description": {{ $trip.description | default "" | jsonify }},
+    "country_codes": {{ $trip.country_codes | jsonify }},
+    "trip_start": {{ $trip.trip_start | jsonify }},
+    "trip_end": {{ $trip.trip_end | jsonify }},
+    "gallery": {{ $trip.gallery | default "" | jsonify }}
+  }{{ end }}
+]

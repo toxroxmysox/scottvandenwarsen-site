@@ -47,5 +47,10 @@ canonifyURLs = true
   baseName = "galleries"
   isPlainText = true
 
+[outputFormats.TripsJSON]
+  mediaType = "application/json"
+  baseName = "trips"
+  isPlainText = true
+
 [outputs]
-  home = ["HTML", "RSS", "GalleryJSON"]
+  home = ["HTML", "RSS", "GalleryJSON", "TripsJSON"]

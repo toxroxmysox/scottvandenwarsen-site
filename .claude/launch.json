@@ -4,7 +4,7 @@
     {
       "name": "hugo-dev",
       "runtimeExecutable": "hugo",
-      "runtimeArgs": ["server", "-p", "1313", "--disableFastRender"],
+      "runtimeArgs": ["server", "-p", "1313", "--disableFastRender", "--baseURL", "http://localhost:1313"],
       "port": 1313
     }
   ]
