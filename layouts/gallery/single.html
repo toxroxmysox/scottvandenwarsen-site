@@ -53,6 +53,33 @@
     {{ end }}
   </div>
 
+  {{/* Video grid: appended after photos, same col-sm-4 layout.
+       Only renders if frontmatter has a `videos` array.
+       Clicking a thumbnail opens a custom lightbox with a YouTube embed. */}}
+  {{ with .Params.videos }}
+  <div class="row video-gallery">
+    {{ range . }}
+      <div class="col-sm-4 album-photo-col">
+        <a href="#" class="video-trigger"
+           data-video-id="{{ .id }}"
+           data-video-title="{{ .title }}"
+           data-video-caption="{{ .caption }}">
+          <div class="video-thumb-wrap">
+            <img src="https://img.youtube.com/vi/{{ .id }}/maxresdefault.jpg"
+                 onerror="this.onerror=null;this.src='https://img.youtube.com/vi/{{ .id }}/hqdefault.jpg';"
+                 alt="{{ .title }}"
+                 class="album-thumb"
+                 loading="lazy">
+            <div class="video-play-btn" aria-hidden="true"></div>
+          </div>
+        </a>
+        {{ with .title }}<div class="video-title">{{ . }}</div>{{ end }}
+        {{ with .caption }}<div class="video-caption">{{ . }}</div>{{ end }}
+      </div>
+    {{ end }}
+  </div>
+  {{ end }}
+
   {{/* ---- Comments ---- */}}
   {{ partial "comments.html" . }}
 
@@ -60,6 +87,26 @@
   <div class="album-breadcrumb album-breadcrumb-bottom">
     <a href="{{ "/gallery/" | relURL }}">← Back to Gallery</a>
   </div>
+
+  {{/* Video lightbox overlay — hidden until JS opens it.
+       Styled to match PhotoSwipe's visual language (same opacity, close button, caption). */}}
+  {{ with .Params.videos }}
+  <div class="video-lightbox" id="videoLightbox" role="dialog" aria-hidden="true">
+    <div class="video-lightbox-backdrop"></div>
+    <div class="video-lightbox-topbar">
+      <button class="video-lightbox-close" aria-label="Close video">&times;</button>
+    </div>
+    <div class="video-lightbox-content">
+      <div class="video-lightbox-player">
+        {{/* iframe injected by JS on open, removed on close */}}
+      </div>
+      <div class="video-lightbox-info">
+        <div class="video-lightbox-title" id="videoLightboxTitle"></div>
+        <div class="video-lightbox-caption" id="videoLightboxCaption"></div>
+      </div>
+    </div>
+  </div>
+  {{ end }}
 
 </div>
 

@@ -63,4 +63,73 @@
   });
 }());
 </script>
+
+{{ if .Params.videos }}
+<!-- Video lightbox — opens YouTube embed on thumbnail click, matches PhotoSwipe UX -->
+<script>
+(function () {
+  var lightbox  = document.getElementById('videoLightbox');
+  if (!lightbox) return;
+
+  var player    = lightbox.querySelector('.video-lightbox-player');
+  var titleEl   = document.getElementById('videoLightboxTitle');
+  var captionEl = document.getElementById('videoLightboxCaption');
+  var closeBtn  = lightbox.querySelector('.video-lightbox-close');
+
+  function openVideo(videoId, title, caption) {
+    var iframe = document.createElement('iframe');
+    iframe.src = 'https://www.youtube.com/embed/' + videoId
+               + '?autoplay=1&rel=0&modestbranding=1';
+    iframe.setAttribute('allow', 'autoplay; encrypted-media');
+    iframe.setAttribute('allowfullscreen', '');
+    player.appendChild(iframe);
+
+    titleEl.textContent   = title   || '';
+    captionEl.textContent = caption || '';
+
+    lightbox.classList.add('is-open');
+    lightbox.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeVideo() {
+    lightbox.classList.remove('is-open');
+    lightbox.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    var iframe = player.querySelector('iframe');
+    if (iframe) player.removeChild(iframe);
+  }
+
+  // Event delegation on the video grid
+  var videoGallery = document.querySelector('.video-gallery');
+  if (videoGallery) {
+    videoGallery.addEventListener('click', function (e) {
+      var trigger = e.target.closest('.video-trigger');
+      if (trigger) {
+        e.preventDefault();
+        openVideo(
+          trigger.getAttribute('data-video-id'),
+          trigger.getAttribute('data-video-title'),
+          trigger.getAttribute('data-video-caption')
+        );
+      }
+    });
+  }
+
+  closeBtn.addEventListener('click', closeVideo);
+  // Close when clicking outside the content area (backdrop, topbar gap, etc.)
+  lightbox.addEventListener('click', function (e) {
+    if (!e.target.closest('.video-lightbox-content')) {
+      closeVideo();
+    }
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && lightbox.classList.contains('is-open')) {
+      closeVideo();
+    }
+  });
+}());
+</script>
+{{ end }}
+
 {{ end }}
