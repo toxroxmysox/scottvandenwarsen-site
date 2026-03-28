@@ -2,6 +2,13 @@
 
 _No active tasks._
 
+- [x] Trip & gallery workflow tooling (session 2026-03-28)
+  - Enhanced `/add-gallery` Claude Code skill — creates gallery + optionally links trip to `data/trips.yaml`
+  - Build-time validation: `warnf` in `layouts/index.tripsjson.json` warns if trip references nonexistent gallery
+  - Commented trip template at bottom of `data/trips.yaml` for quick copy-paste
+  - iOS Shortcut "Log Trip" — appends trip to GitHub via API, triggers Cloudflare rebuild
+  - Shortcut docs: `docs/shortcuts/trip-logging.md` with reusable pattern for future shortcuts
+
 ## Completed
 
 - [x] Typography scale & design consistency (commit bb0e085, pushed to main)

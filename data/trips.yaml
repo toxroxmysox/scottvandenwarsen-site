@@ -29,3 +29,12 @@
   trip_start: 2026-03-07
   trip_end: 2026-03-15
   gallery: "/gallery/switzerland-2026/"
+
+# --- Template: copy, uncomment, and fill to add a new trip ---
+# - id: trip-name-year
+#   title: "Trip Name Year"
+#   description: "Short description"
+#   country_codes: ["XX"]
+#   trip_start: YYYY-MM-DD
+#   trip_end: YYYY-MM-DD
+#   gallery: "/gallery/trip-name-year/"
