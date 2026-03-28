@@ -29,12 +29,3 @@
   trip_start: 2026-03-07
   trip_end: 2026-03-15
   gallery: "/gallery/switzerland-2026/"
-
-- id: test-trip
-  title: "Test Trip"
-  description: "Family Trip to Hilton Head"
-  country_codes: [US]
-  trip_start: 2026-03-20
-  trip_end: 2026-03-24
-  gallery: "/gallery/hilton-head-2026/"
-
