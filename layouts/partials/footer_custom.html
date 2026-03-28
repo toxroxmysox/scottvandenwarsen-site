@@ -116,8 +116,7 @@
     });
   }
 
-  closeBtn.addEventListener('click', closeVideo);
-  // Close when clicking outside the content area (backdrop, topbar gap, etc.)
+  // Close when clicking outside the content area (backdrop, topbar, close button)
   lightbox.addEventListener('click', function (e) {
     if (!e.target.closest('.video-lightbox-content')) {
       closeVideo();
