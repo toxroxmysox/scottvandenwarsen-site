@@ -16,9 +16,10 @@
   {{ with $flag }}
     <span class="gallery-badge gallery-badge-flag">{{ . }}</span>
   {{ end }}
-  {{ $count := len (.Resources.Match "*.{jpg,jpeg,png,webp}") }}
-  {{ if gt $count 0 }}
-    <span class="gallery-badge gallery-badge-count">{{ $count }} photos</span>
+  {{ $photoCount := len (.Resources.Match "*.{jpg,jpeg,png,webp}") }}
+  {{ $videoCount := len (.Params.videos | default slice) }}
+  {{ if or (gt $photoCount 0) (gt $videoCount 0) }}
+    <span class="gallery-badge gallery-badge-count">{{ $photoCount }} photos{{ if gt $videoCount 0 }}, {{ $videoCount }} video{{ if gt $videoCount 1 }}s{{ end }}{{ end }}</span>
   {{ end }}
   <div class="gallery-card-overlay">
     <span class="gallery-card-title">{{ .Title }}</span>
