@@ -252,6 +252,28 @@ If `git pull --rebase` fails with "unstaged changes":
 - **Rule:** Don't use Hugo's `Resize` on photos that may have EXIF orientation metadata (i.e., any camera/phone photo). Serve the original image and let the browser handle EXIF rotation natively. The CSS `aspect-ratio` + `object-fit: cover` approach already handles consistent thumbnail sizing without needing processed images.
 - **Alternative:** If responsive images are needed, pre-process photos with a tool that bakes EXIF rotation into pixels (e.g., `mogrify -auto-orient`) before adding them to the repo.
 
+## iOS Shortcuts
+
+### Shortcuts can't reliably decode base64 from the GitHub Contents API
+- **Problem:** The GitHub Contents API returns file content as base64 with embedded `\n` line breaks. Shortcuts' Decode Base64 action produces blank output even after stripping newlines with Replace Text (regex `\n` → empty).
+- **Fix:** Use `raw.githubusercontent.com/{owner}/{repo}/main/{path}` to fetch raw file content directly. No decoding needed. Still use the Contents API separately to get the `sha` for PUT requests.
+- **Rule:** For any "read a file from GitHub" step in a Shortcut, always use the raw URL for content and the API only for metadata (sha).
+
+### Don't hand-craft JSON as Text for API request bodies
+- **Problem:** Built a PUT request body as a Text action: `{"message": "...", "content": "{base64}", "sha": "..."}`. GitHub returned "Problems parsing JSON" (400). The base64 string contained characters that broke the JSON structure.
+- **Fix:** Set Request Body to "JSON" in the Get Contents of URL action and add keys individually via the built-in editor. Shortcuts handles escaping correctly.
+- **Rule:** Always use Shortcuts' JSON body editor for API requests. Never construct JSON via Text actions.
+
+### Base64 Encode action includes line breaks by default
+- **Problem:** Encoded content for GitHub PUT, got "content is not valid Base64" (422). The Encode Base64 action wraps output at 76 characters with newlines.
+- **Fix:** Expand the Encode action and set Line Breaks to None. Alternatively, add a Replace Text after encoding to strip `\n` (regex mode).
+- **Rule:** Always check/set the Line Breaks option on Encode Base64 actions.
+
+### Hugo page bundle archetypes panic on v0.154 with cascade settings
+- **Problem:** `hugo new gallery/"Test Album"/index.md` causes a panic: `[BUG] no Page found for ...`. This happens when the section's `_index.md` uses `cascade` in frontmatter.
+- **Fix:** Don't use archetypes for page bundles. Create the folder and index.md directly via `mkdir` + file write.
+- **Rule:** Test archetypes before relying on them. If they panic, fall back to manual file creation.
+
 ### Hugo `define "header"` won't override baseof's `block "header"` for section templates
 - **Problem:** Created `layouts/about/single.html` with `{{ define "header" }}{{ end }}` to suppress the theme's header banner. It didn't work — the default header.html partial still rendered, even though `{{ define "main" }}` worked fine.
 - **Fix:** Created a section-specific `layouts/about/baseof.html` that omits the `{{ block "header" }}` entirely.
