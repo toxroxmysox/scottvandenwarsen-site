@@ -1,3 +1,12 @@
+{{- /* Validate gallery paths at build time */ -}}
+{{- range $trip := .Site.Data.trips -}}
+  {{- if $trip.gallery -}}
+    {{- $page := site.GetPage $trip.gallery -}}
+    {{- if not $page -}}
+      {{- warnf "trips.yaml: trip '%s' references gallery '%s' which does not exist" $trip.id $trip.gallery -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
 [{{ range $i, $trip := .Site.Data.trips }}{{ if $i }},{{ end }}
   {
     "id": {{ $trip.id | jsonify }},
