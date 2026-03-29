@@ -30,6 +30,22 @@
   trip_end: 2026-03-15
   gallery: "/gallery/switzerland-2026/"
 
+- id: french-polynesia-2024
+  title: "French Polynesia 2024"
+  description: "Honeymoon in Moorea"
+  country_codes: ["PF"]
+  trip_start: 2024-09-23
+  trip_end: 2024-09-30
+  gallery: "/gallery/french-polynesia-2024/"
+
+- id: chengdu-2024
+  title: "Chengdu 2024"
+  description: "Work trip to Chengdu"
+  country_codes: ["CN"]
+  trip_start: 2024-07-16
+  trip_end: 2024-07-28
+  gallery: "/gallery/chengdu-2024/"
+
 # --- Template: copy, uncomment, and fill to add a new trip ---
 # - id: trip-name-year
 #   title: "Trip Name Year"

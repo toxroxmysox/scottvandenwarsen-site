@@ -19,15 +19,23 @@
 │   ├── reading/           # Articles & links
 │   ├── watching/          # Shows, films, videos
 │   ├── listening/         # Podcasts & audio
-│   └── gallery/           # Photo albums (page bundles with images)
+│   ├── gallery/           # Photo albums (page bundles with images)
+│   └── travel/            # Travel page (map + timeline, aliases /map/)
+├── data/
+│   ├── trips.yaml         # Trip metadata (source of truth for travel page)
+│   └── now.yaml           # Now-playing widget data
 ├── layouts/               # Custom templates overriding the theme
 │   ├── index.html         # Homepage (feed columns + gallery grid)
 │   ├── _default/          # Default list layout
 │   ├── feed/              # Feed list & single templates
 │   ├── gallery/           # Gallery list & single templates
+│   ├── travel/            # Travel page template (map + timeline + tabs)
 │   └── partials/          # Reusable components (cards, nav, head, etc.)
 ├── static/
 │   ├── css/main.css       # All custom styles (Moody Slate, dark mode, layout)
+│   ├── js/travel.js       # Travel page: D3 map, timeline, flight lines, state mgmt
+│   ├── js/mini-map.js     # Homepage mini-map (independent)
+│   ├── data/              # JSON data files fetched by JS at runtime
 │   └── favicon files
 ├── tasks/
 │   ├── todo.md            # Current task tracking

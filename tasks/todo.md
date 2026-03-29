@@ -11,6 +11,16 @@ _No active tasks._
 
 ## Completed
 
+- [x] Travel page: map + timeline + flight lines + mobile tabs (PR #15, merged)
+  - Renamed `/map/` → `/travel/` with alias redirect
+  - Created `data/trips.yaml` as single source of truth for trip data
+  - Built `travel.js` (~1000 lines) replacing `map.js` — pub/sub state management
+  - Horizontal timeline strip (desktop) with chronological trip nodes
+  - SVG flight line arcs between consecutive trips
+  - Enhanced sidebar: trip info, gallery cards, prev/next navigation
+  - Mobile two-tab layout (Map / Timeline) with gallery-style overlay cards
+  - Fixed French Guiana overseas territory splitting
+  - Removed navbar logo circle
 - [x] Typography scale & design consistency (commit bb0e085, pushed to main)
   - Added 5-step typography scale tokens to `:root`: `--text-sm` (12px), `--text-base` (15px), `--text-lg` (18px), `--text-xl` (24px), `--text-2xl` (30px)
   - Added line-height tokens: `--leading-tight/normal/relaxed/loose`

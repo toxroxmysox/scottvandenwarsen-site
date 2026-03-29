@@ -6,275 +6,117 @@ Rules to prevent repeated mistakes. Review at session start.
 
 ## CSS & Styling
 
-### Preview browser aggressively caches CSS
-- **Problem:** After editing `static/css/main.css`, the preview browser keeps loading the old cached version even after page reload. New CSS rules appear missing.
-- **Rule:** Always verify CSS is loaded by inspecting computed styles. If styles aren't applying, the cache is stale — don't assume the CSS is wrong.
-- **Fix applied:** Added `?v={{ now.Unix }}` cache-busting to the CSS link in `layouts/partials/head.html`. This ensures each Hugo build/serve gets a fresh CSS URL.
-- **Workaround for preview:** If cache-bust param doesn't help, inject a fresh `<link>` element via `preview_eval` with a unique timestamp.
-
-### Bootstrap grid breakpoints need real viewport widths
-- **Problem:** Bootstrap's `col-md-4` needs 992px+ viewport width to create 3-column layout. The `desktop` preset in `preview_resize` sometimes resolves to only 640px, causing columns to stack.
-- **Rule:** Always use explicit dimensions (`preview_resize` with `width: 1400, height: 900`) instead of the `desktop` preset for reliable desktop testing.
-
-### CSS inheritance on parent containers
-- **Problem:** Adding `text-align: center` to `.gallery-section` to center the heading also affected the gallery grid contents.
-- **Rule:** When adding inheritable CSS properties to a parent, always check if children need explicit resets (e.g., `.gallery-section .gallery-grid { text-align: left; }`).
-
-### Inline-block elements don't auto-center
-- **Problem:** Gallery heading had `display: inline-block` (from global h2 underline styles) which prevented it from centering within its parent, even with `text-align: center` on itself.
-- **Rule:** To center an `inline-block` element, set `text-align: center` on the **parent**, not the element itself.
-
-## Hugo & Dev Server
-
-### Hugo caches template output
-- **Problem:** Hugo's dev server caches rendered HTML. Template values like `{{ now.Unix }}` compute once and stay the same until the page is rebuilt.
-- **Rule:** Don't expect `now.Unix` to change on every browser refresh — it only changes when Hugo re-renders the template.
-
-### Static files served without versioning
-- **Problem:** Files in `static/` are served as-is with no built-in cache-busting by Hugo.
-- **Rule:** For any static asset that changes frequently during development, add a cache-bust parameter in the template that references it.
-
-## Git & GitHub
-
-### `gh auth login` is fully interactive
-- **Problem:** Cannot run `gh auth login` non-interactively from Claude Code — it requires terminal input for selections.
-- **Rule:** Direct the user to run `gh auth login` in their own terminal. Don't attempt to automate it.
-
-### Worktree files belong to their branch
-- **Problem:** Files created in a worktree are scoped to that worktree's branch. Project-level config files (CLAUDE.md, tasks/) should live in the main repo on `main`, not in worktrees.
-- **Rule:** Always create project config files in the main repository, not in worktrees. Worktrees are for feature work only.
-
-### HTTPS git push needs credential helper
-- **Problem:** `git push` over HTTPS fails with "Device not configured" if no credential helper is set up.
-- **Rule:** After `gh auth login`, `gh` configures the git credential helper automatically. Always check `gh auth status` before attempting to push.
-
-## CSS Variables & Refactoring
-
 ### `replace_all` corrupts `:root` CSS variable definitions
-- **Problem:** Using Edit with `replace_all: true` to replace a hex value like `#64b5f6` → `var(--link)` also replaces the *value* inside the `:root` definition, creating a circular reference: `--link: var(--link);`. This silently breaks all usages of that token.
-- **Rule:** After any `replace_all` pass that involves a value also defined in `:root`, immediately restore the `:root` definition to its correct literal value.
-- **Best approach:** Do all `replace_all` passes first (accepting that `:root` will be corrupted), then restore the entire `:root` block in one comprehensive Edit at the end. Track which entries will be corrupted before starting.
+- **Problem:** Using Edit with `replace_all: true` to replace a hex value like `#64b5f6` → `var(--link)` also replaces the *value* inside the `:root` definition, creating a circular reference.
+- **Rule:** Do all `replace_all` passes first, then restore the entire `:root` block in one Edit at the end.
 
-### Design token strategy for Moody Slate
-- **Pattern used:** Insert a `:root {}` block at the very top of `main.css` with all tokens. Dark-mode overrides go in an immediately-following `@media (prefers-color-scheme: dark) :root {}` block. The Moody Slate section below uses `var(--token)` everywhere — no hardcoded hex values.
-- **File structure order:** tokens → legacy theme CSS → Scott overrides → Moody Slate → cards.
+### Fixed height on thumbnails distorts aspect ratio
+- **Rule:** Use `aspect-ratio: 4/3` + `object-fit: cover` + `width: 100%` instead of fixed `height` for thumbnails.
 
-## JavaScript
+### Dark mode `@media` overrides can silently revert component changes
+- **Rule:** When modifying a CSS property, always search for that selector in the dark mode `@media` block and update it there too.
 
-### JS files are cached more aggressively than CSS
-- **Problem:** `footer_custom.html` uses `?v={{ now.Unix }}` cache-busting on JS script tags, but the *browser* still caches aggressively. After editing `static/js/map.js` or `mini-map.js`, the preview browser often serves the old file with `transferSize: 0` (from disk cache).
-- **Diagnosis command:**
-  ```js
-  performance.getEntriesByType('resource').find(r => r.name.includes('map.js'))
-  // If transferSize === 0, the file is cached
-  ```
-- **Fix — force fresh JS in the preview:** Use `preview_eval` to navigate away then back with a unique bust param:
-  ```js
-  window.location.href = 'about:blank'
-  // then:
-  window.location.href = 'http://localhost:1313/?_bust=' + Date.now()
-  ```
-- **Root cause:** Hugo's dev server returns the same `?v=TIMESTAMP` URL on repeated renders because `now.Unix` is computed once per build, not per request. The browser sees the same URL and serves its cached copy.
-- **Rule:** After editing a JS file, always check `transferSize` in performance entries before trusting what's rendered. If cached, force a fresh load before debugging the JS logic.
+### Tab/wrapper elements can break existing flex layouts
+- **Problem:** Wrapping existing flex children inside a new `<div>` breaks the parent's flex layout.
+- **Rule:** When adding wrapper elements around existing flex children, make the wrapper `display: flex; flex: 1; min-height: 0` so it acts as a flex pass-through.
 
 ## Hugo
 
-### Use `relURL` not `absURL` for local static assets
-- **Problem:** `absURL` in Hugo templates generates full production URLs (`https://scottvandenwarsen.com/js/map.js`). During local dev, these 404 because the file isn't on production yet — so the script silently fails to load.
-- **Rule:** Always use `relURL` for `<script>` and `<link>` tags that reference files in `static/`. Only use `absURL` for canonical URLs, Open Graph `og:url`, and sitemap entries that genuinely need an absolute URL.
-- **Example fix:** `{{ "js/map.js" | absURL }}` → `{{ "js/map.js" | relURL }}`
+### Hugo `data/` vs `static/data/` — different purposes
+- **Problem:** Files in `data/` are only accessible via `.Site.Data` in templates — they are NOT served as static assets. JS `fetch()` returns 404 for `data/` files.
+- **Rule:** Files JS needs to fetch at runtime → `static/` or `static/data/`. Files Hugo templates need → `data/`.
 
-## Git
+### Hugo output format template naming uses lowercased format name
+- **Rule:** `TripsJSON` format → template filename is `index.tripsjson.json` (lowercased).
 
-### Always fetch `origin/main` before starting a worktree session
-- **Problem:** Local `main` was 4 commits behind `origin/main`. PRs merged on GitHub don't update local branches — they only update the remote. A worktree branched from stale local `main` was missing the lightbox, feed redesign, and other merged changes.
-- **Rule:** At session start, run `git fetch origin main` and rebase the worktree branch on `origin/main` (not local `main`). This ensures all merged PR changes are included.
-- **Pattern:** `git fetch origin main && git rebase origin/main`
+### `canonifyURLs = true` converts relURL to absolute URLs
+- **Problem:** With `canonifyURLs = true`, `relURL` generates absolute production URLs that 404 during local dev.
+- **Rule:** Add `--baseURL http://localhost:1313` to local dev command (in `.claude/launch.json`).
 
-### Git rebase workflow when you have unstaged changes
-If `git pull --rebase` fails with "unstaged changes":
-1. `git stash` — shelve unstaged changes
-2. `git pull --rebase origin main` — pull + replay local commits
-3. Resolve any conflicts; `git add` each resolved file
-4. `git rebase --continue` — complete the rebase
-5. `git stash pop` — restore your unstaged changes
-6. `git push origin main`
+### Hugo `Resize` strips EXIF orientation
+- **Rule:** Don't use Hugo's `Resize` on camera/phone photos — it strips EXIF orientation and portraits render sideways. Serve originals with `aspect-ratio` + `object-fit: cover`.
 
-### Merge conflict strategy: CSS variables win over hardcoded values
-- **Rule:** When a merge conflict is between a CSS `var(--token)` (remote design-token refactor) and a hardcoded hex value (our older code), **always keep the CSS variable**. It's more maintainable and consistent with the design system.
-- **Pattern to watch for:** `.some-class { color: <<<< HEAD: var(--text-muted) ==== #99a8b8 >>>>` → keep `var(--text-muted)`.
+### YAML dates must be unquoted for Hugo's `dateFormat`
+- **Rule:** In `data/*.yaml`, leave dates unquoted: `updated: 2026-03-19` (not `"2026-03-19"`). Quoted dates become strings, breaking `dateFormat`.
 
-### After git add, unmerged files still show as conflicted
-- **Problem:** After resolving all conflict markers and running `git add file`, git rebase still reports the file as "needs merge" if you haven't also staged the other conflicted files.
-- **Rule:** After resolving all files, check `git status` to see all "Unmerged paths". Stage every resolved file before running `git rebase --continue`.
+### Hugo `$` in partials invoked via `dict` refers to the dict
+- **Rule:** Pass `.Site` explicitly. Use `$.field` (not `.field`) inside nested `with`/`range` blocks.
 
-## Hugo Themes & Third-Party Libraries
+### Hugo template lookup order: type cascades override section
+- **Rule:** Lookup: `layouts/[type]/` → `layouts/[section]/` → `layouts/_default/`. Check `_index.md` for `type` or `cascade` settings.
+
+## Hugo Themes & Libraries
 
 ### Check what the theme already provides before adding it yourself
-- **Problem:** Added PhotoSwipe CDN `<script>` tags and a `.pswp` overlay `<div>` in custom templates — only to discover the theme's `footer.html` and `header.html` already inject all of this globally on every page. This created duplicate script loads and a broken double overlay.
-- **Rule:** Before adding a JS library or DOM boilerplate, grep the theme for it: `grep -r "PhotoSwipe\|pswp" themes/`. If the theme already loads it, only add your custom init logic.
-- **Specific pattern:** Theme's `load-photoswipe.js` only processes `<figure>` elements — so custom `<a data-size>` elements are safe to wire up separately without conflict.
+- **Rule:** Before adding a JS library, `grep -r "LibraryName" themes/`. If the theme loads it, only add custom init logic.
 
-### PhotoSwipe v4 on Hugo: use `data-size="WxH"` with Hugo's `.Width`/`.Height`
-- **Pattern:** Hugo image resources expose `.Width` and `.Height` on image resources. Use these in the template: `data-size="{{ $img.Width }}x{{ $img.Height }}"`. PhotoSwipe v4 requires these dimensions to size the overlay correctly.
-- **Rule:** Never hardcode dimensions or use temp defaults (800x600). Hugo provides actual dimensions at build time — always use them.
+### PhotoSwipe v4: use `data-size="WxH"` with Hugo's `.Width`/`.Height`
+- **Rule:** Hugo image resources expose `.Width`/`.Height`. Use `data-size="{{ $img.Width }}x{{ $img.Height }}"`. Never hardcode dimensions.
 
-## CSS Layout
+## JavaScript
 
-### Fixed height on thumbnails distorts aspect ratio — use `aspect-ratio` instead
-- **Problem:** `.album-thumb { height: 220px; object-fit: cover }` forced all thumbnails to 220px tall, making portrait photos appear heavily cropped and landscape photos look squished.
-- **Rule:** Use `aspect-ratio: 4/3` (or your preferred ratio) instead of fixed `height`. Combine with `object-fit: cover` and `width: 100%` for thumbnails that maintain natural proportions at any container width.
+### `Promise.all` rejection kills the entire chain
+- **Problem:** One `fetch()` 404 in `Promise.all` caused the entire `.then()` to never execute, silently preventing all rendering.
+- **Rule:** Ensure ALL URLs are valid. Consider `Promise.allSettled()` for non-critical resources, or per-fetch `.catch()` for graceful degradation.
 
-### Theme root font-size may not be 16px — verify before setting `rem` values
-- **Problem:** Set breadcrumb font-size to `0.875rem` expecting ~14px, but the theme sets `html { font-size: 62.5% }` making `1rem = 10px`. The breadcrumb rendered as 8.75px — invisible.
-- **Rule:** Before using `rem` values for font sizes, check what `html { font-size }` is in the theme. On this site: `1rem = 10px`, body text = `1.8rem = 18px`. Match body text by using `1.8rem`, not `1rem`.
+### Keep JS breakpoints in sync with CSS
+- **Rule:** Define breakpoints as named JS constants (e.g., `MOBILE_MAX = 767`) with a comment linking to the CSS `@media` rules.
 
-## Git
-
-### `git stash pop` can conflict with append-only files (like main.css)
-- **Problem:** Remote added CSS to the end of `main.css`; our stash also appended CSS to the end. `git stash pop` created a conflict because both edits targeted the same tail region.
-- **Rule:** When two branches both append to the same file, `git stash pop` will conflict at the append location. Resolution: keep both blocks — upstream's block first (complete it if truncated), then our additions after.
-- **Conflict marker pattern:** The `=======` marker may split the upstream block mid-rule (e.g., a closing `}` is on the wrong side). Always check the upstream block is syntactically complete before appending ours.
-
-## Preview Server
-
-### Preview server must run from the worktree, not the main repo
-- **Problem:** `preview_list` showed the server CWD was `/Users/Scott/Website/scottvandenwarsen-site` (main repo), not the worktree. Template changes in the worktree were invisible.
-- **Rule:** After starting a worktree session, always check `preview_list` and confirm the server `cwd` matches the worktree path. If not, stop and restart the server from the correct context.
-
-## Testing & Verification
-
-### Remove test data immediately after verification
-- **Problem:** Temporarily injected a fake US-CA gallery entry into `buildLocationIndex` to verify the US state rendering code path. Later verified it as a "phantom highlight" bug — it was just the test data left in from the previous session.
-- **Rule:** Inject test data → verify → remove in the same session, before marking the phase complete. Never leave test data in production code paths.
-
-## Workflow
-
-### Don't fight caching — fix it at the source
-- **Problem:** Spent multiple rounds manually cache-busting CSS in the preview browser before realizing the fix should be in the template.
-- **Rule:** If a caching problem comes up more than once, fix it at the source (template, build config) rather than repeatedly working around it.
-
-### Verify at all breakpoints
-- **Rule:** Always test mobile (375px), tablet (768px), and desktop (1400px) when making responsive layout changes. Don't skip any breakpoint.
-
-### Multiple worktrees need different ports
-- **Problem:** Running two Hugo servers on the same port causes conflicts and stale content from the wrong worktree.
-- **Rule:** When comparing worktrees, assign different ports in `.claude/launch.json` (e.g., 1313 and 1314).
+### Zoom/centering must account for sidebar position
+- **Rule:** Compute available area dynamically based on viewport size and sidebar position (horizontal on desktop, vertical on mobile).
 
 ## Responsive / Mobile
 
 ### CSS sidebar transitions: use `transform` not `width` on mobile
-- **Pattern:** Desktop sidebar animates via `width: 0 → 33%`. On mobile, animating width is janky and fights `position: fixed`. Use `transform: translateY(100%) → translateY(0)` for a smooth bottom sheet instead.
-- **Rule:** For overlaid panels (bottom sheets, drawers), always animate `transform` — it's GPU-composited and doesn't trigger layout recalculation.
-
-### Keep JS breakpoints in sync with CSS
-- **Pattern:** Defined `MOBILE_MAX = 767` and `TABLET_MAX = 1023` as JS constants at the top of `map.js`, with a comment "must match CSS". The CSS uses `@media (max-width: 767px)` and `@media (min-width: 768px) and (max-width: 1023px)`.
-- **Rule:** When JS behavior depends on responsive breakpoints, define them once as named constants and add a comment tying them to the CSS. Don't hardcode pixel values inline in JS functions.
-
-### Zoom centering must account for where the sidebar appears
-- **Problem:** `zoomToFeature()` hardcoded `width * 0.333` as sidebar offset, which is wrong when the sidebar is a bottom sheet (mobile) or 40% wide (tablet).
-- **Rule:** When zooming/centering content that shares space with a sidebar, compute the available area dynamically based on viewport size and sidebar position (horizontal on desktop, vertical on mobile).
+- **Rule:** For overlaid panels (bottom sheets, drawers), animate `transform: translateY()` — GPU-composited, no layout recalculation.
 
 ### `!important` is acceptable for responsive overrides of base layout
-- **Pattern:** Used `width: 100% !important; min-width: 0 !important;` in the mobile media query to override the base `.map-sidebar.open { width: 33.333%; min-width: 320px; }`.
-- **Rule:** `!important` is fine when a responsive media query needs to definitively override a base rule that would otherwise break the layout at that breakpoint. This is one of the legitimate use cases for `!important`.
+- **Rule:** `!important` in a media query is fine when it definitively overrides a base rule that would break the layout at that breakpoint.
 
 ### Use `@media (hover: none)` for touch-specific styles
-- **Pattern:** Touch devices don't have hover. Used `@media (hover: none)` to give `.has-gallery` countries a brighter default fill so they're visually distinct as tappable without relying on `:hover`.
-- **Rule:** Don't rely on `:hover` as the only visual affordance for interactive elements. Add `@media (hover: none)` fallbacks for touch devices.
+- **Rule:** Don't rely on `:hover` alone. Add `@media (hover: none)` fallbacks so interactive elements are visually distinct on touch devices.
 
-### `position: fixed` overlays pass touches through to `touch-action: none` elements on iOS WebKit
-- **Problem:** A `position: fixed` bottom sheet with `z-index: 20` was visually on top of a D3 SVG, but taps on the sheet hit the SVG instead. D3's `zoom()` sets `touch-action: none` inline on the SVG. iOS WebKit (Safari, Arc, Chrome for iOS — all use the same engine) incorrectly routes touch events to the `touch-action: none` element rather than the fixed overlay above it.
-- **Root cause:** This is a longstanding iOS WebKit bug, not a z-index/pointer-events issue.
-- **Fix:** Change the overlay from `position: fixed` to `position: absolute`. Ensure the parent container has `position: relative`. Visually identical (bottom-anchored), but iOS touch routing works correctly.
-- **Wrong approach tried first:** `svg.on('.zoom', null)` — removes D3's zoom listener, but D3 already set `touch-action: none` as an inline style; touch routing was still broken AND it blocked map interaction while the sheet was open.
+### iOS `position: fixed` overlays pass touches through to `touch-action: none` elements
+- **Problem:** Fixed bottom sheet visually covered an SVG with `touch-action: none`, but taps hit the SVG. All iOS browsers use WebKit — this affects Safari, Chrome, Arc, etc.
+- **Fix:** Use `position: absolute` with parent `position: relative` instead of `position: fixed`.
 
 ### Pseudo-elements cannot receive touch or pointer events
-- **Problem:** Used `::before` to render a drag handle bar. When implementing drag-to-resize, attached `touchstart`/`touchmove`/`touchend` to the pseudo-element area — but events never fired.
-- **Rule:** Pseudo-elements (`::before`, `::after`) are not DOM nodes and cannot receive events. Always create a real DOM element for anything interactive. Inject it via JS or add it to the HTML template.
+- **Rule:** `::before`/`::after` are not DOM nodes. Create real DOM elements for anything interactive.
 
 ### Bottom sheet expand: use `max-height`, not `translateY`
-- **Problem:** To simulate "drag up to expand" on a bottom sheet, used `translateY(-Npx)` — this just shifted the whole box upward without revealing more content, since the sheet height didn't change.
-- **Rule:** For a bottom-anchored sheet (`position: absolute; bottom: 0`), expanding means growing the sheet's `max-height` (or `height`) so content is revealed. `translateY` should only be used for the close/dismiss direction (dragging down).
-- **Pattern:** `touchmove UP → sidebar.style.maxHeight = (baseH + |deltaY|) + 'px'` (capped at max). `touchend → sidebar.classList.add('expanded')` (CSS class takes over). Include `max-height` in the CSS `transition` property for smooth snap animation.
+- **Rule:** For `position: absolute; bottom: 0` sheets, grow `max-height` to expand. `translateY` shifts the box without revealing content.
 
-### Disable CSS transitions during active drag, re-enable on release
-- **Pattern:** Add a `.dragging` class with `transition: none !important` when `touchstart` fires. Remove it on `touchend` before snapping to final position — this lets the CSS transition animate the snap.
-- **Rule:** Direct manipulation (drag) must be instantaneous. The snap-to-final-position on release should animate. `.dragging` class is the clean way to toggle this.
+### Disable CSS transitions during active drag
+- **Rule:** Add `.dragging` class with `transition: none !important` on `touchstart`. Remove on `touchend` to let CSS transition animate the snap.
 
-### iOS browser ≠ Safari only — all iOS browsers share WebKit
-- **Lesson:** Tested on Arc browser on iOS; assumed the bug might be Arc-specific. Arc on iOS still uses WKWebView (iOS-mandated WebKit). All iOS browsers — Safari, Chrome, Arc, Firefox, Edge — run on WebKit.
-- **Rule:** Any iOS touch bug is a WebKit bug and affects every browser on iOS. Don't narrow scope to "Safari only" when diagnosing iOS touch issues.
+## D3.js / Maps
 
-## Hugo Data Files
-
-### YAML dates must be unquoted for Hugo's `dateFormat`
-- **Problem:** Hugo's `dateFormat` requires a `time.Time` value. YAML parses unquoted `2026-03-19` as a date/time, but quoted `"2026-03-19"` becomes a string. Using `dateFormat` on a string causes a build error.
-- **Rule:** In `data/*.yaml`, always leave date values unquoted: `updated: 2026-03-19` (not `updated: "2026-03-19"`).
-
-### Hugo `$` in partials invoked via `dict` refers to the dict itself
-- **Problem:** Inside a partial called with `{{ partial "foo.html" (dict "field" "x" "Site" .Site) }}`, the `$` variable points to the dict, not the page. So `$.field` works at all nesting depths, and `.Site` must be passed explicitly.
-- **Rule:** When calling a partial via `dict`, always pass `.Site` explicitly if the partial needs site data. Use `$.field` (not `.field`) inside nested `with`/`range` blocks.
-
-### Hugo template lookup order: type cascades override section
-- **Problem:** Expected `/reading/` to route through `layouts/_default/list.html`, but it actually routes through `layouts/feed/list.html` because `content/feed/_index.md` sets `type: feed` via frontmatter cascade.
-- **Rule:** Hugo's template lookup: `layouts/[type]/list.html` → `layouts/[section]/list.html` → `layouts/_default/list.html`. Check `_index.md` for `type` or `cascade` settings before assuming which template handles a section page.
+### Country MultiPolygons may include overseas territories
+- **Problem:** France's TopoJSON MultiPolygon includes French Guiana. Highlighting France also highlights South America.
+- **Fix:** Split polygons by centroid longitude (< -10° = overseas). Give overseas paths a separate class with no click handler. Exclude overseas from zoom bounds.
+- **Rule:** Always check if a country geometry needs splitting for accurate highlighting and zooming.
 
 ## Git
 
+### Worktree files belong to their branch
+- **Rule:** Project config files (CLAUDE.md, tasks/) belong in the main repo on `main`, not in worktrees.
+
 ### Worktree PRs cause local main to fall behind
-- **Problem:** When using worktree branches (e.g., `claude/keen-satoshi`) and merging PRs on GitHub, the local `main` branch doesn't update automatically. Next session starts with main N commits behind origin.
-- **Why it happens:** `git merge` on GitHub only updates the remote ref. Local `main` stays at its last fetched state. This is normal git behavior — not a bug.
-- **Rule:** At the start of every session, run `git pull --rebase origin main` (or `git fetch origin && git rebase origin/main`). This is not optional — stale main causes merge conflicts on every stash pop.
-- **Prevention:** The `/warmup` slash command already checks for this. Always run `/warmup` at session start.
+- **Rule:** After merging PRs on GitHub, local `main` doesn't update. Run `git pull --rebase origin main` at session start. The `/warmup` command checks this.
 
-## CSS & Design Tokens
+### `git stash pop` can conflict with append-only files
+- **Rule:** When both branches append to the same file (e.g., main.css), keep upstream's block first (ensure it's syntactically complete), then ours after.
 
-### Never hardcode rgba/hex values in component CSS — always use design tokens
-- **Problem:** The about page hero card used `rgba(255, 255, 255, 0.04)` and `rgba(100, 181, 246, 0.2)` directly instead of design tokens. This breaks the centralized token system — dark mode overrides and future palette changes won't apply.
-- **Rule:** Every color value in component CSS must reference a `var(--token)`. If no suitable token exists, add one to the `:root` block (and its dark-mode override) before using it.
-- **Tokens added:** `--card-bg`, `--card-border`, `--card-bg-hover`, `--accent-ring` for frosted-glass card surfaces.
+## Testing & Verification
 
-### Body text is 1.8rem (18px) — match it everywhere
-- **Problem:** The about page prose used `font-size: 1.5rem` (15px) while the rest of the site uses `1.8rem` (18px). The theme sets `html { font-size: 62.5% }`, so `1rem = 10px`.
-- **Rule:** Body/prose text should always be `1.8rem` to match the site's base font size. On mobile, `1.6rem` is the minimum. Check the existing body font-size before setting any new prose container's size.
+### Remove test data immediately after verification
+- **Rule:** Inject → verify → remove in the same session. Never leave test data in production code.
 
-### Hugo dev server must be restarted to pick up CSS changes in preview
-- **Problem:** After editing `static/css/main.css`, the `?v={{ now.Unix }}` cache-bust param doesn't change between requests because Hugo computes `now.Unix` once per build. The preview browser keeps serving stale CSS even with `?_bust=` URL params.
-- **Rule:** When CSS changes aren't reflected in the preview after editing `main.css`, stop and restart the hugo-dev server (`preview_stop` + `preview_start`). This forces Hugo to rebuild with a new `now.Unix` value.
+### Verify at all breakpoints
+- **Rule:** Always test mobile (375px), tablet (768px), and desktop (1400px) for responsive changes.
 
-### Dark mode `@media` overrides can silently revert component-level changes
-- **Problem:** Changed `.feed-card-meta` color to `--text-subtle` in the main rule, but the `@media (prefers-color-scheme: dark)` block further down still had `color: var(--text-faint)`, overriding the change in dark mode.
-- **Rule:** When modifying a CSS property on a component, always search for that same selector in the dark mode `@media` block and update it there too.
+### Multiple worktrees need different ports
+- **Rule:** Assign different ports in `.claude/launch.json` (e.g., 1313 vs 1314) when running multiple Hugo servers.
 
-### Hugo `Resize` strips EXIF orientation — don't use it for user-facing thumbnails
-- **Problem:** Used `$img.Resize "768x q85"` to generate responsive `srcset` variants for gallery album photos. Hugo's `Resize` strips EXIF orientation metadata without rotating the underlying pixels. Portrait photos (stored as landscape with EXIF rotation flag) rendered sideways.
-- **Rule:** Don't use Hugo's `Resize` on photos that may have EXIF orientation metadata (i.e., any camera/phone photo). Serve the original image and let the browser handle EXIF rotation natively. The CSS `aspect-ratio` + `object-fit: cover` approach already handles consistent thumbnail sizing without needing processed images.
-- **Alternative:** If responsive images are needed, pre-process photos with a tool that bakes EXIF rotation into pixels (e.g., `mogrify -auto-orient`) before adding them to the repo.
-
-## iOS Shortcuts
-
-### Shortcuts can't reliably decode base64 from the GitHub Contents API
-- **Problem:** The GitHub Contents API returns file content as base64 with embedded `\n` line breaks. Shortcuts' Decode Base64 action produces blank output even after stripping newlines with Replace Text (regex `\n` → empty).
-- **Fix:** Use `raw.githubusercontent.com/{owner}/{repo}/main/{path}` to fetch raw file content directly. No decoding needed. Still use the Contents API separately to get the `sha` for PUT requests.
-- **Rule:** For any "read a file from GitHub" step in a Shortcut, always use the raw URL for content and the API only for metadata (sha).
-
-### Don't hand-craft JSON as Text for API request bodies
-- **Problem:** Built a PUT request body as a Text action: `{"message": "...", "content": "{base64}", "sha": "..."}`. GitHub returned "Problems parsing JSON" (400). The base64 string contained characters that broke the JSON structure.
-- **Fix:** Set Request Body to "JSON" in the Get Contents of URL action and add keys individually via the built-in editor. Shortcuts handles escaping correctly.
-- **Rule:** Always use Shortcuts' JSON body editor for API requests. Never construct JSON via Text actions.
-
-### Base64 Encode action includes line breaks by default
-- **Problem:** Encoded content for GitHub PUT, got "content is not valid Base64" (422). The Encode Base64 action wraps output at 76 characters with newlines.
-- **Fix:** Expand the Encode action and set Line Breaks to None. Alternatively, add a Replace Text after encoding to strip `\n` (regex mode).
-- **Rule:** Always check/set the Line Breaks option on Encode Base64 actions.
-
-### Hugo page bundle archetypes panic on v0.154 with cascade settings
-- **Problem:** `hugo new gallery/"Test Album"/index.md` causes a panic: `[BUG] no Page found for ...`. This happens when the section's `_index.md` uses `cascade` in frontmatter.
-- **Fix:** Don't use archetypes for page bundles. Create the folder and index.md directly via `mkdir` + file write.
-- **Rule:** Test archetypes before relying on them. If they panic, fall back to manual file creation.
-
-### Hugo `define "header"` won't override baseof's `block "header"` for section templates
-- **Problem:** Created `layouts/about/single.html` with `{{ define "header" }}{{ end }}` to suppress the theme's header banner. It didn't work — the default header.html partial still rendered, even though `{{ define "main" }}` worked fine.
-- **Fix:** Created a section-specific `layouts/about/baseof.html` that omits the `{{ block "header" }}` entirely.
-- **Rule:** If you need to suppress a baseof block for a specific section, create a section-specific baseof rather than relying on `{{ define "blockname" }}{{ end }}` in the inner template.
+### Preview server must run from the worktree
+- **Rule:** Verify `preview_list` CWD matches the worktree path. Template changes are invisible if the server runs from the wrong directory.
