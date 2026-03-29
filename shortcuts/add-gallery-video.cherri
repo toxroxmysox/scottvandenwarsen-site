@@ -1,0 +1,105 @@
+// Add Gallery Video — iOS Shortcut
+// Adds a YouTube video to a gallery album via GitHub API
+
+#include 'actions/web'
+#include 'actions/text'
+#include 'actions/scripting'
+#include 'actions/crypto'
+
+#define name Add Gallery Video
+#define color red
+#define inputs url, text
+#define noinput askfor url
+
+#question ghToken "GitHub Personal Access Token (github_pat_...)" ""
+#question deployHookURL "Cloudflare Deploy Hook URL" ""
+
+// --- Step 1: Get YouTube URL ---
+@input = ShortcutInput
+if input {
+    @youtubeURL = "{input}"
+} else {
+    @youtubeURL = prompt("YouTube URL:", "URL")
+}
+
+// --- Step 2: Get Video Title ---
+@videoTitle = prompt("Video title:")
+
+// --- Step 3: Extract Video ID from URL ---
+// Handles youtube.com/watch?v=ID, youtu.be/ID, youtube.com/shorts/ID
+@videoID = replaceText(".*(?:v=|youtu\\.be/|shorts/)([A-Za-z0-9_-]+).*", "$1", youtubeURL, true, true)
+
+// --- Step 4: Fetch Album List from GitHub API ---
+const albumsResponse = downloadURL("https://api.github.com/repos/toxroxmysox/scottvandenwarsen-site/contents/content/gallery", {"Authorization": "Bearer {ghToken}", "Accept": "application/vnd.github.v3+json"})
+
+// --- Step 5: Extract Album Names from JSON ---
+@albumsText = "{albumsResponse}"
+const nameMatches = matchText("\"name\":\"[^\"]+\"", albumsText)
+
+@albumNames: array
+for match in nameMatches {
+    @cleanName = replaceText("\"name\":\"", "", match)
+    @cleanName = replaceText("\"", "", cleanName)
+    if cleanName !contains "_index" {
+        @albumNames += "{cleanName}"
+    }
+}
+
+// --- Step 6: Pick Album ---
+@albumName = chooseFromList(albumNames, "Which album?")
+@encodedAlbum = urlEncode(albumName)
+
+// --- Step 7: Fetch Current index.md ---
+// Raw content (plain text)
+const rawContent = downloadURL("https://raw.githubusercontent.com/toxroxmysox/scottvandenwarsen-site/main/content/gallery/{encodedAlbum}/index.md")
+@fileText = "{rawContent}"
+
+// SHA (needed for PUT)
+const fileInfo = downloadURL("https://api.github.com/repos/toxroxmysox/scottvandenwarsen-site/contents/content/gallery/{encodedAlbum}/index.md", {"Authorization": "Bearer {ghToken}", "Accept": "application/vnd.github.v3+json"})
+@fileSHA = fileInfo['sha']
+
+// --- Step 8: Modify Frontmatter ---
+// Split file at "---" delimiters: [empty, frontmatter, body]
+const parts = splitText(fileText, "---")
+
+// Extract frontmatter and body using a counter
+@partIndex = 0
+@frontmatter = ""
+@body = ""
+for part in parts {
+    @partIndex += 1
+    if partIndex == 2 {
+        @frontmatter = "{part}"
+    }
+    if partIndex == 3 {
+        @body = "{part}"
+    }
+}
+
+// Check if album already has videos
+const hasVideos = matchText("videos:", frontmatter)
+
+// Build updated content
+if hasVideos {
+    // Append new video entry before closing ---
+    @updatedContent = "---{frontmatter}  - id: \"{videoID}\"
+    title: \"{videoTitle}\"
+---{body}"
+} else {
+    // Add videos: key + first entry
+    @updatedContent = "---{frontmatter}videos:
+  - id: \"{videoID}\"
+    title: \"{videoTitle}\"
+---{body}"
+}
+
+// --- Step 9: Base64 Encode and Push ---
+const encoded = base64Encode(updatedContent)
+
+const putResult = jsonRequest("https://api.github.com/repos/toxroxmysox/scottvandenwarsen-site/contents/content/gallery/{encodedAlbum}/index.md", "PUT", {"message": "Add video to {albumName} via iOS Shortcut", "content": "{encoded}", "sha": "{fileSHA}"}, {"Authorization": "Bearer {ghToken}", "Accept": "application/vnd.github.v3+json"})
+
+// --- Step 10: Trigger Cloudflare Deploy ---
+const deployResult = jsonRequest(deployHookURL, "POST")
+
+// --- Step 11: Notify ---
+showNotification("\"{videoTitle}\" added to {albumName}. Site rebuilding.", "Video Added")
