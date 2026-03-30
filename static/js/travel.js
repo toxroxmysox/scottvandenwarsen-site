@@ -179,13 +179,11 @@
     Promise.all([
       d3.json('/data/world-110m.json'),
       d3.json('/galleries.json'),
-      d3.json('/trips.json'),
-      d3.json('/data/country-coords.json')
+      d3.json('/trips.json')
     ]).then(function (results) {
       var worldData = results[0];
       galleryData = results[1];
       trips = results[2];
-      countryCoords = results[3];
       buildIndexes();
       renderMap(worldData);
       renderFlightLines();
@@ -349,6 +347,29 @@
 
   function renderMap(worldData) {
     var countries = topojson.feature(worldData, worldData.objects.countries);
+
+    // Compute country centroids from GeoJSON for flight lines
+    // (auto-updates when new countries appear in trips — no static file needed)
+    countryCoords = {};
+    countries.features.forEach(function (feature) {
+      var alpha2 = numericToAlpha2[String(feature.id)];
+      if (alpha2) {
+        countryCoords[alpha2] = d3.geoCentroid(feature);
+      }
+    });
+    // Small territories omitted from 110m TopoJSON — manual [lon, lat]
+    var smallTerritoryCoords = {
+      'PF': [-149.57, -17.53],  // French Polynesia (Tahiti)
+      'MV': [73.22, 3.20],      // Maldives
+      'SC': [55.49, -4.68],     // Seychelles
+      'MU': [57.55, -20.35]     // Mauritius
+    };
+    Object.keys(smallTerritoryCoords).forEach(function (code) {
+      if (!countryCoords[code]) {
+        countryCoords[code] = smallTerritoryCoords[code];
+      }
+    });
+
     var split = splitOverseasTerritories(countries.features);
 
     // Render overseas territories (no highlights, no click, no data-id)
@@ -968,7 +989,10 @@
 
       // Skip if same country or missing coordinates
       if (fromCode === toCode) continue;
-      if (!countryCoords[fromCode] || !countryCoords[toCode]) continue;
+      if (!countryCoords[fromCode] || !countryCoords[toCode]) {
+        console.warn('Flight line skipped — missing coords:', fromCode, '→', toCode);
+        continue;
+      }
 
       var fromPt = projection(countryCoords[fromCode]);
       var toPt = projection(countryCoords[toCode]);
