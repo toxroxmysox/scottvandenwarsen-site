@@ -12,3 +12,10 @@
 
 # Claude Code worktrees (ephemeral, per-session)
 .claude/worktrees/
+
+# iOS Shortcuts (contain credentials — never commit)
+shortcuts/*.cherri
+shortcuts/*.plist
+shortcuts/*.shortcut
+shortcuts/*.xml
+shortcuts/*_processed.cherri

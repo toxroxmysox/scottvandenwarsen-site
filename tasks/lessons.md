@@ -120,3 +120,87 @@ Rules to prevent repeated mistakes. Review at session start.
 
 ### Preview server must run from the worktree
 - **Rule:** Verify `preview_list` CWD matches the worktree path. Template changes are invisible if the server runs from the wrong directory.
+
+### Hugo `Resize` strips EXIF orientation — don't use it for user-facing thumbnails
+- **Problem:** Used `$img.Resize "768x q85"` to generate responsive `srcset` variants for gallery album photos. Hugo's `Resize` strips EXIF orientation metadata without rotating the underlying pixels. Portrait photos (stored as landscape with EXIF rotation flag) rendered sideways.
+- **Rule:** Don't use Hugo's `Resize` on photos that may have EXIF orientation metadata (i.e., any camera/phone photo). Serve the original image and let the browser handle EXIF rotation natively. The CSS `aspect-ratio` + `object-fit: cover` approach already handles consistent thumbnail sizing without needing processed images.
+- **Alternative:** If responsive images are needed, pre-process photos with a tool that bakes EXIF rotation into pixels (e.g., `mogrify -auto-orient`) before adding them to the repo.
+
+## iOS Shortcuts
+
+### Shortcuts can't reliably decode base64 from the GitHub Contents API
+- **Problem:** The GitHub Contents API returns file content as base64 with embedded `\n` line breaks. Shortcuts' Decode Base64 action produces blank output even after stripping newlines with Replace Text (regex `\n` → empty).
+- **Fix:** Use `raw.githubusercontent.com/{owner}/{repo}/main/{path}` to fetch raw file content directly. No decoding needed. Still use the Contents API separately to get the `sha` for PUT requests.
+- **Rule:** For any "read a file from GitHub" step in a Shortcut, always use the raw URL for content and the API only for metadata (sha).
+
+### Don't hand-craft JSON as Text for API request bodies
+- **Problem:** Built a PUT request body as a Text action: `{"message": "...", "content": "{base64}", "sha": "..."}`. GitHub returned "Problems parsing JSON" (400). The base64 string contained characters that broke the JSON structure.
+- **Fix:** Set Request Body to "JSON" in the Get Contents of URL action and add keys individually via the built-in editor. Shortcuts handles escaping correctly.
+- **Rule:** Always use Shortcuts' JSON body editor for API requests. Never construct JSON via Text actions.
+
+### Base64 Encode action includes line breaks by default
+- **Problem:** Encoded content for GitHub PUT, got "content is not valid Base64" (422). The Encode Base64 action wraps output at 76 characters with newlines.
+- **Fix:** Expand the Encode action and set Line Breaks to None. Alternatively, add a Replace Text after encoding to strip `\n` (regex mode).
+- **Rule:** Always check/set the Line Breaks option on Encode Base64 actions.
+
+## Video Lightbox
+
+### Click-outside-to-close: use a single lightbox-level handler, not a backdrop handler
+- **Problem:** Added a click handler on `.video-lightbox-backdrop` to close the lightbox when clicking outside the video. But the backdrop is `position: absolute` behind the content div — clicks at the center hit the content, not the backdrop. The `preview_click` tool (and real users on mobile) couldn't reliably hit the backdrop.
+- **Fix:** Listen on the entire lightbox element and check `!e.target.closest('.video-lightbox-content')`. This catches clicks on the backdrop, topbar, close button — anything outside the player.
+- **Rule:** For "click outside to close" patterns, attach the handler to the outermost overlay element and filter by target, not to a backdrop div that may be occluded by sibling elements.
+
+### Avoid duplicate event handlers that call the same function
+- **Problem:** Had both `closeBtn.addEventListener('click', closeVideo)` and a lightbox click handler that also calls `closeVideo()` when clicking outside content. The close button is outside `.video-lightbox-content`, so both handlers fired on the same click.
+- **Rule:** When a parent click handler already covers a child element's behavior, don't add a redundant handler on the child. One handler, one responsibility.
+
+### Hugo page bundle archetypes panic on v0.154 with cascade settings
+- **Problem:** `hugo new gallery/"Test Album"/index.md` causes a panic: `[BUG] no Page found for ...`. This happens when the section's `_index.md` uses `cascade` in frontmatter.
+- **Fix:** Don't use archetypes for page bundles. Create the folder and index.md directly via `mkdir` + file write.
+- **Rule:** Test archetypes before relying on them. If they panic, fall back to manual file creation.
+
+## Cherri (iOS Shortcut Compiler)
+
+### Build workflow: compile → patch plist → re-sign
+- **Problem:** Cherri's `base64Encode()` doesn't expose the Line Breaks parameter. Shortcuts' Base64 Encode defaults to adding line breaks every 76 chars, causing GitHub API "content is not valid Base64" (422) errors.
+- **Fix:** Compile normally, then patch the plist to add `<key>WFBase64LineBreakMode</key><string>None</string>` to the base64 action, then re-sign with `shortcuts sign`.
+- **Build script:**
+  ```sh
+  cherri file.cherri -d --skip-sign          # get .plist
+  # patch the plist XML to add WFBase64LineBreakMode: None
+  plutil -convert binary1 patched.xml -o patched.shortcut
+  shortcuts sign --mode anyone --input patched.shortcut --output "Final.shortcut"
+  ```
+
+### Use `getValue()` for const variables, `['key']` for @ variables
+- **Problem:** `const fileInfo = downloadURL(...)` then `@sha = fileInfo['sha']` produced empty SHA. The bracket syntax only works with `@` variables.
+- **Rule:** For `const` (magic variable from an action output), use `const sha = getValue(fileInfo, "sha")`. For `@` variables, use `@val = myDict['key']`.
+
+### `#question` import questions don't fire from file installs
+- **Problem:** `#question ghToken "..."` creates import questions that should prompt when the shortcut is added. They only work reliably from iCloud shared links, not when installing from a `.shortcut` file.
+- **Fix:** For personal shortcuts, hardcode credentials directly. For shared shortcuts, test the import question flow via iCloud link.
+- **Rule:** Don't rely on `#question` for shortcuts distributed via AirDrop/file.
+
+### Headers must be literal dictionaries, not variables
+- **Problem:** `@headers = {...}; downloadURL(url, headers)` fails with "Shortcuts does not allow variable values for this argument."
+- **Rule:** Always inline the headers dictionary: `downloadURL(url, {"Authorization": "Bearer {token}", ...})`.
+
+### `joinText` and `splitText` crash on edge cases (Cherri bugs)
+- **Problem:** `joinText(list, "")` panics with index out of range. `splitText(encoded)` (single arg) also panics.
+- **Rule:** Avoid these patterns. Use alternative approaches (regex replaceText, for loops, or plist patching) to work around.
+
+### URL-encode album/folder names with spaces for GitHub raw URLs
+- **Problem:** `raw.githubusercontent.com` doesn't handle literal spaces in paths. `Spain 2025` in the URL split into `content/gallery/Spain` (truncated at space), creating a stray file instead of modifying the album.
+- **Fix:** Use `urlEncode(albumName)` and use the encoded version in all URLs.
+- **Rule:** Always URL-encode path segments that may contain spaces before embedding in URLs.
+
+### GitHub Contents API SHA must match exactly
+- **Problem:** PUT with wrong/empty SHA returns 409 "does not match". PUT with line-break-corrupted base64 returns 422 "content is not valid Base64".
+- **Diagnosis:** Add debug `alert()` calls showing SHA and PUT result to identify which error is occurring.
+
+## Hugo
+
+### Hugo `define "header"` won't override baseof's `block "header"` for section templates
+- **Problem:** Created `layouts/about/single.html` with `{{ define "header" }}{{ end }}` to suppress the theme's header banner. It didn't work — the default header.html partial still rendered, even though `{{ define "main" }}` worked fine.
+- **Fix:** Created a section-specific `layouts/about/baseof.html` that omits the `{{ block "header" }}` entirely.
+- **Rule:** If you need to suppress a baseof block for a specific section, create a section-specific baseof rather than relying on `{{ define "blockname" }}{{ end }}` in the inner template.

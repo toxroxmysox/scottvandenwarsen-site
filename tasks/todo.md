@@ -2,12 +2,28 @@
 
 _No active tasks._
 
+- [x] YouTube video support in photo galleries (PR #17, merged)
+  - Videos declared in gallery frontmatter (`videos:` array with `id`, `title`, optional `caption`)
+  - Thumbnails render after photos in same grid with CSS play-button overlay
+  - Custom lightbox matching PhotoSwipe visual style (0.92 opacity, fade, close button)
+  - iframe created on click, destroyed on close — no iframes at rest
+  - Gallery card badge: "N photos, M videos"
+  - Overlay tokens: `--overlay-play`, `--overlay-play-hover`, `--overlay-backdrop`
+  - Switzerland 2026 album includes first video: Mid-Mountain Drone
+
 - [x] Trip & gallery workflow tooling (session 2026-03-28)
   - Enhanced `/add-gallery` Claude Code skill — creates gallery + optionally links trip to `data/trips.yaml`
   - Build-time validation: `warnf` in `layouts/index.tripsjson.json` warns if trip references nonexistent gallery
   - Commented trip template at bottom of `data/trips.yaml` for quick copy-paste
   - iOS Shortcut "Log Trip" — appends trip to GitHub via API, triggers Cloudflare rebuild
   - Shortcut docs: `docs/shortcuts/trip-logging.md` with reusable pattern for future shortcuts
+
+- [x] Add-video tooling & iOS Shortcut (session 2026-03-29)
+  - New `/add-video` Claude Code skill — interactive prompts for album, YouTube URL, title, caption
+  - Rewrote `/add-gallery` skill to be interactive (no command-line args)
+  - iOS Shortcut "Add Gallery Video" — built with Cherri compiler, adds videos via GitHub API
+  - Shortcut handles: Share Sheet input, video ID regex extraction, dynamic album list, frontmatter modification, base64 encoding, deploy hook
+  - Source: `shortcuts/add-gallery-video.cherri` (not committed — contains credentials)
 
 ## Completed
 
