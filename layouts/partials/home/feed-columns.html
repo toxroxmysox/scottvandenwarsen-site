@@ -10,7 +10,6 @@
 <div class="row text-center">
   <div class="col-md-4">
     <h2 class="text-center">Reading</h2>
-    {{ partial "now-playing.html" (dict "field" "reading" "Site" .Site) }}
     {{ range first $limit (where .Site.RegularPages.ByDate.Reverse "Section" "reading") }}
       {{ partial "home/card.html" . }}
     {{ end }}
@@ -18,7 +17,6 @@
 
   <div class="col-md-4">
     <h2 class="text-center">Watching</h2>
-    {{ partial "now-playing.html" (dict "field" "watching" "Site" .Site) }}
     {{ range first $limit (where .Site.RegularPages.ByDate.Reverse "Section" "watching") }}
       {{ partial "home/card.html" . }}
     {{ end }}
@@ -26,7 +24,6 @@
 
   <div class="col-md-4">
     <h2 class="text-center">Listening</h2>
-    {{ partial "now-playing.html" (dict "field" "listening" "Site" .Site) }}
     {{ range first $limit (where .Site.RegularPages.ByDate.Reverse "Section" "listening") }}
       {{ partial "home/card.html" . }}
     {{ end }}

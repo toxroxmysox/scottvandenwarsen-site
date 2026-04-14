@@ -39,6 +39,10 @@
             <a title="Home" href="{{ "/" | relLangURL }}">Home</a>
           </li>
 
+          <li class="{{ if eq .Type "now" }}active{{ end }}">
+            <a title="Now" href="{{ "/now/" | relLangURL }}">Now</a>
+          </li>
+
           <li class="{{ if eq .Section "feed" }}active{{ end }}">
             <a title="Feed" href="{{ "/feed/" | relLangURL }}">Feed</a>
           </li>

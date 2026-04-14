@@ -3673,3 +3673,206 @@ ul.share li a {
     font-size: var(--text-base);
   }
 }
+
+/* ==========================================================
+   NOW PAGE — /now/
+   Scroll-spy layout (desktop) + stacked cards (mobile)
+   ========================================================== */
+
+.now-page {
+  padding-top: 12rem;
+  padding-bottom: 6rem;
+}
+
+/* ---- Header ---- */
+.now-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.now-title {
+  font-family: var(--font-ui);
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-bold);
+  color: var(--text-heading);
+  margin: 0 0 0.8rem;
+}
+
+.now-subtitle {
+  font-family: var(--font-body);
+  font-size: var(--text-lg);
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* ---- Layout: side nav + cards ---- */
+.now-layout {
+  display: flex;
+  gap: 4rem;
+  align-items: flex-start;
+}
+
+/* ---- Sticky side nav (desktop) ---- */
+.now-nav {
+  position: sticky;
+  top: 8rem;
+  flex: 0 0 18rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+}
+
+.now-nav-link {
+  font-family: var(--font-ui);
+  font-size: var(--text-base);
+  font-weight: var(--weight-normal);
+  color: var(--text-faint);
+  text-decoration: none;
+  transition: color 0.3s ease, opacity 0.3s ease;
+  cursor: pointer;
+  opacity: 0.5;
+}
+
+.now-nav-link:hover {
+  color: var(--text-muted);
+  opacity: 0.8;
+}
+
+.now-nav-link.active {
+  color: var(--link);
+  font-weight: var(--weight-bold);
+  opacity: 1;
+}
+
+/* ---- Cards column ---- */
+.now-cards {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+/* ---- Card base ---- */
+.now-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-card);
+  padding: 3rem;
+  text-align: center;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+/* Card reveal — JS sets --card-opacity (0–1) and --content-opacity (0 or 1) */
+.now-card--reveal {
+  opacity: var(--card-opacity, 0);
+}
+.now-card--reveal .now-card-label,
+.now-card--reveal .now-card-value,
+.now-card--reveal .now-card-date,
+.now-card--reveal .now-card-photo-wrap {
+  opacity: var(--content-opacity, 0);
+}
+
+.now-card-label {
+  display: block;
+  font-family: var(--font-ui);
+  font-size: var(--text-base);
+  font-weight: var(--weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--link);
+  margin-bottom: 1.2rem;
+  transition: opacity 0.5s ease;
+}
+
+.now-card-value {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 2.4rem;
+  color: var(--text-body);
+  line-height: var(--leading-relaxed);
+  transition: opacity 0.5s ease;
+}
+
+.now-card-date {
+  display: block;
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  color: var(--text-faint);
+  margin-top: 1rem;
+  transition: opacity 0.5s ease;
+}
+
+/* ---- Photo card ---- */
+.now-card-photo-wrap {
+  position: relative;
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  transition: opacity 0.5s ease;
+}
+
+.now-card-photo {
+  display: block;
+  width: 100%;
+  max-height: 50rem;
+  object-fit: cover;
+}
+
+.now-card-photo-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 3rem 2rem 2rem;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+}
+
+.now-card-photo-overlay .now-card-label {
+  color: #fff;
+  margin-bottom: 0.4rem;
+}
+
+.now-card-photo-overlay .now-card-date {
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: 0.4rem;
+}
+
+/* Photo card has no padding — image bleeds to edges */
+.now-card:has(.now-card-photo-wrap) {
+  padding: 0;
+}
+
+/* ---- Responsive: tablet + mobile ---- */
+@media (max-width: 768px) {
+  .now-page {
+    padding-top: 7rem;
+    padding-bottom: 4rem;
+  }
+
+  .now-header {
+    margin-bottom: 3rem;
+  }
+
+  .now-nav {
+    display: none;
+  }
+
+  .now-layout {
+    display: block;
+  }
+
+  .now-cards {
+    gap: 2rem;
+  }
+
+  .now-card {
+    padding: 2.4rem 2rem;
+  }
+
+  .now-card-value {
+    font-size: var(--text-lg);
+  }
+}

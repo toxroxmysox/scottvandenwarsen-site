@@ -1,3 +1,93 @@
+{{ if eq .Type "now" }}
+<!-- Progressive card reveal + scroll-spy nav -->
+<script>
+(function () {
+  var NAV_H = 60;
+  var cards = Array.prototype.slice.call(document.querySelectorAll('.now-card'));
+  var links = document.querySelectorAll('.now-nav-link');
+  if (!cards.length) return;
+
+  // Swap --hidden for --reveal class so CSS custom properties take over
+  cards.forEach(function (c) {
+    c.classList.remove('now-card--hidden');
+    c.classList.add('now-card--reveal');
+  });
+
+  // Compute each card's visibility ratio (0–1) in the viewport
+  function getVisibility(card) {
+    var r = card.getBoundingClientRect();
+    var top = Math.max(r.top, NAV_H);
+    var bot = Math.min(r.bottom, window.innerHeight);
+    var visible = Math.max(0, bot - top);
+    return r.height > 0 ? visible / r.height : 0;
+  }
+
+  function update() {
+    var ratios = cards.map(getVisibility);
+
+    // Find the most-visible card index
+    var activeIdx = 0;
+    var maxRatio = 0;
+    ratios.forEach(function (r, i) {
+      if (r > maxRatio) { maxRatio = r; activeIdx = i; }
+    });
+
+    cards.forEach(function (card, i) {
+      var ratio = ratios[i];
+      var isAdj = Math.abs(i - activeIdx) === 1;
+
+      // Card opacity: active = 1, adjacent = at least 0.5 (border hint), others = ratio
+      var cardOp;
+      if (i === activeIdx) {
+        cardOp = 1;
+      } else if (isAdj) {
+        cardOp = Math.max(0.5, ratio);
+      } else {
+        cardOp = ratio;
+      }
+
+      // Content: visible when card is >75% in view
+      var contentOp = ratio >= 0.75 ? 1 : 0;
+
+      card.style.setProperty('--card-opacity', cardOp);
+      card.style.setProperty('--content-opacity', contentOp);
+    });
+
+    // Update nav active state
+    var activeId = cards[activeIdx].id;
+    links.forEach(function (link) {
+      link.classList.toggle('active', link.getAttribute('data-target') === activeId);
+    });
+  }
+
+  // Throttled scroll handler
+  var ticking = false;
+  function onScroll() {
+    if (!ticking) {
+      ticking = true;
+      requestAnimationFrame(function () { update(); ticking = false; });
+    }
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll, { passive: true });
+  update(); // initial state
+
+  // Click nav link to scroll
+  links.forEach(function (link) {
+    link.addEventListener('click', function (e) {
+      e.preventDefault();
+      var target = document.getElementById(link.getAttribute('data-target'));
+      if (target) {
+        var y = target.getBoundingClientRect().top + window.pageYOffset - NAV_H - 20;
+        window.scrollTo({ top: y, behavior: 'smooth' });
+      }
+    });
+  });
+}());
+</script>
+{{ end }}
+
 {{ if eq .Type "travel" }}
 <!-- D3.js for interactive map -->
 <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
