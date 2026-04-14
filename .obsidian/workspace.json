@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "tasks/handoffs/02-comments-cusdis.md",
+                "file": "data/now.yaml",
                 "mode": "source",
                 "source": true
               },
               "icon": "lucide-file",
-              "title": "02-comments-cusdis"
+              "title": "now"
             }
           }
         ]
@@ -185,6 +185,16 @@
   },
   "active": "883f3e04d5b489cc",
   "lastOpenFiles": [
+    "tasks/handoffs/02-comments-cusdis.md",
+    "public/now/index.html",
+    "public/now/now-photo.jpg",
+    "public/now",
+    "content/now/now-photo.jpg",
+    "layouts/now/single.html",
+    "layouts/now/baseof.html",
+    "content/now/index.md",
+    "layouts/now",
+    "content/now",
     "docs/shortcuts/trip-logging.md",
     "CLAUDE.md",
     "data/now.yaml",
@@ -201,17 +211,11 @@
     "tasks/handoffs/05-exif-photo-sort.md",
     "tasks/handoffs/04-youtube-galleries.md",
     "tasks/handoffs/03-link-preview.md",
-    "tasks/handoffs/02-comments-cusdis.md",
     "tasks/handoffs/01-now-playing-widget.md",
     "tasks/handoffs",
     "content/gallery/_index.md",
     "data/trips.yaml",
     "shortcuts/patched.shortcut",
-    "shortcuts/patched.xml",
-    "shortcuts/Add Gallery Video.plist",
-    "shortcuts/add-gallery-video_processed.cherri",
-    "shortcuts/Add Gallery Video_unsigned.shortcut",
-    "shortcuts/Add Gallery Video.shortcut",
     "content/gallery/French Polynesia 2024/index.md",
     "public/gallery/french-polynesia-2024/cover2.jpg",
     "public/gallery/french-polynesia-2024/cover.jpg",
@@ -221,15 +225,11 @@
     "public/gallery/french-polynesia-2024/IMG_7175.jpeg",
     "public/gallery/french-polynesia-2024/IMG_7118.jpeg",
     "public/gallery/french-polynesia-2024/IMG_7110.jpeg",
-    "public/gallery/french-polynesia-2024/IMG_7099.jpeg",
-    "public/gallery/french-polynesia-2024/IMG_6423.jpeg",
-    "public/tags/oceania/index.xml",
     "content/gallery/Chengdu 2024/index.md",
     "content/gallery/Egypt 2023/index.md",
     "content/travel/_index.md",
     "tasks/lessons.md",
     "content/about/index.md",
-    "content/listening/2025-01-08 - AI Slop Inevitability/index.md",
     "content/reading/Untitled.canvas"
   ]
 }
