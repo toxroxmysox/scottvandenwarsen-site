@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "data/now.yaml",
+                "file": "content/reading/2026-04-14 - Community Disruption/index.md",
                 "mode": "source",
-                "source": true
+                "source": false
               },
               "icon": "lucide-file",
-              "title": "now"
+              "title": "index"
             }
           }
         ]
@@ -78,7 +78,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 415.5
   },
   "right": {
     "id": "f269be32b22d354a",
@@ -183,21 +183,28 @@
       "bases:Create new base": false
     }
   },
-  "active": "883f3e04d5b489cc",
+  "active": "85bcc4eef173f03f",
   "lastOpenFiles": [
+    "content/listening/2026-04-14 - Self-Driving Cars/index.md",
+    "content/listening/2026-04-14 - Self-Driving Cars",
+    "content/now/index.md",
+    "content/reading/2026-04-14 - Community Disruption/index.md",
+    "content/reading/2026-04-14 - Community Disruption",
+    "content/reading/2026-04-14 - Digital Communities/Untitled.md",
+    "content/reading/2026-04-14 - Digital Communities",
+    "content/watching/2026-04-14 - Project Hail Mary/index.md",
+    "content/watching/2026-04-14 - Project Hail Mary",
+    "shortcuts/update-now_processed.cherri",
+    "shortcuts/update-now.cherri",
+    "content/now/now-photo.jpg",
+    "data/now.yaml",
     "tasks/handoffs/02-comments-cusdis.md",
     "public/now/index.html",
     "public/now/now-photo.jpg",
     "public/now",
-    "content/now/now-photo.jpg",
     "layouts/now/single.html",
-    "layouts/now/baseof.html",
-    "content/now/index.md",
-    "layouts/now",
-    "content/now",
     "docs/shortcuts/trip-logging.md",
     "CLAUDE.md",
-    "data/now.yaml",
     "content/gallery/Switzerland 2026/index.md",
     "global-CLAUDE.md",
     "personal-preferences-condensed.md",
@@ -212,10 +219,7 @@
     "tasks/handoffs/04-youtube-galleries.md",
     "tasks/handoffs/03-link-preview.md",
     "tasks/handoffs/01-now-playing-widget.md",
-    "tasks/handoffs",
     "content/gallery/_index.md",
-    "data/trips.yaml",
-    "shortcuts/patched.shortcut",
     "content/gallery/French Polynesia 2024/index.md",
     "public/gallery/french-polynesia-2024/cover2.jpg",
     "public/gallery/french-polynesia-2024/cover.jpg",
@@ -227,9 +231,6 @@
     "public/gallery/french-polynesia-2024/IMG_7110.jpeg",
     "content/gallery/Chengdu 2024/index.md",
     "content/gallery/Egypt 2023/index.md",
-    "content/travel/_index.md",
-    "tasks/lessons.md",
-    "content/about/index.md",
     "content/reading/Untitled.canvas"
   ]
 }
