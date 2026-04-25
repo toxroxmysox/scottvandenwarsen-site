@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "content/reading/2026-04-14 - Community Disruption/index.md",
+                "file": "data/now.yaml",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "index"
+              "title": "now"
             }
           }
         ]
@@ -94,7 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "layouts/partials/head_custom.html",
+                "file": "data/now.yaml",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +104,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for head_custom"
+              "title": "Backlinks for now"
             }
           },
           {
@@ -169,8 +169,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -183,12 +182,14 @@
       "bases:Create new base": false
     }
   },
-  "active": "85bcc4eef173f03f",
+  "active": "883f3e04d5b489cc",
   "lastOpenFiles": [
+    "hugo.toml.sb-60eea08a-CEHqU1",
+    "content/reading/2026-04-14 - Community Disruption/index.md",
+    "Waypoint",
     "content/listening/2026-04-14 - Self-Driving Cars/index.md",
     "content/listening/2026-04-14 - Self-Driving Cars",
     "content/now/index.md",
-    "content/reading/2026-04-14 - Community Disruption/index.md",
     "content/reading/2026-04-14 - Community Disruption",
     "content/reading/2026-04-14 - Digital Communities/Untitled.md",
     "content/reading/2026-04-14 - Digital Communities",
@@ -202,7 +203,6 @@
     "public/now/index.html",
     "public/now/now-photo.jpg",
     "public/now",
-    "layouts/now/single.html",
     "docs/shortcuts/trip-logging.md",
     "CLAUDE.md",
     "content/gallery/Switzerland 2026/index.md",
@@ -230,7 +230,6 @@
     "public/gallery/french-polynesia-2024/IMG_7118.jpeg",
     "public/gallery/french-polynesia-2024/IMG_7110.jpeg",
     "content/gallery/Chengdu 2024/index.md",
-    "content/gallery/Egypt 2023/index.md",
     "content/reading/Untitled.canvas"
   ]
 }

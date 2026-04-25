@@ -1,4 +1,4 @@
-baseURL = "https://scottvandenwarsen.com/"
+baseURL = "https://scott.vandenwarsen.com/"
 languageCode = 'en-us'
 title = "Scott Vanden Warsen"
 theme = "beautifulhugo"
@@ -36,7 +36,7 @@ canonifyURLs = true
 
 [params.author]
   name = "Scott Vanden Warsen"
-  website = "https://scottvandenwarsen.com"
+  website = "https://scott.vandenwarsen.com"
   linkedin = "scott-vanden-warsen"
 
 [taxonomies]
