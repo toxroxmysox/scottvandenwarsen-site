@@ -25,6 +25,14 @@ _No active tasks._
   - Shortcut handles: Share Sheet input, video ID regex extraction, dynamic album list, frontmatter modification, base64 encoding, deploy hook
   - Source: `shortcuts/add-gallery-video.cherri` (not committed — contains credentials)
 
+- [x] Update Now iOS Shortcut + reusable Cherri pipeline (session 2026-04-25)
+  - iOS Shortcut "Update Now" — multi-select chooseFromList → loop prompts → single GitHub commit + single Cloudflare deploy (no N×commits)
+  - Updates any subset of `/now/` fields (watching/listening/reading/doing/feeling/viewing); 'viewing' picks a photo
+  - `shortcuts/build.sh` — reusable compile→patch→sign pipeline (extracts display name from `#define name`, patches WFBase64LineBreakMode on every base64encode, signs with `--mode people-who-know-me`)
+  - New `/add-shortcut` Claude Code skill — guided authoring of new Cherri shortcuts citing all proven patterns + gotchas
+  - Hard-won gotchas: `getValue(const, "key")` not `const['key']` for JSON SHA (otherwise empty → 409); single-line regex `[\s\S]*?` not literal `\n` (iOS Shortcuts mishandles literal newlines); `--mode anyone` signing endpoint fails network, use `--mode people-who-know-me`
+  - Source: `shortcuts/update-now.cherri` (not committed — contains credentials)
+
 ## Completed
 
 - [x] Travel page: map + timeline + flight lines + mobile tabs (PR #15, merged)

@@ -189,6 +189,34 @@ Rules to prevent repeated mistakes. Review at session start.
 - **Problem:** `joinText(list, "")` panics with index out of range. `splitText(encoded)` (single arg) also panics.
 - **Rule:** Avoid these patterns. Use alternative approaches (regex replaceText, for loops, or plist patching) to work around.
 
+### iOS Shortcuts Replace Text mishandles regex with literal newlines
+- **Problem:** Cherri pattern `"{key}:\n  value: \"[^\"]*\"\n  updated: [^\n]*"` compiles `\n` to actual newline characters in the regex pattern. Pattern works in Python's `re`, but iOS Shortcuts' Replace Text action silently fails to match. The shortcut runs to completion, the YAML appears unchanged, and the GitHub PUT silently goes through with stale content (no commit lands because content matches existing SHA).
+- **Fix:** Use `[\\s\\S]*?` (lazy match across all chars including newlines) and `\\S+` for date-like tokens. No literal newlines in the pattern.
+  ```cherri
+  @findPattern = "{key}:[\\s\\S]*?value: \"[^\"]*\"[\\s\\S]*?updated: \\S+"
+  @replacement = "{key}:\n  value: \"{newValue}\"\n  updated: {today}"
+  ```
+- **Rule:** When writing iOS Shortcuts regex patterns in cherri, never include literal `\n` (cherri converts `\n` → newline char). Use `[\s\S]*?` for cross-line matching. The replacement string CAN have literal newlines — only the pattern is constrained.
+
+### `getValue(const, "key")` is mandatory for JSON SHA extraction — `const['key']` returns empty
+- **Problem:** `const fileInfo = downloadURL(...); @sha = fileInfo['sha']` compiles to a property aggrandizement that does NOT auto-parse the response as a dictionary. SHA comes back empty string. GitHub PUT then returns 409 Conflict with message `"data/now.yaml does not match "` (trailing space because the provided SHA was empty).
+- **Fix:** Use `@sha = getValue(fileInfo, "sha")` — compiles to `is.workflow.actions.getvalueforkey` (dedicated Get Dictionary Value action) which does explicit JSON parse before extraction.
+- **Rule:** For ALL `const`-bound JSON responses, use `getValue(constVar, "key")`. The bracket syntax `['key']` is reserved for `@`-bound dicts.
+
+### `shortcuts sign --mode anyone` fails with DNS NXDOMAIN
+- **Problem:** `shortcuts sign --mode anyone --input X --output Y` exits non-zero with "A server with the specified hostname could not be found" — the Apple signing endpoint isn't reachable even when iCloud and other Apple services work fine. No output file is produced. Installing the unsigned plist-as-shortcut shows "unsigned and can't open" on iOS.
+- **Fix:** Use `--mode people-who-know-me` instead. Works reliably for personal devices on the user's iCloud account.
+- **Rule:** Default cherri build pipeline uses `--mode people-who-know-me`. Size sanity check: signed bundle should be ~33KB (AEA-wrapped), not ~12KB (unsigned binary plist).
+
+### iOS Shortcuts HTTP actions silently swallow 4xx/5xx errors
+- **Problem:** `Get Contents of URL` and `JSON Request` continue executing after 4xx/5xx responses — they don't raise errors. A shortcut that should commit to GitHub but gets 409/422 will still trigger the Cloudflare deploy hook and show its success notification, leading to "the build ran but content didn't change" mystery debugging.
+- **Fix:** When a shortcut "executes correctly" but produces no observable result, add `quicklook(value)` after each suspect step:
+  - `quicklook(working)` after regex replace → did the pattern match?
+  - `quicklook(fileInfo)` after API GET → raw response shape
+  - `quicklook(fileSHA)` after extraction → 40-char hex if good, empty if extraction broke
+  - `quicklook(putResult)` after PUT → success has `"commit": {...}`, errors have `"message": "..."`
+- **Rule:** Never trust a shortcut's "completed" notification. If GitHub commits don't appear, instrument with `quicklook` and rebuild.
+
 ### URL-encode album/folder names with spaces for GitHub raw URLs
 - **Problem:** `raw.githubusercontent.com` doesn't handle literal spaces in paths. `Spain 2025` in the URL split into `content/gallery/Spain` (truncated at space), creating a stray file instead of modifying the album.
 - **Fix:** Use `urlEncode(albumName)` and use the encoded version in all URLs.
