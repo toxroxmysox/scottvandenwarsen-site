@@ -1,29 +1,34 @@
 {{ define "main" }}
 
-<div id="main" class="container homepage-sections" role="main">
+{{/* ---- Hero ---- */}}
+<section class="svw-hero">
+  <div class="svw-contours" style="color: var(--color-paper); opacity: 0.08;">
+    <img src="{{ "contours.svg" | relURL }}" alt="" aria-hidden="true">
+  </div>
+  <h1 class="svw-hero__title">
+    An inside look at <span class="svw-emph">what I'm thinking about</span> and want to share with others.
+  </h1>
+  <p class="svw-hero__sub">{{ .Site.Params.description }}</p>
+  <div class="svw-hero__cta">
+    <a href="{{ "/feed/" | relLangURL }}" class="svw-pill svw-pill--solid">Read the latest</a>
+    <a href="{{ "/travel/" | relLangURL }}" class="svw-pill svw-pill--outline">The map</a>
+  </div>
+</section>
 
-  <!-- Optional blurb under the hero (keeps homepage tight) -->
-  {{ with .Site.Params.homeBlurb }}
-    <p class="homepage-blurb">
-      {{ . | markdownify }}
-    </p>
-  {{ end }}
+{{/* ---- Feed Columns ---- */}}
+{{ partial "home/feed-columns.html" (dict "Site" .Site "limit" 3) }}
 
-  {{ partial "home/feed-columns.html" . }}
-
-  <!-- Mini Map -->
-  <section class="mini-map-section">
-    <h2 class="text-center">Where I've Been</h2>
-    <a href="{{ "/travel/" | relLangURL }}" class="mini-map-link">
-      <div class="mini-map-container" id="mini-map-container">
-        <!-- D3 renders the static SVG here -->
-      </div>
-    </a>
-    <div class="text-center" style="margin-top: 1.2rem;">
-      <a href="{{ "/travel/" | relLangURL }}" class="mini-map-cta">Explore the Map &rarr;</a>
-    </div>
-  </section>
-
-</div>
+{{/* ---- Map Section ---- */}}
+<section class="svw-map-section">
+  <header>
+    <span class="svw-card__chip svw-card__chip--inverted">S</span>
+    <h2 class="svw-map-section__title">The Map</h2>
+    <span class="svw-map-section__sub">Where I've been</span>
+  </header>
+  <div class="svw-map__canvas" id="svw-map-canvas">
+    <!-- D3 renders the static SVG here -->
+  </div>
+  <a href="{{ "/travel/" | relLangURL }}" class="svw-map-cta">Explore the Map &rarr;</a>
+</section>
 
 {{ end }}
