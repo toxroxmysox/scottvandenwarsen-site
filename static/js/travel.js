@@ -423,7 +423,8 @@
       .attr('class', 'map-border')
       .attr('d', path)
       .style('fill', 'none')
-      .style('stroke', 'rgba(100, 120, 140, 0.25)')
+      .style('stroke', 'var(--color-ink)')
+      .style('stroke-opacity', '0.15')
       .style('stroke-width', '0.5px')
       .style('pointer-events', 'none');
   }
