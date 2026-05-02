@@ -1,86 +1,40 @@
-  {{ if eq .Type "page" }}
-    {{ partial "page_meta.html" . }}
+<footer class="svw-footer">
+  {{ with .Site.Params.buttondownFormAction }}
+  <div class="svw-footer__subscribe">
+    <label for="bd-email" class="svw-eyebrow">Get new posts delivered to your inbox</label>
+    <form method="POST" action="{{ . }}" class="svw-footer__subscribe-form">
+      <input type="email" name="email" id="bd-email" placeholder="Your email" required>
+      <button type="submit" class="svw-pill svw-pill--solid">Subscribe</button>
+      <div style="position: absolute; left: -5000px;" aria-hidden="true">
+        <input type="text" name="a_password" tabindex="-1" autocomplete="off">
+      </div>
+    </form>
+  </div>
   {{ end }}
-  {{- if and (not (isset .Site.Params "author")) (isset .Site "author") -}}
-     {{ errorf "Please move [author] to [params.author]; Hugo has deprecated the former." }}
-  {{- end -}}
-<footer>
-  <div class="container">
-    {{ if .Site.Params.disclaimerText }}
-    <div class="row">
-      <div class="disclaimer">
-        <b>Disclaimer:</b> {{ .Site.Params.disclaimerText }}
-      </div>
+
+  <div class="svw-footer__bar">
+    <div class="svw-footer__left">
+      <svg width="14" height="14" viewBox="0 0 64 64" fill="none" style="color: var(--color-paper);">
+        <circle cx="32" cy="32" r="31" stroke="currentColor" stroke-width="1.4" opacity="0.85"/>
+        <path d="M32 14 L34 32 L32 50 L30 32 Z" fill="currentColor" opacity="0.85"/>
+        <path d="M32 14 L34 32 L30 32 Z" fill="var(--accent, #b65a31)"/>
+      </svg>
+      <span>&copy; {{ now.Format "2006" }} &middot; Detroit, MI</span>
     </div>
-    {{ end }}
-    <div class="row">
-      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-        {{ partial "subscribe-form.html" . }}
-        <ul class="list-inline text-center footer-links">
-          {{ range .Site.Data.beautifulhugo.social.social_icons }}
-            {{- if isset $.Site.Params.author .id }}
-              <li>
-		{{ if or ( hasPrefix ( index $.Site.Params.author .id ) "http://" ) ( hasPrefix ( index $.Site.Params.author .id ) "https://" ) }}
-		  <a {{ if .rel }}rel="{{ .rel }}"{{- end -}} href="{{ printf "%s" (index $.Site.Params.author .id) }}" title="{{ .title }}">
-		{{ else }}
-		  <a {{ if .rel }}rel="{{ .rel }}"{{- end -}} href="{{ printf .url (index $.Site.Params.author .id) }}" title="{{ .title }}">
-		{{ end }}
-                  <span class="fa-stack fa-lg">
-                    <i class="fas fa-circle fa-stack-2x"></i>
-                    <i class="{{ .icon }} fa-stack-1x fa-inverse"></i>
-                  </span>
-                </a>
-              </li>
-            {{- end -}}
-          {{ end }}
-          {{ if .Site.Params.rss }}
-          <li>
-            <a href="{{ with .OutputFormats.Get "RSS" }}{{ .RelPermalink }}{{ else }}/index.xml{{ end }}" title="RSS">
-              <span class="fa-stack fa-lg">
-                <i class="fas fa-circle fa-stack-2x"></i>
-                <i class="fas fa-rss fa-stack-1x fa-inverse"></i>
-              </span>
-            </a>
-          </li>
-          {{ end }}
-        </ul>
-        <p class="credits copyright text-muted">
-          {{ if .Site.Params.author.name }}
-            {{ if .Site.Params.author.website }}
-              <a href="{{ .Site.Params.author.website }}">{{ .Site.Params.author.name }}</a>
-            {{ else }}
-              {{ .Site.Params.author.name }}
-            {{ end }}
-          {{ end }}
-
-          &nbsp;&bull;&nbsp;&copy;
-          {{ if .Site.Params.since }}
-            {{ .Site.Params.since }} - {{ .Site.Lastmod.Format "2006" }}
-          {{ else }}
-            {{ .Site.Lastmod.Format "2006" }}
-          {{ end }}
-
-          {{ if .Site.Title }}
-            &nbsp;&bull;&nbsp;
-            <a href="{{ "" | absLangURL }}">{{ .Site.Title }}</a>
-          {{ end }}
-        </p>
-        <!-- Please don't remove this, keep my open source work credited :) -->
-        <p class="credits theme-by text-muted">
-          {{ i18n "poweredBy" . | safeHTML }}
-          {{ if $.GitInfo }}&nbsp;&bull;&nbsp;[<a href="{{ .Site.Params.commit }}{{ .GitInfo.Hash }}">{{ substr .GitInfo.Hash 0 8 }}</a>]{{ end }}
-        </p>
-      </div>
+    <div class="svw-footer__right">
+      {{ if .Site.Params.rss }}
+        <a href="{{ "index.xml" | relURL }}">RSS</a> &middot;
+      {{ end }}
+      <a href="mailto:scottvh519@gmail.com">Email</a> &middot;
+      {{ with .Site.Params.author.linkedin }}
+        <a href="https://linkedin.com/in/{{ . }}" rel="me">LinkedIn</a>
+      {{ end }}
     </div>
   </div>
-</footer>
 
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js" integrity="sha384-cMkvdD8LoxVzGF/RPUKAcvmm49FQ0oxwDF3BGKtDXcEc+T1b2N+teh/OJfpU0jr6" crossorigin="anonymous"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/contrib/auto-render.min.js" integrity="sha384-hCXGrW6PitJEwbkoStFjeJxv+fSOOQKOPbJxSfM6G5sWZjAyWhXiTIIAmQqnlLlh" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
-<script src="https://code.jquery.com/jquery-3.7.0.slim.min.js" integrity="sha384-w5y/xIeYixWvfM+A1cEbmHPURnvyqmVg5eVENruEdDjcyRLUSNej7512JQGspFUr" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
-<script src="{{ "js/main.js" | absURL }}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.js" integrity="sha384-QELNnmcmU8IR9ZAykt67vGr9/rZJdHbiWi64V88fCPaOohUlHCqUD/unNN0BXSqy" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe-ui-default.min.js" integrity="sha384-m67o7SkQ1ALzKZIFh4CiTA8tmadaujiTa9Vu+nqPSwDOqHrDmxLezTdFln8077+q" crossorigin="anonymous"></script>
-<script src="{{ "js/load-photoswipe.js" | absURL }}"></script>
-{{- partial "footer_custom.html" . }}
+  {{/* PhotoSwipe scripts — needed by gallery single pages */}}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.js" integrity="sha384-QELNnmcmU8IR9ZAykt67vGr9/rZJdHbiWi64V88fCPaOohUlHCqUD/unNN0BXSqy" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe-ui-default.min.js" integrity="sha384-m67o7SkQ1ALzKZIFh4CiTA8tmadaujiTa9Vu+nqPSwDOqHrDmxLezTdFln8077+q" crossorigin="anonymous"></script>
+  <script src="{{ "js/load-photoswipe.js" | relURL }}"></script>
+  {{- partial "footer_custom.html" . }}
+</footer>
