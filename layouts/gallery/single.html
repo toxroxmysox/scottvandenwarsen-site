@@ -39,11 +39,12 @@
   <div class="row pswp-gallery" itemscope itemtype="http://schema.org/ImageGallery">
     {{ $imgs := .Resources.Match "*.{jpg,jpeg,png,webp}" }}
     {{ range $i, $img := $imgs }}
+      {{ $thumb := $img.Resize "400x webp q80" }}
       <div class="col-sm-4 album-photo-col">
         <a href="{{ $img.RelPermalink }}"
            data-size="{{ $img.Width }}x{{ $img.Height }}"
            itemprop="contentUrl">
-          <img src="{{ $img.RelPermalink }}"
+          <img src="{{ $thumb.RelPermalink }}"
                alt="{{ $.Title }} — photo {{ add $i 1 }}"
                class="album-thumb"
                loading="lazy"
