@@ -49,7 +49,7 @@
     '-99': 'XK'
   };
 
-  var container = document.getElementById('mini-map-container');
+  var container = document.getElementById('svw-map-canvas');
   if (!container) return;
 
   var width = container.clientWidth;
@@ -61,11 +61,11 @@
 
   var path = d3.geoPath().projection(projection);
 
-  var svg = d3.select('#mini-map-container')
+  var svg = d3.select('#svw-map-canvas')
     .append('svg')
     .attr('width', width)
     .attr('height', height)
-    .attr('class', 'mini-map-svg');
+    .attr('class', 'svw-map-svg');
 
   var g = svg.append('g');
 
@@ -95,14 +95,14 @@
       .attr('class', function (d) {
         var alpha2 = numericToAlpha2[String(d.id)];
         var visited = alpha2 && locations[alpha2];
-        return 'mini-map-country' + (visited ? ' visited' : '');
+        return 'svw-map__country' + (visited ? ' svw-map__country--visited' : '');
       })
       .attr('d', path);
 
     // Country borders
     g.append('path')
       .datum(topojson.mesh(worldData, worldData.objects.countries, function (a, b) { return a !== b; }))
-      .attr('class', 'mini-map-border')
+      .attr('class', 'svw-map__border')
       .attr('d', path);
   });
 
