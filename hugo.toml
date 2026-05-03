@@ -17,7 +17,7 @@ canonifyURLs = true
   # How many albums appear in the gallery grid on the homepage.
   galleryAlbumLimit = 6
 
-  description = "An inside look at what Scott Vanden Warsen is thinking about and wants to share with others."
+  description = ""
 
   # Show related posts on feed single pages (matched by shared tags).
   showRelatedPosts = true
