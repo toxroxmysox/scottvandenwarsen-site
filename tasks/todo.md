@@ -2,6 +2,17 @@
 
 _No active tasks._
 
+- [x] Atlas Refined visual redesign (PR #20, merged)
+  - Complete rewrite of CSS from scratch — removed Bootstrap 3, new token system (paper/ink/accent)
+  - New `baseof.html` shell, nav with SVW compass monogram, footer with subscribe form
+  - Homepage: hero section, 3-column feed, gallery postcards, mini-map
+  - Gallery: postcard cards with flag/photo-count badges, PhotoSwipe lightbox
+  - Feed: paper card articles, scrollable columns
+  - Travel: tab visibility, country highlighting fix
+  - About, Now pages rewritten
+  - Fixed EXIF orientation on 89 gallery images (baked rotation into pixels)
+  - Brand assets: SVW compass SVG, contour background, OG images
+
 - [x] YouTube video support in photo galleries (PR #17, merged)
   - Videos declared in gallery frontmatter (`videos:` array with `id`, `title`, optional `caption`)
   - Thumbnails render after photos in same grid with CSS play-button overlay
@@ -81,16 +92,20 @@ _No active tasks._
 
 ## Future Session Backlog
 
+### Atlas Refined Follow-up
+- [ ] **Travel map flight lines** — disabled in redesign (JS commented out at travel.js:189). Needs visual rework to fit Atlas Refined aesthetic
+- [ ] **Dark mode audit** — Atlas Refined tokens have dark mode overrides, but full page-by-page verification needed
+- [ ] **Responsive audit** — verify all pages at mobile (375px), tablet (768px), desktop (1400px)
+- [ ] **Gallery single page thumbnails** — currently serves original full-size images. Could add Hugo `.Process` thumbnails with grid layout for faster loads (but beware EXIF orientation — source files are now fixed)
+- [ ] **Favicon** — old favicons deleted, need new ones based on SVW compass monogram
+- [ ] **Open Graph images** — need per-page or per-section OG images for social sharing
+
 ### Content Additions
-- [ ] **Now page** (`/now/`) — what you're currently focused on, updated regularly. Creates return visits.
 - [ ] **Uses/Tools page** — gear, apps, services you use. Surprisingly popular content type.
 
 ### Design Polish
 - [ ] Micro-interactions on feed/gallery cards (subtle hover animations, glow effects)
-- [ ] Homepage hero section — add a tagline/subheading communicating what the site is about in <10 words
-- [ ] Visual section dividers between feed columns (gradient lines or subtle separators)
 - [ ] Sticky back-to-top button for long pages
-- [ ] Textural elements — noise/grain overlay on dark backgrounds for depth
 - [ ] Scroll-triggered fade-in animations as sections enter viewport
 
 ### Content Enhancements

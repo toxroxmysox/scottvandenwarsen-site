@@ -232,3 +232,30 @@ Rules to prevent repeated mistakes. Review at session start.
 - **Problem:** Created `layouts/about/single.html` with `{{ define "header" }}{{ end }}` to suppress the theme's header banner. It didn't work — the default header.html partial still rendered, even though `{{ define "main" }}` worked fine.
 - **Fix:** Created a section-specific `layouts/about/baseof.html` that omits the `{{ block "header" }}` entirely.
 - **Rule:** If you need to suppress a baseof block for a specific section, create a section-specific baseof rather than relying on `{{ define "blockname" }}{{ end }}` in the inner template.
+
+### Hugo `isset` needed for zero-value template parameters
+- **Problem:** Passing `"limit" 0` to a partial, then checking `if .limit` evaluates to false because Hugo treats 0 as falsy. Feed columns showed only 3 posts instead of all.
+- **Rule:** Use `isset . "limit"` to check if a parameter was passed, not `if .limit`. Then use the value directly.
+
+### Hugo `.Process` with `autoOrient` may not work reliably
+- **Problem:** `.Process "resize 600x webp q80 autoOrient"` still produced sideways WebP thumbnails from EXIF-rotated source images. Root cause unclear on Hugo v0.154.2.
+- **Fix:** Bake EXIF orientation into pixel data before adding images to the repo. Use Python to rotate pixels and reset EXIF orientation tag to 1.
+- **Rule:** Don't rely on Hugo's `autoOrient`. Pre-process photos with `sips --rotate` + EXIF tag reset, or `mogrify -auto-orient`.
+
+### `sips --rotate` doesn't clear EXIF orientation tag
+- **Problem:** `sips --rotate 90` rotates pixel data but leaves EXIF Orientation tag at its original value. Browsers then apply ANOTHER rotation based on the stale tag, causing double-rotation.
+- **Rule:** After `sips --rotate`, always reset the EXIF orientation tag to 1. `sips` can't do this reliably — use Python or `exiftool` to patch the raw EXIF bytes.
+
+### Hugo server caches can serve stale CSS/templates
+- **Problem:** After restarting Hugo dev server, old CSS was still being served. The `relURL` function was resolving to the production domain URL instead of localhost, even with `--baseURL` flag.
+- **Fix:** Delete `resources/_gen` and `public/` directories, then restart the server fresh.
+- **Rule:** When design changes aren't appearing, nuke `resources/_gen` and `public/` before restarting Hugo server. Don't assume a restart clears all caches.
+
+### PhotoSwipe v4 requires a root `.pswp` overlay element in the DOM
+- **Problem:** PhotoSwipe lightbox didn't open on gallery pages. The JS init code was present and found `.pswp-gallery` links, but `document.querySelector('.pswp')` returned null.
+- **Fix:** Include the theme's `load-photoswipe-theme.html` partial in the gallery single template.
+- **Rule:** PhotoSwipe v4 needs the `.pswp` root element with its full child structure (bg, scroll-wrap, container, UI) in the page. Check that it's present when lightbox isn't working.
+
+### CSS class names must match between JS and CSS
+- **Problem:** travel.js adds class `has-gallery` to visited countries, but CSS only had `.map-country.map-overseas` — the class name didn't match.
+- **Rule:** When JS dynamically adds CSS classes, grep the stylesheet to verify a matching rule exists. Name mismatches between JS and CSS are silent failures.

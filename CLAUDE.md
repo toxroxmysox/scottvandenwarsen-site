@@ -74,35 +74,36 @@ Images sit alongside `index.md` inside each album folder.
 
 ## Design System
 
-### Color Scheme — Moody Slate
+### Color Scheme — Atlas Refined
 
-Dark blue-grey gradients with muted blue accents. Full dark mode via `prefers-color-scheme`.
+Warm, earthy tones with a dark forest green base and cream/parchment text. Full dark mode via `prefers-color-scheme`.
 
 All colors are defined as CSS custom properties (design tokens) in `:root` at the top of `static/css/main.css`. Dark-mode overrides follow immediately after. **Never hardcode hex/rgba values in component CSS — always use `var(--token)`.**
 
 Key token groups:
-- **Backgrounds:** `--bg-start` / `--bg-mid` / `--bg-light` (page gradient), `--surface` / `--surface-raised` (panels)
-- **Text hierarchy:** `--text-body` (main copy) → `--text-muted` → `--text-subtle` → `--text-faint` (least prominent), `--text-heading` (h1–h6)
-- **Links/accents:** `--link` / `--link-hover`, `--accent-bg` / `--accent-ring`
-- **Card surfaces:** `--card-bg` / `--card-border` / `--card-bg-hover` (frosted-glass translucent cards)
-- **Borders:** `--border` / `--border-light`
-- **Shape:** `--radius-card` (10px), `--radius-gallery` (12px), `--transition` (0.2s ease)
+- **Backgrounds:** `--color-bg` (deep forest green `#162923`), `--color-paper` (warm cream `#ece4d0`), `--color-paper-alt` (darker parchment)
+- **Text:** `--color-ink` (near-black on light, warm cream on dark), `--color-ink-light` (muted secondary text)
+- **Accent:** `--accent` (warm gold `#c8a96e`), `--accent-hover` (brighter gold)
+- **Cards:** `--shadow-card` (layered box-shadow for paper card depth)
+- **Shape:** `--radius-card` (12px), `--radius-sm` (6px)
 
 ### Typography
 
-- **Theme root:** `html { font-size: 62.5% }` → **1rem = 10px** (not 16px!)
-- **Body text:** `1.8rem` (18px) using `--font-body` (Lora serif)
-- **UI text:** `--font-ui` (Open Sans) for nav, headings, labels, card titles
-- **Mobile minimum:** `1.6rem` (16px) for body prose
-- When adding new text containers, always match body text at `1.8rem` — don't guess.
+- **Body text:** `clamp(1rem, 0.95rem + 0.25vw, 1.125rem)` using Fraunces (variable serif)
+- **UI text:** IBM Plex Mono for nav, labels, metadata, card titles
+- **Headings:** Fraunces with optical sizing
+- No `font-size: 62.5%` trick — uses standard browser default (1rem = 16px)
 
 ### Component Patterns
 
-- **Feed cards:** Frosted-glass style (`.feed-card-link`) — `var(--card-bg)` background, `var(--card-border)` edge, hover lift
-- **Gallery cards:** Overlay style (`.gallery-card`) — full-bleed images with gradient text overlay, CSS grid (1/2/3 columns responsive)
-- **About hero:** Frosted-glass card with circular photo + intro text, uses same card tokens
-- **Feed layout:** Bootstrap 3-column grid (`col-md-4`) for Reading/Watching/Listening
+- **Layout:** Custom `baseof.html` shell with `svw-page` body class, no Bootstrap
+- **Feed cards:** Paper card style (`.svw-article`) — `var(--color-paper)` background, box-shadow, hover lift
+- **Gallery cards:** Postcard style (`.svw-postcard`) — full-bleed cover image with flag badge, photo count badge, title/meta overlay
+- **Feed layout:** CSS grid 3-column layout for Reading/Watching/Listening (`.svw-feed-columns`)
+- **Nav:** Sticky nav with SVW compass monogram, IBM Plex Mono links, hamburger toggle on mobile (`nav.js`)
+- **Footer:** Centered with email subscribe form (Buttondown), social links
 - **CSS cache-busting:** `?v={{ now.Unix }}` appended to main.css link in `layouts/partials/head.html`
+- **Brand:** SVW compass monogram (`static/svw-compass.svg`), contour line background (`static/contours.svg`)
 
 ## Commands
 
