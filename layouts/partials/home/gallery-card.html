@@ -1,7 +1,7 @@
 <a href="{{ .RelPermalink }}" class="svw-postcard">
   {{ with .Params.cover }}
     {{ with $.Resources.GetMatch . }}
-      {{ $thumb := .Resize "600x webp q80" }}
+      {{ $thumb := .Process "resize 600x webp q80" }}
       <img
         src="{{ $thumb.RelPermalink }}"
         alt="{{ $.Title }}"

@@ -1,4 +1,7 @@
-{{ $limit := .limit | default 3 }}
+{{ $limit := 3 }}
+{{ if isset . "limit" }}
+  {{ $limit = .limit }}
+{{ end }}
 {{ $sections := slice
   (dict "section" "reading"   "title" "Reading"   "chip" "N")
   (dict "section" "watching"  "title" "Watching"  "chip" "E")
@@ -8,10 +11,10 @@
 <section class="svw-feed">
   {{ range $sections }}
     {{ $pages := where $.Site.RegularPages.ByDate.Reverse "Section" .section }}
-    {{ if $limit }}
+    {{ if gt $limit 0 }}
       {{ $pages = first $limit $pages }}
     {{ end }}
-    <article class="svw-card{{ if not $limit }} svw-card--scrollable{{ end }}">
+    <article class="svw-card{{ if eq $limit 0 }} svw-card--scrollable{{ end }}">
       <header class="svw-card__head">
         <span class="svw-card__chip">{{ .chip }}</span>
         <h3 class="svw-card__title">{{ .title }}</h3>

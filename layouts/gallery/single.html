@@ -19,11 +19,10 @@
   <div class="svw-photo-grid pswp-gallery" itemscope itemtype="http://schema.org/ImageGallery">
     {{ $imgs := .Resources.Match "*.{jpg,jpeg,png,webp}" }}
     {{ range $i, $img := $imgs }}
-      {{ $thumb := $img.Resize "400x webp q80" }}
       <a href="{{ $img.RelPermalink }}"
          data-size="{{ $img.Width }}x{{ $img.Height }}"
          itemprop="contentUrl">
-        <img src="{{ $thumb.RelPermalink }}"
+        <img src="{{ $img.RelPermalink }}"
              alt="{{ $.Title }} — photo {{ add $i 1 }}"
              loading="lazy"
              itemprop="thumbnail">
@@ -54,6 +53,8 @@
   {{ end }}
 
   {{ partial "comments.html" . }}
+
+  {{ partial "load-photoswipe-theme.html" . }}
 
   <nav class="svw-gallery-single__breadcrumb" style="margin-top: var(--space-7);">
     <a href="{{ "/gallery/" | relURL }}">&larr; Back to Gallery</a>
