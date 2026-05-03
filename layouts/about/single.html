@@ -1,52 +1,36 @@
 {{ define "main" }}
-<div id="main" class="about-page" role="main">
+<div class="svw-about">
 
-  {{/* ---- Hero section: photo + intro ---- */}}
-  <section class="about-hero">
-    <div class="container">
-      <div class="about-hero-inner">
-
-        {{/* Photo (page resource next to index.md) */}}
-        {{ $photo := .Resources.GetMatch (.Params.photo | default "*.jpg") }}
-        {{ if $photo }}
-          {{ $crop := .Params.photo_crop | default "Center" }}
-          {{ $rotate := .Params.photo_rotate | default "" }}
-          {{ $opts := printf "400x400 %s webp q90" $crop }}
-          {{ if $rotate }}{{ $opts = printf "%s %s" $opts $rotate }}{{ end }}
-          {{ $sized := $photo.Fill $opts }}
-          <div class="about-photo-wrap">
-            <img src="{{ $sized.RelPermalink }}"
-                 alt="{{ .Title }}"
-                 class="about-photo"
-                 width="{{ $sized.Width }}"
-                 height="{{ $sized.Height }}" />
-          </div>
-        {{ end }}
-
-        {{/* Intro text */}}
-        <div class="about-intro">
-          <h1 class="about-name">{{ .Title }}</h1>
-          {{ with .Params.subtitle }}
-            <p class="about-subtitle">{{ . }}</p>
-          {{ end }}
-          {{ with .Params.tagline }}
-            <p class="about-tagline">{{ . | markdownify }}</p>
-          {{ end }}
-        </div>
-
-      </div>
+  <section class="svw-about__hero">
+    <div class="svw-contours" style="color: var(--color-ink); opacity: 0.04;">
+      <img src="{{ "contours.svg" | relURL }}" alt="" aria-hidden="true">
     </div>
+
+    {{ $photo := .Resources.GetMatch (.Params.photo | default "*.jpg") }}
+    {{ if $photo }}
+      {{ $crop := .Params.photo_crop | default "Center" }}
+      {{ $opts := printf "400x400 %s webp q90" $crop }}
+      {{ $sized := $photo.Fill $opts }}
+      <img src="{{ $sized.RelPermalink }}"
+           alt="{{ .Title }}"
+           class="svw-about__photo"
+           width="{{ $sized.Width }}"
+           height="{{ $sized.Height }}">
+    {{ end }}
+
+    <h1 class="svw-about__name">{{ .Title }}</h1>
+    {{ with .Params.subtitle }}
+      <p class="svw-about__subtitle">{{ . }}</p>
+    {{ end }}
+    {{ with .Params.tagline }}
+      <p class="svw-about__tagline">{{ . | markdownify }}</p>
+    {{ end }}
   </section>
 
-  {{/* ---- Body prose from index.md ---- */}}
   {{ with .Content }}
-    <section class="about-content">
-      <div class="container">
-        <div class="about-prose">
-          {{ . }}
-        </div>
-      </div>
-    </section>
+    <div class="svw-about__prose">
+      {{ . }}
+    </div>
   {{ end }}
 
 </div>

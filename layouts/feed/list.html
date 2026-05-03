@@ -1,5 +1,3 @@
 {{ define "main" }}
-<div id="main" class="container homepage-sections" role="main">
-  {{ partial "home/feed-columns.html" . }}
-</div>
+{{ partial "home/feed-columns.html" (dict "Site" .Site "limit" 0) }}
 {{ end }}

@@ -1,85 +1,79 @@
 {{ define "main" }}
-<div id="main" class="now-page" role="main">
-  <div class="container">
+<div class="svw-now">
 
-    {{/* ---- Page header ---- */}}
-    <header class="now-header">
-      <h1 class="now-title">Now</h1>
-      {{ with .Params.subtitle }}
-        <p class="now-subtitle">{{ . }}</p>
-      {{ end }}
-    </header>
+  <header class="svw-now__header">
+    <h1 class="svw-now__title">Now</h1>
+    {{ with .Params.subtitle }}
+      <p class="svw-now__subtitle">{{ . }}</p>
+    {{ end }}
+  </header>
 
-    {{/* ---- Build category list ---- */}}
-    {{ $categories := slice
-      (dict "key" "viewing"   "label" "Now Viewing"   "nav" "Viewing")
-      (dict "key" "watching"  "label" "Now Watching"   "nav" "Watching")
-      (dict "key" "listening" "label" "Now Listening"  "nav" "Listening")
-      (dict "key" "reading"   "label" "Now Reading"    "nav" "Reading")
-      (dict "key" "doing"     "label" "Now Doing"      "nav" "Doing")
-      (dict "key" "feeling"   "label" "Now Feeling"    "nav" "Feeling")
-    }}
-    {{ $now := .Site.Data.now }}
+  {{/* Build category list */}}
+  {{ $categories := slice
+    (dict "key" "viewing"   "label" "Now Viewing"   "nav" "Viewing")
+    (dict "key" "watching"  "label" "Now Watching"   "nav" "Watching")
+    (dict "key" "listening" "label" "Now Listening"  "nav" "Listening")
+    (dict "key" "reading"   "label" "Now Reading"    "nav" "Reading")
+    (dict "key" "doing"     "label" "Now Doing"      "nav" "Doing")
+    (dict "key" "feeling"   "label" "Now Feeling"    "nav" "Feeling")
+  }}
+  {{ $now := .Site.Data.now }}
 
-    {{/* Filter to only categories with values */}}
-    {{ $active := slice }}
-    {{ range $categories }}
-      {{ $k := .key }}
-      {{ $l := .label }}
-      {{ $n := .nav }}
-      {{ $entry := index $now $k }}
-      {{ with $entry }}
-        {{ with .value }}
-          {{ $active = $active | append (dict "key" $k "label" $l "nav" $n) }}
-        {{ end }}
+  {{/* Filter to only categories with values */}}
+  {{ $active := slice }}
+  {{ range $categories }}
+    {{ $k := .key }}
+    {{ $l := .label }}
+    {{ $n := .nav }}
+    {{ $entry := index $now $k }}
+    {{ with $entry }}
+      {{ with .value }}
+        {{ $active = $active | append (dict "key" $k "label" $l "nav" $n) }}
       {{ end }}
     {{ end }}
+  {{ end }}
 
-    <div class="now-layout">
+  <div class="svw-now__layout">
 
-      {{/* ---- Sticky side nav (desktop) ---- */}}
-      <nav class="now-nav" aria-label="Now categories">
-        {{ range $active }}
-          <a class="now-nav-link" href="#now-{{ .key }}" data-target="now-{{ .key }}">{{ .nav }}</a>
-        {{ end }}
-      </nav>
+    <nav class="svw-now__nav" aria-label="Now categories">
+      {{ range $active }}
+        <a class="now-nav-link" href="#now-{{ .key }}" data-target="now-{{ .key }}">{{ .nav }}</a>
+      {{ end }}
+    </nav>
 
-      {{/* ---- Scrollable cards ---- */}}
-      <div class="now-cards">
-        {{ range $active }}
-          {{ $entry := index $now .key }}
-          <section class="now-card now-card--hidden" id="now-{{ .key }}">
-            {{ if eq .key "viewing" }}
-              {{/* Photo card — resolve filename from page bundle */}}
-              {{ $photoName := $entry.value }}
-              {{ $photo := $.Resources.GetMatch $photoName }}
-              {{ if $photo }}
-                <div class="now-card-photo-wrap">
-                  <img src="{{ $photo.RelPermalink }}"
-                       alt="What I'm viewing now"
-                       class="now-card-photo"
-                       loading="lazy" />
-                  <div class="now-card-photo-overlay">
-                    <span class="now-card-label">{{ .label }}</span>
-                    {{ with $entry.updated }}
-                      <span class="now-card-date">{{ dateFormat "January 2, 2006" . }}</span>
-                    {{ end }}
-                  </div>
+    <div class="svw-now__cards">
+      {{ range $active }}
+        {{ $entry := index $now .key }}
+        <section class="now-card now-card--hidden" id="now-{{ .key }}">
+          {{ if eq .key "viewing" }}
+            {{ $photoName := $entry.value }}
+            {{ $photo := $.Resources.GetMatch $photoName }}
+            {{ if $photo }}
+              <div class="now-card--photo">
+                <img src="{{ $photo.RelPermalink }}"
+                     alt="What I'm viewing now"
+                     loading="lazy">
+                <div class="now-card__overlay">
+                  <span class="now-card__label">{{ .label }}</span>
+                  {{ with $entry.updated }}
+                    <span class="now-card__date">{{ dateFormat "January 2, 2006" . }}</span>
+                  {{ end }}
                 </div>
-              {{ end }}
-            {{ else }}
-              {{/* Text card */}}
-              <span class="now-card-label">{{ .label }}</span>
-              <span class="now-card-value">{{ $entry.value }}</span>
-              {{ with $entry.updated }}
-                <span class="now-card-date">{{ dateFormat "January 2, 2006" . }}</span>
-              {{ end }}
+              </div>
             {{ end }}
-          </section>
-        {{ end }}
-      </div>
-
+          {{ else }}
+            <div class="now-card__content">
+              <span class="now-card__label">{{ .label }}</span>
+              <span class="now-card__value">{{ $entry.value }}</span>
+              {{ with $entry.updated }}
+                <span class="now-card__date">{{ dateFormat "January 2, 2006" . }}</span>
+              {{ end }}
+            </div>
+          {{ end }}
+        </section>
+      {{ end }}
     </div>
+
   </div>
 </div>
 {{ end }}

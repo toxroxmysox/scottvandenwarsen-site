@@ -1,30 +1,38 @@
-<a href="{{ .RelPermalink }}" class="gallery-card">
+<a href="{{ .RelPermalink }}" class="svw-postcard">
   {{ with .Params.cover }}
     {{ with $.Resources.GetMatch . }}
+      {{ $thumb := .Process "resize 600x webp q80" }}
       <img
-        src="{{ .RelPermalink }}"
+        src="{{ $thumb.RelPermalink }}"
         alt="{{ $.Title }}"
-        class="gallery-card-img"
+        class="svw-postcard__photo"
         loading="lazy"
-        width="{{ .Width }}"
-        height="{{ .Height }}"
+        width="{{ $thumb.Width }}"
+        height="{{ $thumb.Height }}"
       >
     {{ end }}
   {{ end }}
-  {{/* Badges pinned to card corners */}}
+
+  {{/* Location flag badge */}}
   {{ $flag := index .Site.Data.country_flags .Params.location }}
   {{ with $flag }}
-    <span class="gallery-badge gallery-badge-flag">{{ . }}</span>
+    <span class="svw-postcard__flag">{{ . }}</span>
   {{ end }}
+
+  {{/* Photo/video count badge */}}
   {{ $photoCount := len (.Resources.Match "*.{jpg,jpeg,png,webp}") }}
   {{ $videoCount := len (.Params.videos | default slice) }}
   {{ if or (gt $photoCount 0) (gt $videoCount 0) }}
-    <span class="gallery-badge gallery-badge-count">{{ $photoCount }} photos{{ if gt $videoCount 0 }}, {{ $videoCount }} video{{ if gt $videoCount 1 }}s{{ end }}{{ end }}</span>
+    <span class="svw-postcard__badge">{{ $photoCount }} photos{{ if gt $videoCount 0 }}, {{ $videoCount }} video{{ if gt $videoCount 1 }}s{{ end }}{{ end }}</span>
   {{ end }}
-  <div class="gallery-card-overlay">
-    <span class="gallery-card-title">{{ .Title }}</span>
-    {{ with .Params.summary }}
-      <span class="gallery-card-summary">{{ . }}</span>
-    {{ end }}
+
+  <div class="svw-postcard__body">
+    <div class="svw-postcard__title">{{ .Title }}</div>
+    <div class="svw-postcard__meta">
+      {{ .Date.Format "JAN 2006" | upper }}
+      {{ with .Params.location }}
+        &middot; {{ . | upper }}
+      {{ end }}
+    </div>
   </div>
 </a>

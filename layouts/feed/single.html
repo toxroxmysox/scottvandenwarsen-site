@@ -1,86 +1,71 @@
-{{ define "header" }}<!-- no header -->{{ end }}
-
 {{ define "main" }}
-<div id="main" class="feed-single-container" role="main">
+<div class="svw-feed-single">
 
-      {{/* ---- Breadcrumb ---- */}}
-      <nav class="feed-breadcrumb" aria-label="Breadcrumb">
-        <a href="{{ "feed/" | relURL }}" onclick="if(history.length>1){history.back();return false;}">
-          &larr; Back
-        </a>
-      </nav>
+  <nav class="svw-feed-single__breadcrumb">
+    <a href="{{ "feed/" | relURL }}" onclick="if(history.length>1){history.back();return false;}">&larr; Back</a>
+  </nav>
 
-      {{/* ---- Hero Card ---- */}}
-      <div class="feed-hero-card">
-        {{ with .Date }}
-          <div class="feed-hero-date">
-            {{ .Format "Jan 2, 2006" }}
-          </div>
-        {{ end }}
-
-        <h1 class="feed-hero-title">{{ .Title }}</h1>
-
-        {{ if .Params.tags }}
-          <div class="feed-hero-tags">
-            {{ range .Params.tags }}
-              <a class="tag-pill" href="{{ "tags" | relLangURL }}/{{ . | urlize }}/">{{ . }}</a>
-            {{ end }}
-          </div>
-        {{ end }}
-
-        {{ with .Params.external_url }}
-          <a class="feed-hero-external-btn" href="{{ . }}" target="_blank" rel="noopener noreferrer">
-            View Source &#8599;
-          </a>
+  <div class="svw-feed-hero">
+    {{ with .Date }}
+      <div class="svw-feed-hero__date">{{ .Format "January 2, 2006" }}</div>
+    {{ end }}
+    <h1 class="svw-feed-hero__title">{{ .Title }}</h1>
+    {{ if .Params.tags }}
+      <div class="svw-feed-hero__tags">
+        {{ range .Params.tags }}
+          <a class="svw-pill svw-pill--light" href="{{ "tags" | relLangURL }}/{{ . | urlize }}/">{{ . }}</a>
         {{ end }}
       </div>
+    {{ end }}
+    {{ with .Params.external_url }}
+      <a class="svw-pill svw-pill--solid svw-feed-hero__external" href="{{ . }}" target="_blank" rel="noopener noreferrer">
+        View Source &#8599;
+      </a>
+    {{ end }}
+  </div>
 
-      {{/* ---- Article Body ---- */}}
-      <article class="blog-post feed-article">
-        {{ .Content }}
-      </article>
+  {{ with .Content }}
+    <article class="svw-article">
+      {{ . }}
+    </article>
+  {{ end }}
 
-      {{/* ---- Prev/Next Pager ---- */}}
-      {{ if ne .Type "page" }}
-        {{ if or .PrevInSection .NextInSection }}
-          <nav class="feed-pager" aria-label="Post navigation">
-            {{ if .PrevInSection }}
-              <a class="feed-pager-link feed-pager-prev" href="{{ .PrevInSection.RelPermalink }}" title="{{ .PrevInSection.Title }}">
-                &larr; {{ .PrevInSection.Title }}
-              </a>
-            {{ end }}
-            {{ if .NextInSection }}
-              <a class="feed-pager-link feed-pager-next" href="{{ .NextInSection.RelPermalink }}" title="{{ .NextInSection.Title }}">
-                {{ .NextInSection.Title }} &rarr;
-              </a>
-            {{ end }}
-          </nav>
-        {{ end }}
+  {{/* Prev/Next */}}
+  {{ if or .PrevInSection .NextInSection }}
+    <nav class="svw-pager" aria-label="Post navigation">
+      {{ with .PrevInSection }}
+        <a href="{{ .RelPermalink }}">&larr; {{ .Title }}</a>
+      {{ else }}
+        <span></span>
       {{ end }}
+      {{ with .NextInSection }}
+        <a href="{{ .RelPermalink }}">{{ .Title }} &rarr;</a>
+      {{ end }}
+    </nav>
+  {{ end }}
 
-      {{/* ---- Related Posts ---- */}}
-      {{ if and .Site.Params.showRelatedPosts .Params.tags }}
-        {{ $feedPages := where .Site.RegularPages "Section" "in" (slice "reading" "watching" "listening") }}
-        {{ $related := first (.Site.Params.related_content_limit | default 4) (where (where $feedPages ".Params.tags" "intersect" .Params.tags) "Permalink" "!=" .Permalink) }}
-        {{ if $related }}
-          <section class="related-posts">
-            <h2 class="related-posts-heading">Related</h2>
-            <div class="related-posts-grid">
-              {{ range $related }}
-                <a class="related-post-card" href="{{ .RelPermalink }}">
-                  <span class="related-post-title">{{ .Title }}</span>
-                  {{ with .Params.summary }}
-                    <span class="related-post-summary">{{ . }}</span>
-                  {{ end }}
-                </a>
+  {{/* Related posts */}}
+  {{ if and .Site.Params.showRelatedPosts .Params.tags }}
+    {{ $feedPages := where .Site.RegularPages "Section" "in" (slice "reading" "watching" "listening") }}
+    {{ $related := first (.Site.Params.related_content_limit | default 4) (where (where $feedPages ".Params.tags" "intersect" .Params.tags) "Permalink" "!=" .Permalink) }}
+    {{ if $related }}
+      <section class="svw-related">
+        <h2 class="svw-related__heading">Related</h2>
+        <div class="svw-related__grid">
+          {{ range $related }}
+            <a class="svw-related__card" href="{{ .RelPermalink }}">
+              <span class="svw-related__card-title">{{ .Title }}</span>
+              {{ with .Params.summary }}
+                <span class="svw-related__card-summary">{{ . }}</span>
               {{ end }}
-            </div>
-          </section>
-        {{ end }}
-      {{ end }}
+            </a>
+          {{ end }}
+        </div>
+      </section>
+    {{ end }}
+  {{ end }}
 
-      {{/* ---- Comments ---- */}}
-      {{ partial "comments.html" . }}
+  {{ partial "comments.html" . }}
 
 </div>
 {{ end }}

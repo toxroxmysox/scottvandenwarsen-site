@@ -186,7 +186,7 @@
       trips = results[2];
       buildIndexes();
       renderMap(worldData);
-      renderFlightLines();
+      // renderFlightLines(); // disabled — will fix later
       renderTimeline();
       renderTimelineCards();
     });
@@ -277,8 +277,6 @@
       // Highlight timeline
       highlightTimelineNode(tripId);
 
-      // Highlight flight lines
-      highlightFlightLines(tripId);
     } else {
       // Deselect
       d3.selectAll('.map-country.active, .map-state.active').classed('active', false);
@@ -286,7 +284,6 @@
       closeSidebar();
       removeCountryLabel();
       highlightTimelineNode(null);
-      highlightFlightLines(null);
 
       if (isZoomedToUS) {
         g.selectAll('.map-state').remove();
@@ -423,7 +420,8 @@
       .attr('class', 'map-border')
       .attr('d', path)
       .style('fill', 'none')
-      .style('stroke', 'rgba(100, 120, 140, 0.25)')
+      .style('stroke', 'var(--color-ink)')
+      .style('stroke-opacity', '0.15')
       .style('stroke-width', '0.5px')
       .style('pointer-events', 'none');
   }
@@ -1089,9 +1087,7 @@
     svg.attr('width', width).attr('height', height);
     // Re-render geo paths (countries, borders, states)
     g.selectAll('.map-country, .map-border, .map-state').attr('d', path);
-    // Re-render flight lines with updated projection
-    g.selectAll('.flight-lines-layer').remove();
-    renderFlightLines();
+    // Flight lines disabled — will fix later
 
     if (activeLocation && sidebar.classList.contains('open')) {
       state.setActiveTrip(null);

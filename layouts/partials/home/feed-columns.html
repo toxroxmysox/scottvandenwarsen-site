@@ -1,31 +1,37 @@
-{{/* feedItemLimit controls how many cards appear per column on the homepage.
-     Change it in hugo.toml → [params] → feedItemLimit.
-     Defaults to 5 if the param is not set.
-     On the /feed/ archive page the limit is removed so all items are shown. */}}
-{{ $limit := .Site.Params.feedItemLimit | default 5 }}
-{{ if eq .Section "feed" }}
-  {{ $limit = 9999 }}
+{{ $limit := 3 }}
+{{ if isset . "limit" }}
+  {{ $limit = .limit }}
 {{ end }}
+{{ $sections := slice
+  (dict "section" "reading"   "title" "Reading"   "chip" "N")
+  (dict "section" "watching"  "title" "Watching"  "chip" "E")
+  (dict "section" "listening" "title" "Listening" "chip" "W")
+}}
 
-<div class="row text-center">
-  <div class="col-md-4">
-    <h2 class="text-center">Reading</h2>
-    {{ range first $limit (where .Site.RegularPages.ByDate.Reverse "Section" "reading") }}
-      {{ partial "home/card.html" . }}
+<section class="svw-feed">
+  {{ range $sections }}
+    {{ $pages := where $.Site.RegularPages.ByDate.Reverse "Section" .section }}
+    {{ if gt $limit 0 }}
+      {{ $pages = first $limit $pages }}
     {{ end }}
-  </div>
-
-  <div class="col-md-4">
-    <h2 class="text-center">Watching</h2>
-    {{ range first $limit (where .Site.RegularPages.ByDate.Reverse "Section" "watching") }}
-      {{ partial "home/card.html" . }}
-    {{ end }}
-  </div>
-
-  <div class="col-md-4">
-    <h2 class="text-center">Listening</h2>
-    {{ range first $limit (where .Site.RegularPages.ByDate.Reverse "Section" "listening") }}
-      {{ partial "home/card.html" . }}
-    {{ end }}
-  </div>
-</div>
+    <article class="svw-card{{ if eq $limit 0 }} svw-card--scrollable{{ end }}">
+      <header class="svw-card__head">
+        <span class="svw-card__chip">{{ .chip }}</span>
+        <h3 class="svw-card__title">{{ .title }}</h3>
+      </header>
+      {{ range $pages }}
+        <a href="{{ .RelPermalink }}" class="svw-feed-row">
+          <div class="svw-feed-row__meta">
+            {{ .Date.Format "JAN 2" | upper }}
+            <span class="svw-feed-row__meta-mark">&diams;</span>
+            {{ .Section | upper }}
+          </div>
+          <div class="svw-feed-row__title">{{ .Title }}</div>
+          {{ with .Params.summary }}
+            <p class="svw-feed-row__summary">{{ . }}</p>
+          {{ end }}
+        </a>
+      {{ end }}
+    </article>
+  {{ end }}
+</section>

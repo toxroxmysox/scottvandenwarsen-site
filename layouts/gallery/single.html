@@ -1,96 +1,66 @@
 {{ define "main" }}
-{{/* ---- Album page ----
-     .album-container: limits page width — change max-width in main.css
-     .feed-date:       reuses the existing date label style
-     .album-content:   sets body text opacity for the album description
-     .album-thumb:     thumbnail sizing — change height in main.css (.album-thumb)
-     .pswp-gallery:    PhotoSwipe v4 hook — clicking a photo opens the lightbox
-*/}}
-<div id="main" class="container album-container" role="main">
+<div class="svw-gallery-single">
 
-  {{/* Back to gallery breadcrumb — top */}}
-  <div class="album-breadcrumb">
-    <a href="{{ "/gallery/" | relURL }}">← Gallery</a>
+  <nav class="svw-gallery-single__breadcrumb">
+    <a href="{{ "/gallery/" | relURL }}">&larr; Gallery</a>
+  </nav>
+
+  <div class="svw-gallery-single__date">
+    {{ .Date.Format "January 2, 2006" | upper }}
   </div>
 
-  {{/* Header row: date label */}}
-  <div class="row album-row-header">
-    <div class="col-sm-12">
-      <div class="feed-date">
-        {{ .Date.Format "Jan 2, 2006" }}
-      </div>
-    </div>
-  </div>
+  <h1 class="svw-gallery-single__title">{{ .Title }}</h1>
 
-  {{/* Content row: album description from index.md body text */}}
-  {{ if .Content }}
-    <div class="row album-row-content">
-      <div class="col-sm-12">
-        <div class="album-content">
-          {{ .Content }}
-        </div>
-      </div>
-    </div>
+  {{ with .Content }}
+    <div class="svw-gallery-single__desc">{{ . }}</div>
   {{ end }}
 
-  {{/* Photo grid: col-sm-4 = 3-up on tablet and above, stacked on mobile.
-       data-size="WxH" is required by PhotoSwipe v4 to size the overlay correctly.
-       Hugo provides .Width and .Height on image resources automatically. */}}
-  <div class="row pswp-gallery" itemscope itemtype="http://schema.org/ImageGallery">
+  {{/* Photo grid */}}
+  <div class="svw-photo-grid pswp-gallery" itemscope itemtype="http://schema.org/ImageGallery">
     {{ $imgs := .Resources.Match "*.{jpg,jpeg,png,webp}" }}
     {{ range $i, $img := $imgs }}
-      {{ $thumb := $img.Resize "400x webp q80" }}
-      <div class="col-sm-4 album-photo-col">
-        <a href="{{ $img.RelPermalink }}"
-           data-size="{{ $img.Width }}x{{ $img.Height }}"
-           itemprop="contentUrl">
-          <img src="{{ $thumb.RelPermalink }}"
-               alt="{{ $.Title }} — photo {{ add $i 1 }}"
-               class="album-thumb"
-               loading="lazy"
-               itemprop="thumbnail">
-        </a>
-      </div>
+      <a href="{{ $img.RelPermalink }}"
+         data-size="{{ $img.Width }}x{{ $img.Height }}"
+         itemprop="contentUrl">
+        <img src="{{ $img.RelPermalink }}"
+             alt="{{ $.Title }} — photo {{ add $i 1 }}"
+             loading="lazy"
+             itemprop="thumbnail">
+      </a>
     {{ end }}
   </div>
 
-  {{/* Video grid: appended after photos, same col-sm-4 layout.
-       Only renders if frontmatter has a `videos` array.
-       Clicking a thumbnail opens a custom lightbox with a YouTube embed. */}}
+  {{/* Video grid */}}
   {{ with .Params.videos }}
-  <div class="row video-gallery">
+  <div class="svw-video-grid video-gallery">
     {{ range . }}
-      <div class="col-sm-4 album-photo-col">
-        <a href="#" class="video-trigger"
-           data-video-id="{{ .id }}"
-           data-video-title="{{ .title }}"
-           data-video-caption="{{ .caption }}">
-          <div class="video-thumb-wrap">
-            <img src="https://img.youtube.com/vi/{{ .id }}/maxresdefault.jpg"
-                 onerror="this.onerror=null;this.src='https://img.youtube.com/vi/{{ .id }}/hqdefault.jpg';"
-                 alt="{{ .title }}"
-                 class="album-thumb"
-                 loading="lazy">
-            <div class="video-play-btn" aria-hidden="true"></div>
-          </div>
-        </a>
+      <a href="#" class="video-trigger"
+         data-video-id="{{ .id }}"
+         data-video-title="{{ .title }}"
+         data-video-caption="{{ .caption }}">
+        <div class="video-thumb-wrap">
+          <img src="https://img.youtube.com/vi/{{ .id }}/maxresdefault.jpg"
+               onerror="this.onerror=null;this.src='https://img.youtube.com/vi/{{ .id }}/hqdefault.jpg';"
+               alt="{{ .title }}"
+               loading="lazy">
+          <div class="video-play-btn" aria-hidden="true"></div>
+        </div>
         {{ with .title }}<div class="video-title">{{ . }}</div>{{ end }}
         {{ with .caption }}<div class="video-caption">{{ . }}</div>{{ end }}
-      </div>
+      </a>
     {{ end }}
   </div>
   {{ end }}
 
-  {{/* ---- Comments ---- */}}
   {{ partial "comments.html" . }}
 
-  {{/* Back to gallery breadcrumb — bottom so users don't have to scroll back up */}}
-  <div class="album-breadcrumb album-breadcrumb-bottom">
-    <a href="{{ "/gallery/" | relURL }}">← Back to Gallery</a>
-  </div>
+  {{ partial "load-photoswipe-theme.html" . }}
 
-  {{/* Video lightbox overlay — hidden until JS opens it.
-       Styled to match PhotoSwipe's visual language (same opacity, close button, caption). */}}
+  <nav class="svw-gallery-single__breadcrumb" style="margin-top: var(--space-7);">
+    <a href="{{ "/gallery/" | relURL }}">&larr; Back to Gallery</a>
+  </nav>
+
+  {{/* Video lightbox overlay */}}
   {{ with .Params.videos }}
   <div class="video-lightbox" id="videoLightbox" role="dialog" aria-hidden="true">
     <div class="video-lightbox-backdrop"></div>
@@ -98,9 +68,7 @@
       <button class="video-lightbox-close" aria-label="Close video">&times;</button>
     </div>
     <div class="video-lightbox-content">
-      <div class="video-lightbox-player">
-        {{/* iframe injected by JS on open, removed on close */}}
-      </div>
+      <div class="video-lightbox-player"></div>
       <div class="video-lightbox-info">
         <div class="video-lightbox-title" id="videoLightboxTitle"></div>
         <div class="video-lightbox-caption" id="videoLightboxCaption"></div>
@@ -110,5 +78,4 @@
   {{ end }}
 
 </div>
-
 {{ end }}
