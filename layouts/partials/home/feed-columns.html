@@ -22,7 +22,7 @@
       {{ range $pages }}
         <a href="{{ .RelPermalink }}" class="svw-feed-row">
           <div class="svw-feed-row__meta">
-            {{ .Date.Format "JAN 2" | upper }}
+            {{ .Date.Format "Jan 2" | upper }}
             <span class="svw-feed-row__meta-mark">&diams;</span>
             {{ .Section | upper }}
           </div>

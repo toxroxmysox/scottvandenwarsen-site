@@ -29,7 +29,7 @@
   <div class="svw-postcard__body">
     <div class="svw-postcard__title">{{ .Title }}</div>
     <div class="svw-postcard__meta">
-      {{ .Date.Format "JAN 2006" | upper }}
+      {{ .Date.Format "Jan 2006" | upper }}
       {{ with .Params.location }}
         &middot; {{ . | upper }}
       {{ end }}
