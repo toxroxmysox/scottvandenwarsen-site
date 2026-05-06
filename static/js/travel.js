@@ -1036,12 +1036,13 @@
     var text = document.createElementNS(ns, 'text');
     text.setAttribute('font-size', '18');
     text.setAttribute('text-anchor', 'middle');
+    text.setAttribute('fill', 'var(--accent)');
     text.style.cssText = [
       'offset-path: path("' + pathD.replace(/"/g, '\'') + '")',
       'offset-distance: 0%',
       'animation: planeTrace 4s ease-in-out ' + (i * 1.5) + 's infinite'
     ].join(';');
-    text.textContent = '✈';
+    text.textContent = '✈︎';
     svgEl.appendChild(text);
   }
 
