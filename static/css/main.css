@@ -1251,10 +1251,12 @@ a { color: inherit; text-decoration: none; }
 }
 
 @media (max-width: 767px) {
-  .timeline-postcard {
+  .timeline-postcard,
+  .timeline-postcard--left,
+  .timeline-postcard--right {
     width: 90%;
-    margin-left: auto !important;
-    margin-right: auto !important;
+    margin-left: auto;
+    margin-right: auto;
     margin-bottom: 48px;
   }
 }
