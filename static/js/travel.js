@@ -916,53 +916,54 @@
     if (!timelineCardsEl) return;
     timelineCardsEl.innerHTML = '';
 
-    // Reverse chronological (newest first)
-    var sorted = trips.slice().reverse();
+    var sorted = trips.slice().sort(function (a, b) {
+      return a.trip_start < b.trip_start ? 1 : -1;
+    });
 
-    sorted.forEach(function (trip) {
-      var card = document.createElement('div');
-      card.className = 'timeline-card';
+    sorted.forEach(function (trip, i) {
+      var card = document.createElement('a');
+      card.className = 'svw-postcard timeline-postcard ' +
+        (i % 2 === 0 ? 'timeline-postcard--left' : 'timeline-postcard--right');
       card.setAttribute('data-trip-id', trip.id);
+      if (trip.gallery) { card.href = trip.gallery; }
 
-      // Cover image (if gallery exists)
+      if (trip.flag) {
+        var flag = document.createElement('span');
+        flag.className = 'svw-postcard__flag';
+        flag.textContent = trip.flag;
+        card.appendChild(flag);
+      }
+
       if (trip._gallery && trip._gallery.cover) {
         var img = document.createElement('img');
         img.src = trip._gallery.cover;
         img.alt = trip.title;
-        img.className = 'timeline-card-cover';
+        img.className = 'svw-postcard__photo';
         img.loading = 'lazy';
         card.appendChild(img);
       }
 
       var body = document.createElement('div');
-      body.className = 'timeline-card-body';
+      body.className = 'svw-postcard__body';
 
-      var title = document.createElement('h3');
-      title.className = 'timeline-card-title';
+      var title = document.createElement('div');
+      title.className = 'svw-postcard__title';
       title.textContent = trip.title;
       body.appendChild(title);
 
-      var dates = document.createElement('div');
-      dates.className = 'timeline-card-dates';
-      dates.textContent = formatDateRange(trip.trip_start, trip.trip_end);
-      body.appendChild(dates);
+      var meta = document.createElement('div');
+      meta.className = 'svw-postcard__meta';
+      meta.textContent = formatDateRange(trip.trip_start, trip.trip_end);
+      body.appendChild(meta);
 
       if (trip.description) {
         var desc = document.createElement('p');
-        desc.className = 'timeline-card-description';
+        desc.style.cssText = 'font-size:var(--fs-body-sm);color:var(--color-ink-soft);margin-top:6px;line-height:1.5;';
         desc.textContent = trip.description;
         body.appendChild(desc);
       }
 
       card.appendChild(body);
-
-      card.addEventListener('click', (function (tripId) {
-        return function () {
-          state.setActiveTrip(tripId);
-          switchTab('map');
-        };
-      })(trip.id));
-
       timelineCardsEl.appendChild(card);
     });
   }
