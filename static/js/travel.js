@@ -906,6 +906,9 @@
 
     tabMapEl.classList.toggle('active', tabName === 'map');
     tabTimelineEl.classList.toggle('active', tabName === 'timeline');
+    if (tabName === 'timeline') {
+      requestAnimationFrame(renderFlightPath);
+    }
   }
 
   // ===================================================================
@@ -967,6 +970,83 @@
       timelineCardsEl.appendChild(card);
     });
   }
+
+  function renderFlightPath() {
+  if (!timelineCardsEl) return;
+
+  // Remove existing SVG if present
+  var existing = timelineCardsEl.querySelector('.timeline-flight-svg');
+  if (existing) existing.remove();
+
+  var cards = Array.from(timelineCardsEl.querySelectorAll('.timeline-postcard'));
+  if (cards.length < 2) return;
+
+  var containerRect = timelineCardsEl.getBoundingClientRect();
+  if (containerRect.width === 0) return; // hidden tab — bail
+
+  var ns = 'http://www.w3.org/2000/svg';
+  var svgEl = document.createElementNS(ns, 'svg');
+  svgEl.setAttribute('class', 'timeline-flight-svg');
+  svgEl.setAttribute('aria-hidden', 'true');
+
+  var defs = document.createElementNS(ns, 'defs');
+  var style = document.createElementNS(ns, 'style');
+  style.textContent = [
+    '@keyframes planeTrace {',
+    '  0% { opacity: 0; offset-distance: 0%; }',
+    ' 10% { opacity: 1; }',
+    ' 90% { opacity: 1; }',
+    '100% { opacity: 0; offset-distance: 100%; }',
+    '}'
+  ].join('\n');
+  defs.appendChild(style);
+  svgEl.appendChild(defs);
+
+  for (var i = 0; i < cards.length - 1; i++) {
+    var fromRect = cards[i].getBoundingClientRect();
+    var toRect   = cards[i + 1].getBoundingClientRect();
+
+    // Center-bottom of departure card → center-top of arrival card
+    var x1 = fromRect.left - containerRect.left + fromRect.width / 2;
+    var y1 = fromRect.top  - containerRect.top  + fromRect.height;
+    var x2 = toRect.left   - containerRect.left + toRect.width  / 2;
+    var y2 = toRect.top    - containerRect.top;
+
+    // Cubic bezier: depart downward, arrive from above
+    var cy = (y1 + y2) / 2;
+    var pathD = 'M ' + x1 + ' ' + y1 +
+                ' C ' + x1 + ' ' + cy + ',' +
+                        x2 + ' ' + cy + ',' +
+                        x2 + ' ' + y2;
+
+    // Dashed path
+    var pathEl = document.createElementNS(ns, 'path');
+    pathEl.setAttribute('d', pathD);
+    pathEl.setAttribute('fill', 'none');
+    pathEl.setAttribute('stroke', 'var(--accent)');
+    pathEl.setAttribute('stroke-width', '2');
+    pathEl.setAttribute('stroke-dasharray', '6 6');
+    pathEl.setAttribute('opacity', '0.6');
+    svgEl.appendChild(pathEl);
+
+    // Animated plane emoji along the path
+    var pathId = 'flight-path-' + i;
+    pathEl.setAttribute('id', pathId);
+
+    var text = document.createElementNS(ns, 'text');
+    text.setAttribute('font-size', '18');
+    text.setAttribute('text-anchor', 'middle');
+    text.style.cssText = [
+      'offset-path: path("' + pathD.replace(/"/g, '\'') + '")',
+      'offset-distance: 0%',
+      'animation: planeTrace 4s ease-in-out ' + (i * 1.5) + 's infinite'
+    ].join(';');
+    text.textContent = '✈';
+    svgEl.appendChild(text);
+  }
+
+  timelineCardsEl.insertBefore(svgEl, timelineCardsEl.firstChild);
+}
 
   // ===================================================================
   // FLIGHT LINES
@@ -1092,6 +1172,10 @@
 
     if (activeLocation && sidebar.classList.contains('open')) {
       state.setActiveTrip(null);
+    }
+
+    if (tabTimelineEl && tabTimelineEl.classList.contains('active')) {
+      renderFlightPath();
     }
   }
 
