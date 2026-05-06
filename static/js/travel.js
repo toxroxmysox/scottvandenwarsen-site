@@ -1040,6 +1040,7 @@
     text.style.cssText = [
       'offset-path: path("' + pathD.replace(/"/g, '\'') + '")',
       'offset-distance: 0%',
+      'offset-rotate: auto 180deg',
       'animation: planeTrace 4s ease-in-out ' + (i * 1.5) + 's infinite'
     ].join(';');
     text.textContent = '✈︎';
