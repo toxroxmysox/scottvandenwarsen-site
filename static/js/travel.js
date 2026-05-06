@@ -993,10 +993,10 @@
   var style = document.createElementNS(ns, 'style');
   style.textContent = [
     '@keyframes planeTrace {',
-    '  0% { opacity: 0; offset-distance: 0%; }',
+    '  0% { opacity: 0; offset-distance: 100%; }',
     ' 10% { opacity: 1; }',
     ' 90% { opacity: 1; }',
-    '100% { opacity: 0; offset-distance: 100%; }',
+    '100% { opacity: 0; offset-distance: 0%; }',
     '}'
   ].join('\n');
   defs.appendChild(style);
