@@ -6,6 +6,9 @@
       {{- warnf "trips.yaml: trip '%s' references gallery '%s' which does not exist" $trip.id $trip.gallery -}}
     {{- end -}}
   {{- end -}}
+  {{- if not $trip.country_codes -}}
+    {{- warnf "trips.yaml: trip '%s' has no country_codes — flag emoji will be empty" $trip.id -}}
+  {{- end -}}
 {{- end -}}
 [{{ range $i, $trip := .Site.Data.trips }}{{ if $i }},{{ end }}
   {
