@@ -894,9 +894,19 @@
         };
       })(tabs[i]));
     }
+
+    var hash = window.location.hash.replace('#', '');
+    if (hash === 'timeline' || hash === 'map') {
+      switchTab(hash, true);
+    }
+
+    window.addEventListener('hashchange', function () {
+      var h = window.location.hash.replace('#', '');
+      if (h === 'timeline' || h === 'map') switchTab(h, true);
+    });
   }
 
-  function switchTab(tabName) {
+  function switchTab(tabName, skipHash) {
     if (!tabsEl) return;
 
     var tabs = tabsEl.querySelectorAll('.travel-tab');
@@ -908,6 +918,10 @@
     tabTimelineEl.classList.toggle('active', tabName === 'timeline');
     if (tabName === 'timeline') {
       requestAnimationFrame(renderFlightPath);
+    }
+
+    if (!skipHash) {
+      history.replaceState(null, '', '#' + tabName);
     }
   }
 

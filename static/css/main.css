@@ -1085,27 +1085,33 @@ a { color: inherit; text-decoration: none; }
 }
 .travel-tabs {
   display: flex;
-  gap: var(--space-4);
+  gap: 4px;
   padding: 14px 40px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 .travel-tab {
   font-family: var(--font-ui);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   letter-spacing: var(--ls-eyebrow-tight);
   text-transform: uppercase;
   color: rgba(236, 228, 208, 0.55);
-  background: none;
-  border: none;
-  padding: 6px 0;
+  background: rgba(236, 228, 208, 0.06);
+  border: 1px solid rgba(236, 228, 208, 0.1);
+  border-radius: var(--radius-sm);
+  padding: 8px 18px;
   cursor: pointer;
-  border-bottom: 2px solid transparent;
-  transition: color 0.15s ease, border-color 0.15s ease;
+  transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+}
+.travel-tab:hover {
+  color: rgba(236, 228, 208, 0.85);
+  background: rgba(236, 228, 208, 0.1);
+  border-color: rgba(236, 228, 208, 0.2);
 }
 .travel-tab.active {
-  color: var(--accent);
-  border-bottom-color: var(--accent);
+  color: var(--color-bg);
+  background: var(--accent);
+  border-color: var(--accent);
 }
 
 .map-container {
