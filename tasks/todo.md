@@ -2,6 +2,14 @@
 
 _No active tasks._
 
+- [x] Favicon + responsive audit (session 2026-05-09)
+  - Generated SVW compass favicon set: SVG, 32x32 PNG, 16x16 PNG, 180x180 apple-touch-icon, ICO (16+32)
+  - Pure Python generator (struct + zlib) — no image libraries needed
+  - Updated `head.html` with full favicon link set + manifest link
+  - Updated `site.webmanifest` with correct name, icons, and Atlas Refined theme color
+  - Responsive audit passed all pages at 375px, 768px, 1400px — no overflow issues
+  - Removed stale dark mode audit task (site is dark-only, no light mode exists)
+
 - [x] Atlas Refined visual redesign (PR #20, merged)
   - Complete rewrite of CSS from scratch — removed Bootstrap 3, new token system (paper/ink/accent)
   - New `baseof.html` shell, nav with SVW compass monogram, footer with subscribe form
@@ -94,10 +102,10 @@ _No active tasks._
 
 ### Atlas Refined Follow-up
 - [ ] **Travel map flight lines** — disabled in redesign (JS commented out at travel.js:189). Needs visual rework to fit Atlas Refined aesthetic
-- [ ] **Dark mode audit** — Atlas Refined tokens have dark mode overrides, but full page-by-page verification needed
-- [ ] **Responsive audit** — verify all pages at mobile (375px), tablet (768px), desktop (1400px)
+- [x] ~~**Dark mode audit**~~ — removed: site is dark-only (`color-scheme: dark`), no light mode exists
+- [x] ~~**Responsive audit**~~ — passed all pages at 375/768/1400px (session 2026-05-09)
 - [ ] **Gallery single page thumbnails** — currently serves original full-size images. Could add Hugo `.Process` thumbnails with grid layout for faster loads (but beware EXIF orientation — source files are now fixed)
-- [ ] **Favicon** — old favicons deleted, need new ones based on SVW compass monogram
+- [x] ~~**Favicon**~~ — completed (session 2026-05-09)
 - [ ] **Open Graph images** — need per-page or per-section OG images for social sharing
 
 ### Content Additions
