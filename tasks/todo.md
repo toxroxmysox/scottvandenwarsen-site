@@ -1,6 +1,17 @@
 # Current Tasks
 
-_No active tasks._
+_No active tasks.
+
+Scott manually added tasks:
+- [ ] make the map/travel switcher on the map page more visible / distinct, and be able to have a direct hyperlink to the timeline page within travel.
+- [ ] On the bottom of the travel page (map section), order the trips horizontally instead of vertically.
+- [ ] Add year breakouts to the gallery page to group the trips by... something, year? region? family/solo?
+- [ ] Add a visual titles to the feed page and sub-feeds, and have the individual feeds have a scroll list instead of the entire page scrolling. 
+	- [ ] What could be ways to make the posts more engaging? Highlight a quote?
+- [ ] add the gallery and now page links to the home page, not just a plain section but something fun?
+- [ ] explore animation or motion on the site for the map, or for the home page using the new ui ux skills or motion skills?
+- [ ] Add link to hardcover app for people to follow me on hardcover
+- [ ] fix the ios logo to be the new logo instead of the old svw
 
 - [x] Favicon + responsive audit (session 2026-05-09)
   - Generated SVW compass favicon set: SVG, 32x32 PNG, 16x16 PNG, 180x180 apple-touch-icon, ICO (16+32)

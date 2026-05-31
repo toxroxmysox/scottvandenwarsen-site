@@ -4,21 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "1f9d4781e848174b",
+        "id": "03ea518ff26ec635",
         "type": "tabs",
         "children": [
           {
-            "id": "883f3e04d5b489cc",
+            "id": "d54f7d130073b06f",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "data/now.yaml",
+                "file": "tasks/todo.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "now"
+              "title": "todo"
             }
           }
         ]
@@ -94,7 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "data/now.yaml",
+                "file": "content/listening/2026-04-14 - Self-Driving Cars/index.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +104,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for now"
+              "title": "Backlinks for index"
             }
           },
           {
@@ -169,7 +169,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -182,19 +183,30 @@
       "bases:Create new base": false
     }
   },
-  "active": "883f3e04d5b489cc",
+  "active": "d54f7d130073b06f",
   "lastOpenFiles": [
+    "content/reading/2026-05-30 - First Principles/index.md",
+    "content/now/now-photo.jpg",
+    "content/reading/2026-05-30 - Dungeon Crawler Carl/index.md",
+    "content/listening/2026-05-30 - Carrot Musical/index.md",
+    "content/reading/2026-05-30 - First Principles",
+    "content/reading/2026-05-30 - Dungeon Crawler Carl",
+    "content/reading/2026-04-14 - Community Disruption/index.md",
+    "content/listening/2026-04-14 - Self-Driving Cars/index.md",
+    "archetypes/default.md",
+    "content/listening/2026-05-30 - Carrot Musical/Untitled",
+    "content/listening/2026-05-30 - Carrot Musical",
+    "tasks/todo.md",
+    "content/listening/2026-03-06 - Bruno Mars/index.md",
+    "content/listening/2026-01-31 - No Easy Fix/index.md",
+    "content/listening/2025-01-08 - AI Slop Inevitability/index.md",
+    "data/now.yaml",
     "content/now/IMG_3914.JPG",
     "hugo.toml.sb-60eea08a-3PZr0K",
     "public/trips.json",
     "public/watching/index.xml",
     "public/listening/index.xml",
     "public/tags/ai/index.xml",
-    "public/travel/index.xml",
-    "public/index.xml",
-    "public/tags/oceania/index.xml",
-    "public/gallery/index.xml",
-    "public/reading/index.xml",
     "public/gallery/egypt-2023/cover_4_hu_fdb43288b03cc811.webp",
     "resources/_gen/images/gallery/egypt-2023/cover_4_hu_fdb43288b03cc811.webp",
     "public/gallery/paris-2025/cover_3_hu_38c7e921013b9350.webp",
@@ -203,13 +215,9 @@
     "resources/_gen/images/gallery/spain-2025/cover_2_hu_fe0f242faeb23cc7.webp",
     "public/gallery/switzerland-2026/cover_hu_944d5f6d6cbf0f69.webp",
     "resources/_gen/images/gallery/switzerland-2026/cover_hu_944d5f6d6cbf0f69.webp",
-    "public/gallery/french-polynesia-2024/cover_hu_c61c901890cdd16b.webp",
-    "public/gallery/egypt-2023/cover_4.jpg",
     "docs/superpowers/specs/2026-05-02-atlas-refined-redesign.md",
     "docs/superpowers/plans/2026-05-02-atlas-refined-implementation.md",
     "docs/superpowers/plans/2026-05-02-gallery-image-optimization.md",
-    "content/reading/2026-04-14 - Community Disruption/index.md",
-    "content/listening/2026-04-14 - Self-Driving Cars/index.md",
     "content/now/index.md",
     "content/reading/2026-04-14 - Digital Communities/Untitled.md",
     "content/watching/2026-04-14 - Project Hail Mary/index.md",
@@ -222,14 +230,6 @@
     "tasks/handoffs/handoff-email-subscription.md",
     "tasks/handoffs/12-shortcut-trip-logging.md",
     "tasks/handoffs/11-shortcut-feed-post.md",
-    "tasks/handoffs/09-shortcut-now-playing.md",
-    "tasks/handoffs/08-travel-page.md",
-    "tasks/handoffs/07-site-search-related.md",
-    "tasks/handoffs/06-product-recommendations.md",
-    "tasks/handoffs/05-exif-photo-sort.md",
-    "tasks/handoffs/04-youtube-galleries.md",
-    "tasks/handoffs/03-link-preview.md",
-    "tasks/handoffs/01-now-playing-widget.md",
     "content/reading/Untitled.canvas"
   ]
 }
