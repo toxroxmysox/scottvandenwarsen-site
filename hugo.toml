@@ -1,7 +1,6 @@
 baseURL = "https://scott.vandenwarsen.com/"
 languageCode = 'en-us'
 title = "Scott Vanden Warsen"
-theme = "beautifulhugo"
 enableRobotsTXT = true
 googleAnalytics = "G-MPJWD25QBM"
 disableHugoGeneratorInject = true

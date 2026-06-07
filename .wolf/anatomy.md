@@ -3,6 +3,14 @@
 > Auto-maintained by OpenWolf. Last scanned: 2026-05-02T16:39:07.589Z
 > Files: 321 tracked | Anatomy hits: 0 | Misses: 0
 
+> **2026-06-07 architecture change (theme deletion):** `themes/beautifulhugo/`
+> is DELETED. All `themes/beautifulhugo/**` entries below are stale until the
+> next daemon scan. The 3 live theme files were vendored into `layouts/`:
+> `layouts/partials/seo/` (main, schema, twitter, opengraph, structured/*) and
+> `layouts/partials/load-photoswipe-theme.html`. New: `static/js/country-codes.js`
+> (shared `window.SVW` lookup tables, dedup'd out of travel.js + mini-map.js).
+> Deleted: `layouts/partials/now-playing.html` (dead). See `docs/adr/0001`.
+
 ## ./
 
 - `.DS_Store` (~7096 tok)
