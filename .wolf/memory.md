@@ -21,3 +21,8 @@ populated, SEO meta + PhotoSwipe scaffold intact, no syntax.css.
 
 Tooling note: preview MCP can't attach — it forces PORT=8080 but launch.json
 hardcodes `-p 1313`. Verified via curl instead.
+
+## 2026-07-05 — EXIF orientation shared partial
+- Extracted the validated EXIF-orientation thumbnail logic from `layouts/gallery/single.html` into `layouts/partials/exif-thumb.html` (returns dict {Thumb, FullW, FullH}; Thumb=false for mirrored tags 2/4/5/7 → callers fall back to the original image).
+- Rewired `layouts/gallery/single.html` and `layouts/partials/home/gallery-card.html` (album covers were previously unprotected against rotated covers).
+- Verified: `hugo` builds clean; postcard img tags on /gallery/ byte-identical to pre-change baseline; album pages keep correct data-size and thumb dims.

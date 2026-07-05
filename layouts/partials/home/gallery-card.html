@@ -1,15 +1,26 @@
 <a href="{{ .RelPermalink }}" class="svw-postcard">
   {{ with .Params.cover }}
     {{ with $.Resources.GetMatch . }}
-      {{ $thumb := .Process "resize 600x webp q80" }}
+      {{ $t := partial "exif-thumb.html" . }}
+      {{ with $t.Thumb }}
       <img
-        src="{{ $thumb.RelPermalink }}"
+        src="{{ .RelPermalink }}"
         alt="{{ $.Title }}"
         class="svw-postcard__photo"
         loading="lazy"
-        width="{{ $thumb.Width }}"
-        height="{{ $thumb.Height }}"
+        width="{{ .Width }}"
+        height="{{ .Height }}"
       >
+      {{ else }}
+      <img
+        src="{{ .RelPermalink }}"
+        alt="{{ $.Title }}"
+        class="svw-postcard__photo"
+        loading="lazy"
+        width="{{ $t.FullW }}"
+        height="{{ $t.FullH }}"
+      >
+      {{ end }}
     {{ end }}
   {{ end }}
 

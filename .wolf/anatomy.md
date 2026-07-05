@@ -222,6 +222,7 @@
 
 - `.DS_Store` (~2186 tok)
 - `comments.html` — Declares toggleComments (~514 tok)
+- `exif-thumb.html` — orientation-aware 600px webp thumb; returns dict {Thumb, FullW, FullH}; used by gallery/single.html and home/gallery-card.html (~330 tok)
 - `footer_custom.html` — so: getVisibility, update, onScroll, openVideo, closeVideo (~1909 tok)
 - `footer.html` (~1198 tok)
 - `head_custom.html` (~107 tok)

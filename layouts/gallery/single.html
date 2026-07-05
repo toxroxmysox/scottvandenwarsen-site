@@ -19,13 +19,24 @@
   <div class="svw-photo-grid pswp-gallery" itemscope itemtype="http://schema.org/ImageGallery">
     {{ $imgs := .Resources.Match "*.{jpg,jpeg,png,webp}" }}
     {{ range $i, $img := $imgs }}
+      {{- $t := partial "exif-thumb.html" $img -}}
+      {{- $thumb := $t.Thumb -}}
       <a href="{{ $img.RelPermalink }}"
-         data-size="{{ $img.Width }}x{{ $img.Height }}"
+         data-size="{{ $t.FullW }}x{{ $t.FullH }}"
          itemprop="contentUrl">
-        <img src="{{ $img.RelPermalink }}"
+        {{- if $thumb }}
+        <img src="{{ $thumb.RelPermalink }}"
+             width="{{ $thumb.Width }}" height="{{ $thumb.Height }}"
              alt="{{ $.Title }} — photo {{ add $i 1 }}"
              loading="lazy"
              itemprop="thumbnail">
+        {{- else }}
+        <img src="{{ $img.RelPermalink }}"
+             width="{{ $t.FullW }}" height="{{ $t.FullH }}"
+             alt="{{ $.Title }} — photo {{ add $i 1 }}"
+             loading="lazy"
+             itemprop="thumbnail">
+        {{- end }}
       </a>
     {{ end }}
   </div>

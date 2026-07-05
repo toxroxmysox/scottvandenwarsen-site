@@ -1,0 +1,26 @@
+{{- /* exif-thumb.html — orientation-aware 600px webp thumbnail.
+       Hugo's image processing ignores the EXIF orientation tag (see
+       tasks/lessons.md "Hugo `.Process` with `autoOrient`"), so read the tag
+       and rotate explicitly. Hugo's rNNN rotates counter-clockwise:
+       tag 6 = 90° CW = r270.
+       Takes an image resource; returns a dict:
+         Thumb — processed thumbnail, or false for mirrored orientations
+                 (2,4,5,7), which rotation alone can't fix — callers should
+                 serve the original and let the browser apply the EXIF
+                 transform
+         FullW/FullH — displayed dims of the original (tags 5-8 transpose
+                 width/height vs the raw pixel .Width/.Height) */ -}}
+{{- $img := . -}}
+{{- $orient := 1 -}}
+{{- if eq $img.MediaType.SubType "jpeg" -}}
+  {{- with $img.Exif -}}{{- with .Tags.Orientation -}}{{- $orient = int (printf "%v" .) -}}{{- end -}}{{- end -}}
+{{- end -}}
+{{- $fullW := $img.Width -}}{{- $fullH := $img.Height -}}
+{{- if ge $orient 5 -}}{{- $fullW = $img.Height -}}{{- $fullH = $img.Width -}}{{- end -}}
+{{- $rot := "" -}}
+{{- if eq $orient 3 }}{{ $rot = "r180 " }}{{ else if eq $orient 6 }}{{ $rot = "r270 " }}{{ else if eq $orient 8 }}{{ $rot = "r90 " }}{{ end -}}
+{{- $thumb := false -}}
+{{- if not (in (slice 2 4 5 7) $orient) -}}
+  {{- $thumb = $img.Process (printf "resize 600x %swebp q80" $rot) -}}
+{{- end -}}
+{{- return (dict "Thumb" $thumb "FullW" $fullW "FullH" $fullH) -}}

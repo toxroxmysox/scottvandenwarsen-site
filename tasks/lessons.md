@@ -241,6 +241,7 @@ Rules to prevent repeated mistakes. Review at session start.
 - **Problem:** `.Process "resize 600x webp q80 autoOrient"` still produced sideways WebP thumbnails from EXIF-rotated source images. Root cause unclear on Hugo v0.154.2.
 - **Fix:** Bake EXIF orientation into pixel data before adding images to the repo. Use Python to rotate pixels and reset EXIF orientation tag to 1.
 - **Rule:** Don't rely on Hugo's `autoOrient`. Pre-process photos with `sips --rotate` + EXIF tag reset, or `mogrify -auto-orient`.
+- **Validated alternative (v0.154.2):** Explicit `rNNN` rotation in the process spec DOES work: read the tag via `$img.Exif.Tags.Orientation` (requires `[imaging.exif] includeFields = "Orientation"` in hugo.toml) and map tag 3→`r180`, 6→`r270`, 8→`r90` (Hugo rotates counter-clockwise; tag 6 = 90° CW = r270). Verified pixel-identical to a `sips --rotate 90` oracle. Tags 5–8 also transpose displayed width/height vs `.Width`/`.Height` (raw pixel dims). See `layouts/gallery/single.html`.
 
 ### `sips --rotate` doesn't clear EXIF orientation tag
 - **Problem:** `sips --rotate 90` rotates pixel data but leaves EXIF Orientation tag at its original value. Browsers then apply ANOTHER rotation based on the stale tag, causing double-rotation.
