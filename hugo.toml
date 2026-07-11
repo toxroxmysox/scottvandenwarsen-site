@@ -54,6 +54,13 @@ canonifyURLs = true
 [outputs]
   home = ["HTML", "RSS", "GalleryJSON", "TripsJSON"]
 
+[imaging]
+  # Quality ceiling for all Hugo-generated image derivatives (thumbnails, WebP,
+  # responsive sizes). Web-master sources live in content/gallery at 3840px/q90;
+  # Hugo only ever downsizes from those, using these settings.
+  quality = 90
+  resampleFilter = "Lanczos"
+
 [imaging.exif]
   includeFields = "Orientation"
   disableDate = true
