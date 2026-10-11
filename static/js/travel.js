@@ -104,6 +104,22 @@
     width = mapContainer.clientWidth;
     height = mapContainer.clientHeight;
 
+    // A zero-width container (hidden/not-yet-laid-out pane) gives
+    // projection.scale(0), which turns Antarctica's pole-edge points into
+    // NaN path data (#25). Wait until the container has a real size.
+    if (!width || !height) {
+      if (typeof ResizeObserver === 'function') {
+        var sizeWatcher = new ResizeObserver(function () {
+          if (mapContainer.clientWidth && mapContainer.clientHeight) {
+            sizeWatcher.disconnect();
+            init();
+          }
+        });
+        sizeWatcher.observe(mapContainer);
+      }
+      return;
+    }
+
     projection = d3.geoMercator()
       .scale(width / 6.5)
       .translate([width / 2, height / 1.6]);
@@ -1083,6 +1099,8 @@
   }
 
   function onResize() {
+    // Skip zero-size layouts (see init) so the projection never gets scale 0.
+    if (!mapContainer.clientWidth || !mapContainer.clientHeight) return;
     width = mapContainer.clientWidth;
     height = mapContainer.clientHeight;
 
