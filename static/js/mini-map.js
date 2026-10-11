@@ -8,10 +8,15 @@
   'use strict';
 
   // Shared lookup — see static/js/country-codes.js (loaded first)
-  var numericToAlpha2 = window.SVW.numericToAlpha2;
-
   var container = document.getElementById('svw-map-canvas');
   if (!container) return;
+
+  if (!window.SVW || !window.SVW.numericToAlpha2) {
+    console.error('mini-map.js: window.SVW.numericToAlpha2 missing (country-codes.js failed to load); map not rendered.');
+    container.textContent = 'Map unavailable.';
+    return;
+  }
+  var numericToAlpha2 = window.SVW.numericToAlpha2;
 
   var width = container.clientWidth;
   var height = Math.min(width * 0.5, 400);
@@ -30,12 +35,24 @@
 
   var g = svg.append('g');
 
+  function loadJson(url) {
+    return d3.json(url).catch(function (err) {
+      console.error('mini-map.js: failed to load ' + url, err);
+      return null;
+    });
+  }
+
   Promise.all([
-    d3.json('/data/world-110m.json'),
-    d3.json('/galleries.json')
+    loadJson('/data/world-110m.json'),
+    loadJson('/galleries.json')
   ]).then(function (results) {
     var worldData = results[0];
-    var galleries = results[1];
+    var galleries = Array.isArray(results[1]) ? results[1] : [];
+
+    if (!worldData) {
+      container.textContent = 'Map unavailable.';
+      return;
+    }
 
     // Build location set
     var locations = {};

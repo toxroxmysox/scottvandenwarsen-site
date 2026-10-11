@@ -33,6 +33,12 @@
   // ===================================================================
 
   // Shared lookups — see static/js/country-codes.js (loaded first)
+  if (!window.SVW || !window.SVW.numericToAlpha2 || !window.SVW.fipsToState) {
+    console.error('travel.js: window.SVW lookups missing (country-codes.js failed to load); map not rendered.');
+    var failEl = document.getElementById('map-container');
+    if (failEl) failEl.textContent = 'The map could not be loaded.';
+    return;
+  }
   var numericToAlpha2 = window.SVW.numericToAlpha2;
   var fipsToState = window.SVW.fipsToState;
 
@@ -120,17 +126,32 @@
 
     g = svg.append('g');
 
-    // Load all data in parallel
+    // Load all data in parallel; each fetch degrades independently
+    function loadJson(url, fallback) {
+      return d3.json(url).catch(function (err) {
+        console.error('travel.js: failed to load ' + url, err);
+        return fallback;
+      });
+    }
+
     Promise.all([
-      d3.json('/data/world-110m.json'),
-      d3.json('/galleries.json'),
-      d3.json('/trips.json')
+      loadJson('/data/world-110m.json', null),
+      loadJson('/galleries.json', null),
+      loadJson('/trips.json', null)
     ]).then(function (results) {
       var worldData = results[0];
-      galleryData = results[1];
-      trips = results[2];
+      galleryData = Array.isArray(results[1]) ? results[1] : [];
+      trips = Array.isArray(results[2]) ? results[2] : [];
+      if (!worldData && !trips.length) {
+        showMapFallback('The map could not be loaded. Please try again later.');
+        return;
+      }
       buildIndexes();
-      renderMap(worldData);
+      if (worldData) {
+        renderMap(worldData);
+      } else {
+        showMapFallback('The map could not be loaded. Trip list is shown below.');
+      }
       renderTimeline();
       renderTimelineCards();
     });
@@ -154,6 +175,14 @@
   // ===================================================================
   // DATA INDEXES
   // ===================================================================
+
+  function showMapFallback(message) {
+    var el = document.createElement('p');
+    el.className = 'map-fallback';
+    el.style.cssText = 'position:absolute;top:1rem;left:1rem;margin:0;opacity:.7';
+    el.textContent = message;
+    mapContainer.appendChild(el);
+  }
 
   function buildIndexes() {
     // Gallery index by location (existing behavior)
@@ -721,6 +750,8 @@
       usStatesFeatures = topojson.feature(usData, usData.objects.states);
       usStatesLoaded = true;
       renderUSStates();
+    }).catch(function (err) {
+      console.error('travel.js: failed to load /data/us-states-10m.json', err);
     });
   }
 
