@@ -1,4 +1,37 @@
 {
   "version": 1,
-  "bugs": []
+  "bugs": [
+    {
+      "id": "bug-001",
+      "timestamp": "2026-10-11T12:13:13.398730",
+      "error_message": "load-photoswipe.js 404 on every page; dead partials; breadcrumb position 1->3; dead flight-line funcs (#23)",
+      "file": "layouts/partials/footer.html",
+      "root_cause": "Stale script tag/partials left after redesign",
+      "fix": "Removed script tag, head_custom.html, seo/structured/post.html, dead funcs; breadcrumb position 2",
+      "tags": [
+        "cleanup",
+        "404",
+        "seo"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-10-11T12:13:13.398730"
+    },
+    {
+      "id": "bug-002",
+      "timestamp": "2026-10-11T12:13:13.398730",
+      "error_message": "Blank map on fetch failure; unguarded window.SVW (#21)",
+      "file": "static/js/travel.js",
+      "root_cause": "Promise.all with no catch; direct window.SVW deref",
+      "fix": "Guard with console.error+return; per-fetch catch with fallback text",
+      "tags": [
+        "js",
+        "maps",
+        "promise"
+      ],
+      "related_bugs": [],
+      "occurrences": 1,
+      "last_seen": "2026-10-11T12:13:13.398730"
+    }
+  ]
 }

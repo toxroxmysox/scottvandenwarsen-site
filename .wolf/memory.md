@@ -26,3 +26,4 @@ hardcodes `-p 1313`. Verified via curl instead.
 - Extracted the validated EXIF-orientation thumbnail logic from `layouts/gallery/single.html` into `layouts/partials/exif-thumb.html` (returns dict {Thumb, FullW, FullH}; Thumb=false for mirrored tags 2/4/5/7 → callers fall back to the original image).
 - Rewired `layouts/gallery/single.html` and `layouts/partials/home/gallery-card.html` (album covers were previously unprotected against rotated covers).
 - Verified: `hugo` builds clean; postcard img tags on /gallery/ byte-identical to pre-change baseline; album pages keep correct data-size and thumb dims.
+| 12:13 | Fixed #23 + #21 (cleanup, map fetch/SVW guards), pushed, deploy verified | footer.html, breadcrumb.html, travel.js, mini-map.js | done | ~20000 |
