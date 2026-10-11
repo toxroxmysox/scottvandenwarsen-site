@@ -131,7 +131,6 @@
       trips = results[2];
       buildIndexes();
       renderMap(worldData);
-      // renderFlightLines(); // disabled — will fix later
       renderTimeline();
       renderTimelineCards();
     });
@@ -1008,72 +1007,6 @@
 
   timelineCardsEl.insertBefore(svgEl, timelineCardsEl.firstChild);
 }
-
-  // ===================================================================
-  // FLIGHT LINES
-  // ===================================================================
-
-  function renderFlightLines() {
-    if (trips.length < 2) return;
-
-    var flightGroup = g.insert('g', '.map-border')
-      .attr('class', 'flight-lines-layer');
-
-    var now = new Date();
-
-    for (var i = 0; i < trips.length - 1; i++) {
-      var fromTrip = trips[i];
-      var toTrip = trips[i + 1];
-      var fromCode = fromTrip.country_codes[0];
-      var toCode = toTrip.country_codes[0];
-
-      // Skip if same country or missing coordinates
-      if (fromCode === toCode) continue;
-      if (!countryCoords[fromCode] || !countryCoords[toCode]) {
-        console.warn('Flight line skipped — missing coords:', fromCode, '→', toCode);
-        continue;
-      }
-
-      var fromPt = projection(countryCoords[fromCode]);
-      var toPt = projection(countryCoords[toCode]);
-
-      // Quadratic bezier: control point offset upward by dist * 0.3
-      var dx = toPt[0] - fromPt[0];
-      var dy = toPt[1] - fromPt[1];
-      var dist = Math.sqrt(dx * dx + dy * dy);
-      var mx = (fromPt[0] + toPt[0]) / 2;
-      var my = (fromPt[1] + toPt[1]) / 2 - dist * 0.3;
-
-      var pathData = 'M' + fromPt[0] + ',' + fromPt[1] +
-        ' Q' + mx + ',' + my +
-        ' ' + toPt[0] + ',' + toPt[1];
-
-      var isFuture = new Date(toTrip.trip_start) > now;
-
-      flightGroup.append('path')
-        .attr('class', 'flight-line' + (isFuture ? ' future' : ''))
-        .attr('d', pathData)
-        .attr('data-from-trip', fromTrip.id)
-        .attr('data-to-trip', toTrip.id)
-        .on('click', (function (earlierTripId) {
-          return function (event) {
-            event.stopPropagation();
-            state.setActiveTrip(earlierTripId);
-          };
-        })(fromTrip.id));
-    }
-  }
-
-  function highlightFlightLines(tripId) {
-    var lines = g.selectAll('.flight-line');
-    if (!lines.size()) return;
-
-    lines.classed('active', function () {
-      if (!tripId) return false;
-      return this.getAttribute('data-from-trip') === tripId ||
-             this.getAttribute('data-to-trip') === tripId;
-    });
-  }
 
   // ===================================================================
   // UTILITIES
